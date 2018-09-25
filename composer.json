@@ -2,7 +2,7 @@
 	"name": "cptechinc/dplus-dpluso",
     "type": "library",
     "description": "Classes for Dplus Online",
-    "keywords": ["order-displays", "user-actions"],
+    "keywords": ["order-displays", "user-actions", "customer", "items"],
     "homepage": "http://github.com/cptechinc/dplus-dpluso",
 	"autoload": {
 		"files": [
