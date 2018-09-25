@@ -1,0 +1,63 @@
+{
+	"name": "cptechinc/dplus-dpluso",
+    "type": "library",
+    "description": "Classes for Dplus Online",
+    "keywords": ["order-displays", "user-actions"],
+    "homepage": "http://github.com/cptechinc/dplus-dpluso",
+	"autoload": {
+		"files": [
+			"src/order-displays/OrderDisplay.class.php",
+			"src/order-displays/OrderDisplay.interface.php",
+			"src/order-displays/CartDisplay.class.php",
+			"src/order-displays/OrderPanel.class.php",
+			"src/order-displays/OrderPanel.interface.php",
+			"src/order-displays/OrderPanelCustomer.interface.php",
+			"src/order-displays/OrderPanelCustomer.trait.php",
+			"src/order-displays/SalesOrderDisplay.interface.php",
+			"src/order-displays/SalesOrderDisplay.trait.php",
+			"src/order-displays/SalesOrderDisplay.class.php",
+			"src/order-displays/SalesOrderDisplayEdit.class.php",
+			"src/order-displays/SalesOrderPanel.interface.php",
+			"src/order-displays/SalesOrderPanel.class.php",
+			"src/order-displays/SalesOrderHistoryPanel.class.php",
+			"src/order-displays/SalesOrderPanelRep.class.php",
+			"src/order-displays/SalesOrderPanelCustomer.class.php",
+			"src/order-displays/SalesOrderHistoryPanel.class.php",
+			"src/order-displays/SalesOrderHistoryPanelCustomer.class.php",
+			"src/order-displays/QuoteDisplay.interface.php",
+			"src/order-displays/QuotePanel.interface.php",
+			"src/order-displays/QuoteDisplay.trait.php",
+			"src/order-displays/QuoteDisplay.class.php",
+			"src/order-displays/QuoteDisplayEdit.class.php",
+			"src/order-displays/QuotePanel.class.php",
+			"src/order-displays/QuotePanelRep.class.php",
+			"src/order-displays/QuotePanelCustomer.class.php",
+            
+            "src/user-actions/UserAction.class.php",
+			"src/user-actions/UserActionDisplay.class.php",
+			"src/user-actions/UserActionDisplayEdit.class.php",
+			"src/user-actions/UserActionsPanel.class.php",
+			"src/user-actions/UserActionsPanelCustomer.class.php",
+			"src/user-actions/UserActionsPanelContact.class.php",
+			"src/user-actions/UserActionsPanelSalesOrder.class.php",
+			"src/user-actions/UserActionsPanelQuote.class.php",
+            
+			"src/bookings/BookingsPanel.class.php",
+			"src/bookings/BookingsPanelCustomer.class.php",
+			
+			"src/items/ItemLookupModal.class.php",
+			
+			"src/configs/FormFieldsConfig.class.php",
+			
+			"src/customer/CustomerIndex.class.php",
+			"src/customer/Contact.class.php",
+			"src/customer/Customer.class.php",
+			
+			
+			"src/general/SigninLog.class.php",
+			
+			"src/model/Vendor.class.php",
+			"src/model/LogmUser.class.php"
+		]
+	}
+}
