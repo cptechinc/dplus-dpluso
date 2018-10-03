@@ -90,7 +90,8 @@
          * @return float           Amount Sold
          */
         public function get_amountsold($loginID = '', $debug = false) {
-            return $debug ? get_custperm($this, $loginID, $debug) : (get_custperm($this, $loginID, $debug))['amountsold'];
+            $custperm = get_custperm($this, $loginID, $debug);
+            return $debug ? get_custperm($this, $loginID, $debug) : $custperm['amountsold'];
         }
 
         /**
@@ -100,7 +101,8 @@
          * @return int           Number of Times sold
          */
         public function get_timesold($loginID = '', $debug = false) {
-            return $debug ? get_custperm($this, $loginID, $debug) : (get_custperm($this, $loginID, $debug))['timesold'];
+            $custperm = get_custperm($this, $loginID, $debug);
+            return $debug ? get_custperm($this, $loginID, $debug) : $custperm['timesold'];
         }
 
         /**
@@ -110,7 +112,8 @@
          * @return string          Last Sale Date
          */
         public function get_lastsaledate($loginID = '', $debug = false) {
-            return $debug ? get_custperm($this, $loginID, $debug) : (get_custperm($this, $loginID, $debug))['lastsaledate'];
+            $custperm = get_custperm($this, $loginID, $debug);
+            return $debug ? get_custperm($this, $loginID, $debug) : $custperm['lastsaledate'];
         }
         /* =============================================================
 			CLASS FUNCTIONS
