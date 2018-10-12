@@ -1,4 +1,6 @@
 <?php 
+	use Dplus\ProcessWire\DplusWire as DplusWire;
+	
 	class CustomerQuotePanel extends QuotePanel implements OrderPanelCustomerInterface {
 		use OrderPanelCustomerTraits;
 		

@@ -1,4 +1,6 @@
 <?php
+	use Dplus\ProcessWire\DplusWire as DplusWire;
+	
 	class SalesOrderHistoryPanel extends SalesOrderPanel {
 		/**
 		 * Array of SalesOrderHistory
@@ -17,7 +19,7 @@
 				'datatype' => 'char',
 				'label' => 'CustID'
 			),
-			'orderno' => array(
+			'ordernumber' => array(
 				'querytype' => 'between',
 				'datatype' => 'char',
 				'label' => 'Order #'
@@ -27,7 +29,7 @@
 				'datatype' => 'numeric',
 				'label' => 'Order Total'
 			),
-			'orderdate' => array(
+			'order_date' => array(
 				'querytype' => 'between',
 				'datatype' => 'date',
 				'date-format' => 'Ymd',
@@ -68,7 +70,7 @@
 		public function get_orders($loginID = '', $debug = false) {
 			$useclass = true;
 			if ($this->tablesorter->orderby) {
-				if ($this->tablesorter->orderby == 'orderdate') {
+				if ($this->tablesorter->orderby == 'order_date') {
 					$orders = get_usersaleshistoryorderdate(DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $loginID, $useclass, $debug);
 				} elseif ($this->tablesorter->orderby == 'invoice_date') {
 					$orders = get_usersaleshistoryinvoicedate(DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $loginID, $useclass, $debug);
@@ -95,16 +97,16 @@
 		}
 
 		public function generate_expandorcollapselink(Order $order) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 
-			if ($order->orderno == $this->activeID) {
+			if ($order->ordernumber == $this->activeID) {
 				$href = $this->generate_closedetailsurl($order);
 				$ajaxdata = $this->generate_ajaxdataforcontento();
 				$addclass = 'load-link';
 				$icon = '-';
 			} else {
 				$href = $this->generate_loaddetailsurl($order);
-				$ajaxdata = "data-loadinto=$this->loadinto|data-focus=#$order->orderno";
+				$ajaxdata = "data-loadinto=$this->loadinto|data-focus=#$order->ordernumber";
 				$addclass = 'generate-load-link';
 				$icon = '+';
 			}
@@ -112,7 +114,7 @@
 		}
 
 		public function generate_rowclass(Order $order) {
-			return ($this->activeID == $order->orderno) ? 'selected' : '';
+			return ($this->activeID == $order->ordernumber) ? 'selected' : '';
 		}
 
 		public function generate_loadurl() {
@@ -125,7 +127,7 @@
 		}
 
 		public function generate_clearsearchlink() {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_loadurl();
 			$icon = $bootstrap->icon('fa fa-search-minus');
 			$ajaxdata = $this->generate_ajaxdataforcontento();
@@ -133,7 +135,7 @@
 		}
 
 		public function generate_refreshlink() {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_loadurl();
 			$icon = $bootstrap->icon('fa fa-refresh');
 			$ajaxdata = $this->generate_ajaxdataforcontento();
@@ -143,21 +145,6 @@
 		public function generate_closedetailsurl() {
 			$url = new \Purl\Url($this->pageurl->getUrl());
 			$url->query->setData(array('ordn' => false, 'show' => false));
-			return $url->getUrl();
-		}
-
-		public function generate_loaddetailsurl(Order $order) {
-			$url = new \Purl\Url($this->generate_loaddetailsurltrait($order));
-			$url->query->set('page', $this->pagenbr);
-			$url->query->set('orderby', $this->tablesorter->orderbystring);
-			$url->query->set('type', 'history');
-
-			if (!empty($this->filters)) {
-				$url->query->set('filter', 'filter');
-				foreach ($this->filters as $filter => $value) {
-					$url->query->set($filter, implode('|', $value));
-				}
-			}
 			return $url->getUrl();
 		}
 
@@ -172,10 +159,10 @@
 				return '';
 			}
 			$action = DplusWire::wire('config')->pages->cart.'redir/';
-			$id = $order->orderno.'-'.$detail->itemid.'-form';
-			$form = new FormMaker("method=post|action=$action|class=item-reorder|id=$id");
+			$id = $order->ordernumber.'-'.$detail->itemid.'-form';
+			$form = new Dplus\Content\FormMaker("method=post|action=$action|class=item-reorder|id=$id");
 			$form->input("type=hidden|name=action|value=add-to-cart");
-			$form->input("type=hidden|name=ordn|value=$order->orderno");
+			$form->input("type=hidden|name=ordn|value=$order->ordernumber");
 			$form->input("type=hidden|name=custID|value=$order->custid");
 			$form->input("type=hidden|name=itemID|value=$detail->itemid");
 			$form->input("type=hidden|name=qty|value=".intval($detail->qty));
@@ -185,22 +172,22 @@
 		}
 		
 		public function generate_filter(ProcessWire\WireInput $input) {
-			$stringerbell = new StringerBell();
+			$stringerbell = new Dplus\Base\StringerBell();
 			$this->generate_defaultfilter($input);
 
-			if (isset($this->filters['orderdate'])) {
-				if (empty($this->filters['orderdate'][0])) {
-					$this->filters['orderdate'][0] = DplusDateTime::format_date(get_minsaleshistoryorderdate($this->sessionID, 'orderdate'));
+			if (isset($this->filters['order_date'])) {
+				if (empty($this->filters['order_date'][0])) {
+					$this->filters['order_date'][0] = Dplus\Base\DplusDateTime::format_date(get_minsaleshistoryorderdate('orderdate'));
 				}
 
-				if (empty($this->filters['orderdate'][1])) {
-					$this->filters['orderdate'][1] = date('m/d/Y');
+				if (empty($this->filters['order_date'][1])) {
+					$this->filters['order_date'][1] = date('m/d/Y');
 				}
 			}
 
 			if (isset($this->filters['invoice_date'])) {
 				if (empty($this->filters['invoice_date'][0])) {
-					$this->filters['invoice_date'][0] = date('m/d/Y', strtotime(get_minsaleshistoryorderdate($this->sessionID, 'invoice_date')));
+					$this->filters['invoice_date'][0] = date('m/d/Y', strtotime(get_minsaleshistoryorderdate('invoice_date')));
 				}
 
 				if (empty($this->filters['invoice_date'][1])) {

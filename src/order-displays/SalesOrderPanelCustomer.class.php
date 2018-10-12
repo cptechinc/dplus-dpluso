@@ -1,7 +1,9 @@
-<?php 
+<?php
+	Use Dplus\ProcessWire\DplusWire as DplusWire;
+	
 	class CustomerSalesOrderPanel extends SalesOrderPanel implements OrderPanelCustomerInterface {
 		use OrderPanelCustomerTraits;
-		
+
 		public $orders = array();
 		public $filterable = array(
 			'custpo' => array(
@@ -14,19 +16,20 @@
 				'datatype' => 'char',
 				'label' => 'CustID'
 			),
-			'orderno' => array(
+			'ordernumber' => array(
 				'querytype' => 'between',
 				'datatype' => 'char',
 				'label' => 'Order #'
 			),
-			'ordertotal' => array(
+			'total_order' => array(
 				'querytype' => 'between',
 				'datatype' => 'numeric',
 				'label' => 'Order Total'
 			),
-			'orderdate' => array(
+			'order_date' => array(
 				'querytype' => 'between',
 				'datatype' => 'date',
+				'date-format' => 'Ymd',
 				'label' => 'Order Date'
 			),
 			'status' => array(
@@ -40,48 +43,45 @@
 				'label' => 'Sales Person 1'
 			)
 		);
-		
+
 		/* =============================================================
 			SalesOrderPanelInterface Functions
 		============================================================ */
-		public function get_ordercount($debug = false) {
-			$count = count_customerorders($this->sessionID, $this->custID, $this->shipID, $this->filters, $this->filterable, $debug);
-			return $debug ? $count : $this->count = $count;
+		/**
+		 * Returns the Max Sales Order Total
+		 * @param  bool   $debug Return SQL Query?
+		 * @return float         Max Sales Order Total
+		 */
+		public function get_maxsalesordertotal($debug = false) {
+			return get_maxsalesordertotal($this->custID, $this->shipID, $debug);
 		}
-		
-		public function get_orders($debug = false) {
-			$useclass = true;
-			if ($this->tablesorter->orderby) {
-				if ($this->tablesorter->orderby == 'orderdate') {
-					$orders = get_customerordersorderdate($this->sessionID, $this->custID, $this->shipID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
-				} else {
-					$orders = get_customerordersorderby($this->sessionID, $this->custID, $this->shipID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $this->filters, $this->filterable, $useclass, $debug);
-				}
-			} else {
-				// DEFAULT BY ORDER DATE SINCE SALES ORDER # CAN BE ROLLED OVER
-				$this->tablesorter->sortrule = 'DESC';
-				$orders = get_customerordersorderdate($this->sessionID, $this->custID, $this->shipID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
-			}
-			return $debug ? $orders : $this->orders = $orders;
+
+		/**
+		 * Returns the Min Sales Order Total
+		 * @param  bool   $debug Return SQL Query?
+		 * @return float         Min Sales Order Total
+		 */
+		public function get_minsalesordertotal($debug = false) {
+			return get_minsalesordertotal($this->custID, $this->shipID, $debug);
 		}
-		
+
 		/* =============================================================
 			OrderPanelInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-		public function generate_loadurl() { 
+		public function generate_loadurl() {
 			$url = new \Purl\Url(parent::generate_loadurl());
 			$url->query->set('action', 'load-cust-orders');
 			$url->query->set('custID', $this->custID);
 			return $url->getUrl();
 		}
-		
+
 		public function generate_loaddetailsurl(Order $order) {
 			$url = new \Purl\Url(parent::generate_loaddetailsurl($order));
 			$url->query->set('custID', $order->custid);
 			return $url->getUrl();
 		}
-		
+
 		public function generate_lastloadeddescription() {
 			if (DplusWire::wire('session')->{'orders-loaded-for'}) {
 				if (DplusWire::wire('session')->{'orders-loaded-for'} == $this->custID) {
@@ -90,31 +90,32 @@
 			}
 			return '';
 		}
-		
+
 		public function generate_filter(ProcessWire\WireInput $input) {
 			parent::generate_filter($input);
-			
-			if (isset($this->filters['orderdate'])) {
-				if (empty($this->filters['orderdate'][0])) {
-					$this->filters['orderdate'][0] = date('m/d/Y', strtotime(get_minorderdate($this->sessionID, 'orderdate')));
+			$this->filters['custid'] = array($this->custID);
+
+			if (isset($this->filters['order_date'])) {
+				if (empty($this->filters['order_date'][0])) {
+					$this->filters['order_date'][0] = date('m/d/Y', strtotime($this->get_minsalesorderdate('order_date')));
 				}
-				
-				if (empty($this->filters['orderdate'][1])) {
-					$this->filters['orderdate'][1] = date('m/d/Y');
+
+				if (empty($this->filters['order_date'][1])) {
+					$this->filters['order_date'][1] = date('m/d/Y');
 				}
 			}
-			
-			if (isset($this->filters['ordertotal'])) {
-				if (!strlen($this->filters['ordertotal'][0])) {
-					$this->filters['ordertotal'][0] = '0.00';
+
+			if (isset($this->filters['total_order'])) {
+				if (!strlen($this->filters['total_order'][0])) {
+					$this->filters['total_order'][0] = '0.00';
 				}
-				
-				if (!strlen($this->filters['ordertotal'][1])) {
-					$this->filters['ordertotal'][1] = get_maxordertotal($this->sessionID, $this->custID);
+
+				if (!strlen($this->filters['total_order'][1])) {
+					$this->filters['total_order'][1] = $this->get_maxsalesordertotal($this->custID);
 				}
 			}
 		}
-		
+
 		/* =============================================================
 			SalesOrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
@@ -124,7 +125,7 @@
 			$url->query->set('custID', $this->custID);
 			return $url->getUrl();
 		}
-		
+
 		/* =============================================================
 			OrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE

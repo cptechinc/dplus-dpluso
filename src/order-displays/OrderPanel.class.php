@@ -1,9 +1,11 @@
 <?php
+	use \Dplus\Base\QueryBuilder as QueryBuilder;
+	
 	/**
 	 * Blueprint class for dealing with lists of orders and their display
 	 */
 	abstract class OrderPanel extends OrderDisplay {
-		use AttributeParser;
+		use Dplus\Base\AttributeParser;
 
 		/**
 		 * ID of HTML element to focus on after ajax load
@@ -43,7 +45,7 @@
 
 		/**
 		 * Object to sort the columns
-		 * @var TablePageSorter
+		 * @var Dplus\Content\TablePageSorter
 		 */
 		public $tablesorter; // Will be instatnce of TablePageSorter
 
@@ -96,7 +98,7 @@
 			parent::__construct($sessionID, $pageurl, $modal);
 			$this->loadinto = $this->focus = $loadinto;
 			$this->ajaxdata = "data-loadinto='$this->loadinto' data-focus='$this->focus'";
-			$this->tablesorter = new TablePageSorter($this->pageurl->query->get('orderby'));
+			$this->tablesorter = new Dplus\Content\TablePageSorter($this->pageurl->query->get('orderby'));
 
 			if ($ajax) {
 				$this->collapse = '';
@@ -129,10 +131,10 @@
 		 * @return string        HTML for bootstrap popover
 		 */
 		public function generate_shiptopopover(Order $order) {
-			$bootstrap = new HTMLWriter();
-			$address = $order->shipaddress.'<br>';
-			$address .= (!empty($order->shipaddress2)) ? $order->shipaddress2."<br>" : '';
-			$address .= $order->shipcity.", ". $order->shipstate.' ' . $order->shipzip;
+			$bootstrap = new Dplus\Content\HTMLWriter();
+			$address = $order->shipto_address1.'<br>';
+			$address .= (!empty($order->shipto_address2)) ? $order->shipto_address2."<br>" : '';
+			$address .= $order->shipto_city.", ". $order->shipto_state.' ' . $order->shipto_zip;
 			$attr = "tabindex=0|role=button|class=btn btn-default bordered btn-sm|data-toggle=popover";
 			$attr .= "|data-placement=top|data-trigger=focus|data-html=true|title=Ship-To Address|data-content=$address";
 			return $bootstrap->create_element('a', $attr, '<b>?</b>');
@@ -146,7 +148,7 @@
 		 * @return string HTML Link
 		 */
 		public function generate_clearsearchlink() {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_loadurl();
 			$icon = $bootstrap->icon('fa fa-search-minus');
 			$ajaxdata = $this->generate_ajaxdataforcontento();
@@ -158,7 +160,7 @@
 		 * @return [HTML Link
 		 */
 		public function generate_clearsortlink() {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_clearsorturl();
 			$ajaxdata = $this->generate_ajaxdataforcontento();
 			return $bootstrap->create_element('a', "href=$href|class=btn btn-warning btn-sm load-link|$ajaxdata", '(Clear Sort)');
@@ -179,7 +181,7 @@
 		 * @return string HTML link
 		 */
 		public function generate_loadlink() {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_loadurl();
 			$ajaxdata = $this->generate_ajaxdataforcontento();
 			return $bootstrap->create_element('a', "href=$href|class=generate-load-link|$ajaxdata", "Load Orders");

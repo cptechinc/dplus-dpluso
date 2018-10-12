@@ -1,9 +1,10 @@
 <?php
+	use Dplus\ProcessWire\DplusWire as DplusWire;
+	
 	/**
 	 * Class that handles aspects of the display of the Carthead
 	 */
 	class CartDisplay extends OrderDisplay {
-		use ThrowErrorTrait;
 
 		/**
 		 * Carthead, from carthed
@@ -29,7 +30,7 @@
 		 * @return string           HTML link
 		 */
 		public function generate_loaddplusnoteslinkdetail($linenbr) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_dplusnotesrequesturl($this->cart, $linenbr);
 			$detail = CartDetail::load($this->sessionID, $linenbr);
 			$title = ($detail->has_notes()) ? "View and Create Quote Notes" : "Create Quote Notes";
@@ -45,7 +46,7 @@
 		 * @return string          HTML link
 		 */
 		public function generate_loaddplusnoteslinkheader($linenbr = '0') {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_dplusnotesrequesturl($this->cart, $linenbr);
 			$has_notes = has_dplusnote($this->sessionID, $this->sessionID, '0', Qnote::get_qnotetype('cart')) == 'Y' ? true : false;
 			$title = ($has_notes) ? "View and Create Quote Notes" : "Create Quote Notes";
@@ -107,7 +108,7 @@
 		 * @return string              HTML Link
 		 */
 		public function generate_detailvieweditlink(Order $cart, OrderDetail $detail) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_detailviewediturl($cart, $detail);
 			$icon = $bootstrap->create_element('button', 'class=btn btn-sm btn-warning detail-line-icon', $bootstrap->icon('glyphicon glyphicon-pencil'));
 			return $bootstrap->create_element('a', "href=$href|class=update-line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$cart->custid|aria-label=View Detail Line", $icon);

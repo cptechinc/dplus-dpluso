@@ -1,13 +1,15 @@
 <?php
+    use Dplus\ProcessWire\DplusWire as DplusWire;
+    
 	/**
 	 * Class for dealing with Contacts in Dpluso
 	 * Contacts are loaded from custindex
 	 */
     class Contact {
-        use CreateFromObjectArrayTraits;
-		use CreateClassArrayTraits;
-		use ThrowErrorTrait;
-		use MagicMethodTraits;
+        use Dplus\Base\CreateFromObjectArrayTraits;
+		use Dplus\Base\CreateClassArrayTraits;
+		use Dplus\Base\ThrowErrorTrait;
+		use Dplus\Base\MagicMethodTraits;
 
 		public $recno;
 		public $date;
@@ -217,10 +219,10 @@
          * @return bool          Does the user have the right permissions to edit this contact
          */
         public function can_edit($loginID = '') {
-            $loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
+            $loginID = (!empty($loginID)) ? $loginID : Dplus\ProcessWire\DplusWire::wire('user')->loginid;
     		$user = LogmUser::load($loginID);
 
-            if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) {
+            if ($user->get_dplusrole() == Dplus\ProcessWire\DplusWire::wire('config')->roles['sales-rep']) {
                 return ($this->is_ackcontact() || $this->is_certcontact() || $this->is_buyingcontact()) ? true : false;
             } else {
                 return true;

@@ -138,7 +138,7 @@
 		 * @uses
 		 */
 		public function generate_refreshlink() {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_refreshurl();
 			$icon = $bootstrap->icon('fa fa-refresh');
 			$ajaxdata = $this->generate_ajaxdataforcontento();
@@ -151,7 +151,7 @@
 		 * @uses
 		 */
 		public function generate_cleardateparameterslink() {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_refreshurl();
 			$icon = $bootstrap->icon('fa fa-times');
 			$ajaxdata = $this->generate_ajaxdataforcontento();
@@ -220,7 +220,7 @@
 		 * @return void
 		 */
 		protected function determine_interval() {
-			$days = DplusDateTime::subtract_days($this->filters['bookdate'][0], $this->filters['bookdate'][1]);
+			$days = Dplus\Base\DplusDateTime::subtract_days($this->filters['bookdate'][0], $this->filters['bookdate'][1]);
 
 			if ($days >= 90 && empty($this->interval)) {
 				$this->set_interval('month');
@@ -246,7 +246,7 @@
 		 */
 		public function generate_viewsalesordersbydayurl($date) {
 			$url = new Purl\Url($this->pageurl->getUrl());
-			$url->path = DplusWire::wire('config')->pages->ajaxload."bookings/sales-orders/";
+			$url->path = Dplus\ProcessWire\DplusWire::wire('config')->pages->ajaxload."bookings/sales-orders/";
 			$url->query = '';
 			$url->query->set('date', $date);
 			$url->query->set('custID', $this->custID);
@@ -263,7 +263,7 @@
 		 * @uses   $this->generate_viewsalesordersbydayurl($date)
 		 */
 		public function generate_viewsalesordersbydaylink($date) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_viewsalesordersbydayurl($date);
 			$icon = $bootstrap->icon('glyphicon glyphicon-new-window');
 			$ajaxdata = "data-modal=$this->modal";
@@ -278,7 +278,7 @@
 		 */
 		public function generate_viewsalesorderdayurl($ordn, $date) {
 			$url = new Purl\Url($this->pageurl->getUrl());
-			$url->path = DplusWire::wire('config')->pages->ajaxload."bookings/sales-order/";
+			$url->path = Dplus\ProcessWire\DplusWire::wire('config')->pages->ajaxload."bookings/sales-order/";
 			$url->query = '';
 			$url->query->set('ordn', $ordn);
 			$url->query->set('date', $date);
@@ -297,7 +297,7 @@
 		 * @uses $this->generate_viewsalesorderdayurl($ordn, $date);
 		 */
 		public function generate_viewsalesorderdaylink($ordn, $date) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_viewsalesorderdayurl($ordn, $date);
 			$icon = $bootstrap->icon('glyphicon glyphicon-new-window');
 			$ajaxdata = "data-modal=$this->modal";

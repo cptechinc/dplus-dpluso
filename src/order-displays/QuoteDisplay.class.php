@@ -48,7 +48,7 @@
 		}
 		
 		public function generate_editlink(Order $quote) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_editurl($quote);
 			$icon = $bootstrap->icon('material-icons', '&#xE150;');
 			return $bootstrap->create_element('a', "href=$href|class=btn btn-block btn-warning", $icon. " Edit Quote");   
@@ -60,7 +60,7 @@
 		}
 		
 		public function generate_detailvieweditlink(Order $quote, OrderDetail $detail) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_detailviewediturl($quote, $detail);
 			$icon = $bootstrap->create_element('span', 'class=h3', $bootstrap->icon('glyphicon glyphicon-eye-open'));
 			return $bootstrap->create_element('a', "href=$href|class=update-line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$quote->custid|aria-label=View Detail Line", $icon);	

@@ -1,4 +1,6 @@
 <?php
+	use Dplus\ProcessWire\DplusWire as DplusWire;
+	
 	/**
 	 * Traits that will be shared by Sales Order Displays like Displays or Panels
 	 */
@@ -14,7 +16,7 @@
 		 * @return string          HTML link to view Dplus Notes
 		 */
 		public function generate_loaddplusnoteslink(Order $order, $linenbr = '0') {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_dplusnotesrequesturl($order, $linenbr);
 
 			if ($order->can_edit()) {
@@ -36,7 +38,7 @@
 		public function generate_dplusnotesrequesturl(Order $order, $linenbr) {
 			$url = new \Purl\Url($this->pageurl->getUrl());
 			$url->path = DplusWire::wire('config')->pages->notes."redir/";
-			$url->query->setData(array('action' => 'get-order-notes', 'ordn' => $order->orderno, 'linenbr' => $linenbr));
+			$url->query->setData(array('action' => 'get-order-notes', 'ordn' => $order->ordernumber, 'linenbr' => $linenbr));
 			return $url->getUrl();
 		}
 
@@ -63,7 +65,7 @@
 		 * @uses
 		 */
 		public function generate_loadheaderdocumentslink(Order $order, OrderDetail $orderdetail = null) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_documentsrequesturl($order, $orderdetail);
 			$icon = $bootstrap->icon('fa fa-file-text');
 			$ajaxdata = "data-loadinto=.docs|data-focus=.docs|data-click=#documents-link";
@@ -83,7 +85,7 @@
 		 * @uses
 		 */
 		public function generate_loaddetaildocumentslink(Order $order, OrderDetail $orderdetail = null) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_documentsrequesturl($order, $orderdetail);
 			$icon = $bootstrap->icon('fa fa-file-text');
 			$ajaxdata = "data-loadinto=.docs|data-focus=.docs|data-click=#documents-link";
@@ -105,7 +107,7 @@
 		 */
 		public function generate_documentsrequesturltrait(Order $order, OrderDetail $orderdetail = null) {
 			$url = $this->generate_ordersredirurl();
-			$url->query->setData(array('action' => 'get-order-documents', 'ordn' => $order->orderno));
+			$url->query->setData(array('action' => 'get-order-documents', 'ordn' => $order->ordernumber));
 			if ($orderdetail) {
 				$url->query->set('itemdoc', $orderdetail->itemid);
 			}
@@ -113,26 +115,13 @@
 		}
 
 		/**
-		 * Returns URL to edit order page
+		 * Returns URL to Request Edit Order
 		 * @param  Order  $order SalesOrder
 		 * @return string        URL to edit order page
 		 */
 		public function generate_editurl(Order $order) {
 			$url = $this->generate_ordersredirurl();
-			$url->query->setData(array('action' => 'get-order-details','ordn' => $order->orderno));
-
-			if ($order->can_edit()) {
-				$url->query->set('lock', 'lock');
-			} elseif ($order->editord == 'L') {
-				if (DplusWire::wire('user')->hasorderlocked) {
-					$queryset = ($order->orderno == DplusWire::wire('user')->lockedordn) ?  'lock' : 'readonly';
-					$url->query->set($queryset, $queryset);
-				} else {
-					$url->query->set('readonly', 'readonly');
-				}
-			} else {
-				$url->query->set('readonly', 'readonly');
-			}
+			$url->query->setData(array('action' => 'get-order-edit','ordn' => $order->ordernumber));
 			return $url->getUrl();
 		}
 
@@ -142,7 +131,7 @@
 		 * @return string        HTML link to view print page
 		 */
 		public function generate_viewprintlink(Order $order) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_viewprinturl($order);
 			$icon = $bootstrap->create_element('span','class=h3', $bootstrap->icon('glyphicon glyphicon-print'));
 			return $bootstrap->create_element('a', "href=$href|target=_blank", $icon." View Printable Order");
@@ -154,8 +143,8 @@
 		 * @return string        URL to view print page
 		 */
 		public function generate_viewprinturl(Order $order) {
-			$url = new \Purl\Url($this->generate_loaddetailsurl($order));
-			$url->query->set('print', 'true');
+			$url = $this->generate_ordersredirurl();
+			$url->query->setData(array('action' => 'get-order-print','ordn' => $order->ordernumber));
 			return $url->getUrl();
 		}
 
@@ -168,7 +157,7 @@
 		public function generate_viewprintpageurl(Order $order) {
 			$url = new \Purl\Url($this->pageurl->getUrl());
 			$url->path = DplusWire::wire('config')->pages->print."order/";
-			$url->query->set('ordn', $order->orderno);
+			$url->query->set('ordn', $order->ordernumber);
 			$url->query->set('view', 'pdf');
 			return $url->getUrl();
 		}
@@ -181,7 +170,7 @@
 		 */
 		public function generate_sendemailurl(Order $order) {
 			$url = new \Purl\Url(DplusWire::wire('config')->pages->email."sales-order/");
-			$url->query->set('ordn', $order->orderno);
+			$url->query->set('ordn', $order->ordernumber);
 			$url->query->set('referenceID', $this->sessionID);
 			return $url->getUrl();
 		}
@@ -192,7 +181,7 @@
 		 * @return string        HTML Link to view linked user actions
 		 */
 		public function generate_viewlinkeduseractionslink(Order $order) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_viewlinkeduseractionsurl($order);
 			$icon = $bootstrap->create_element('span','class=h3', $bootstrap->icon('glyphicon glyphicon-check'));
 			return $bootstrap->create_element('a', "href=$href|target=_blank", $icon." View Associated Actions");
@@ -206,7 +195,7 @@
 		public function generate_viewlinkeduseractionsurl(Order $order) {
 			$url = new \Purl\Url($this->pageurl->getUrl());
 			$url->path = DplusWire::wire('config')->pages->useractions;
-			$url->query->setData(array('ordn' => $order->orderno));
+			$url->query->setData(array('ordn' => $order->ordernumber));
 			return $url->getUrl();
 		}
 
@@ -217,7 +206,7 @@
 		 * @return string              HTML Link
 		 */
 		public function generate_viewdetaillink(Order $order, OrderDetail $detail) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_viewdetailurl($order, $detail);
 			$icon = $bootstrap->icon('fa fa-info-circle');
 			return $bootstrap->create_element('a', "href=$href|class=h3 view-item-details|data-itemid=$detail->itemid|data-kit=$detail->kititemflag|data-modal=#ajax-modal", $icon);
@@ -232,7 +221,7 @@
 		public function generate_viewdetailurl(Order $order, OrderDetail $detail) {
 			$url = new \Purl\Url($this->pageurl->getUrl());
 			$url->path = DplusWire::wire('config')->pages->ajax."load/view-detail/order/";
-			$url->query->setData(array('ordn' => $order->orderno, 'line' => $detail->linenbr));
+			$url->query->setData(array('ordn' => $order->ordernumber, 'line' => $detail->linenbr));
 			return $url->getUrl();
 		}
 
@@ -246,7 +235,7 @@
 		 */
 		public function generate_loaddetailsurltrait(Order $order) {
 			$url = $this->generate_ordersredirurl();
-			$url->query->setData(array('action' => 'get-order-details', 'ordn' => $order->orderno));
+			$url->query->setData(array('action' => 'get-order-details', 'ordn' => $order->ordernumber));
 			return $url->getUrl();
 		}
 
@@ -269,7 +258,7 @@
 		 */
 		public function generate_detailviewediturl(Order $order, OrderDetail $detail) {
 			$url = new \Purl\Url(DplusWire::wire('config')->pages->ajaxload.'edit-detail/order/');
-			$url->query->setData(array('ordn' => $order->orderno, 'line' => $detail->linenbr));
+			$url->query->setData(array('ordn' => $order->ordernumber, 'line' => $detail->linenbr));
 			return $url->getUrl();
 		}
 
@@ -282,7 +271,7 @@
 		 * @return string        HTML Link
 		 */
 		public function generate_loadtrackinglink(Order $order) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_trackingrequesturl($order);
 			$icon = $bootstrap->create_element('i','class=glyphicon glyphicon-plane hover|style=top: 3px; padding-right: 5px; font-size: 130%;|aria-hidden=true', '');
 			$ajaxdata = "data-loadinto=.tracking|data-focus=.tracking|data-click=#tracking-tab-link";
@@ -302,7 +291,7 @@
 		 */
 		public function generate_trackingrequesturltrait(Order $order) {
 			$url = $this->generate_ordersredirurl();
-			$url->query->setData(array('action' => 'get-order-tracking', 'ordn' => $order->orderno));
+			$url->query->setData(array('action' => 'get-order-tracking', 'ordn' => $order->ordernumber));
 			return $url->getUrl();
 		}
 
@@ -313,7 +302,7 @@
 		 * @return array        SalesOrderDetails Array | SQL Query
 		 */
 		public function get_orderdetails(Order $order, $debug = false) {
-			return get_orderdetails($this->sessionID, $order->orderno, true, $debug);
+			return get_orderdetails($this->sessionID, $order->ordernumber, true, $debug);
 		}
 
 		/**

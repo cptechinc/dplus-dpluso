@@ -3,10 +3,10 @@
 	 * Deals with Vendors from vendors Table
 	 */
 	class Vendor {
-		use ThrowErrorTrait;
-		use MagicMethodTraits;
-		use CreateFromObjectArrayTraits;
-		use CreateClassArrayTraits;
+		use Dplus\Base\ThrowErrorTrait;
+		use Dplus\Base\MagicMethodTraits;
+		use Dplus\Base\CreateFromObjectArrayTraits;
+		use Dplus\Base\CreateClassArrayTraits;
 
 		protected $vendid;
 		protected $shipfrom;

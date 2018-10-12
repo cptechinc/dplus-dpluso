@@ -1,11 +1,13 @@
 <?php
+	use Dplus\ProcessWire\DplusWire as DplusWire;
+	
 	/**
 	 * Dplus User that has their email, name, loginid, role, company, fax, phone
 	 */
 	class LogmUser {
-		use ThrowErrorTrait;
-		use MagicMethodTraits;
-
+		use Dplus\Base\ThrowErrorTrait;
+		use Dplus\Base\MagicMethodTraits;
+		
 		/**
 		 * Login ID
 		 * @var string

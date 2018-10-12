@@ -1,4 +1,6 @@
 <?php
+	use Dplus\ProcessWire\DplusWire as DplusWire;
+	
 	class EditQuoteDisplay extends QuoteDisplay {
 		use QuoteDisplayTraits;
 
@@ -24,7 +26,7 @@
 		 * @return string        HTML link to send Quote to Order
 		 */
 		public function generate_sendtoorderlink(Order $quote) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_sendtoorderurl($quote);
 			$icon = $bootstrap->icon('fa fa-paper-plane-o');
 			return $bootstrap->create_element('a', "href=$href|class=btn btn-block btn-default", $icon. " Send To Order");
@@ -70,7 +72,7 @@
 		 * @return string        HTML to discard Quote changes
 		 */
 		public function generate_discardchangeslink(Order $quote) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_unlockurl($quote);
 			$icon = $bootstrap->icon('glyphicon glyphicon-floppy-remove');
 			return $bootstrap->create_element('a', "href=$href|class=btn btn-block btn-warning", $icon. " Discard Changes, Unlock Quote");
@@ -82,7 +84,7 @@
 		 * @return string        HTML button to save and unlock Quote
 		 */
 		public function generate_saveunlockbutton(Order $quote) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$icon = $bootstrap->icon('fa fa-unlock');
 			return $bootstrap->create_element('button', "class=btn btn-block btn-emerald save-unlock-quotehead|data-form=#quotehead-form", $icon. " Save and Exit");
 		}
@@ -94,14 +96,14 @@
 		 */
 		public function generate_confirmationlink(Order $quote) {
 			$href = $this->generate_confirmationurl($quote);
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_unlockurl($quote);
 			$icon = $bootstrap->icon('fa fa-unlock');
 			return $bootstrap->create_element('a', "href=$href|class=btn btn-block btn-success", $icon. " Finished with quote");
 		}
 
 		public function generate_detailvieweditlink(Order $quote, OrderDetail $detail) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_detailviewediturl($quote, $detail);
 			$icon = $bootstrap->create_element('button', 'class=btn btn-sm btn-warning', $bootstrap->icon('glyphicon glyphicon-pencil'));
 			return $bootstrap->create_element('a', "href=$href|class=update-line|title=Edit Item|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$quote->custid|aria-label=View Detail Line", $icon);
@@ -114,7 +116,7 @@
 		 * @return string              HTML Link to delete detail line
 		 */
 		public function generate_deletedetaillink(Order $quote, OrderDetail $detail) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$icon = $bootstrap->icon('glyphicon glyphicon-trash') . $bootstrap->create_element('span', 'class=sr-only', 'Delete Line');
 			$url = $this->generate_quotesredirurl();
 			$url->query->setData(array('action' => 'remove-line-get', 'qnbr' => $quote->quotnbr, 'linenbr' => $detail->linenbr, 'page' => $this->pageurl->getUrl()));
@@ -127,7 +129,7 @@
 		 * @return string HTML bootstrap alert div that this Quote is will be in read only mode
 		 */
 		public function generate_readonlyalert() {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$msg = $bootstrap->create_element('b', '', 'Attention!') . ' This order will open in read-only mode, you will not be able to save changes.';
 			return $bootstrap->alertpanel('warning', $msg);
 		}
@@ -138,7 +140,7 @@
 		 * @return string        HTML bootstrap alert for an error
 		 */
 		public function generate_erroralert($quote) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$msg = $bootstrap->create_element('b', '', 'Error!') . $quote->errormsg;
 			return $bootstrap->alertpanel('danger', $msg, false);
 		}
@@ -147,7 +149,7 @@
 			OrderDisplay Interface Functions
 		============================================================ */
 		public function generate_loaddplusnoteslink(Order $quote, $linenbr = '0') {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_dplusnotesrequesturl($quote, $linenbr);
 
 			if ($quote->can_edit()) {

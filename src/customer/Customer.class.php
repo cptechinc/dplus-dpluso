@@ -1,11 +1,13 @@
 <?php
+    use Dplus\ProcessWire\DplusWire as DplusWire;
+    
 	/**
 	 * Class for dealing with Customers
 	 * Derived from the custindex Table
 	 */
     class Customer extends Contact {
-        use CreateFromObjectArrayTraits;
-		use CreateClassArrayTraits;
+        use Dplus\Base\CreateFromObjectArrayTraits;
+		use Dplus\Base\CreateClassArrayTraits;
         
         /* =============================================================
 			GETTER FUNCTIONS
@@ -165,7 +167,7 @@
          * @return string          SQL Query
          */
         public function create_custpermpermission($loginID = '', $debug = false) {
-            if (!can_accesscustomer($this->custid, $this->shiptoid, $loginID)) {
+            if (!has_custperm($this->custid, $this->shiptoid)) {
                 insert_custperm($this, LogmUser::get_toplevelcustpermloginid(), $debug);
                 return insert_custperm($this, $loginID, $debug);
             }

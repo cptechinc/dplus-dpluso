@@ -4,9 +4,9 @@
 	 * @author Paul Gomez paul@cptechinc.com
 	 */
 	class BookingsPanel {
-		use ThrowErrorTrait;
-		use MagicMethodTraits;
-		use AttributeParser;
+		use Dplus\Base\ThrowErrorTrait;
+		use Dplus\Base\MagicMethodTraits;
+		use Dplus\Base\AttributeParser;
 
 		/**
 		 * Object that stores page location and where to load
@@ -207,7 +207,7 @@
 		 * @return void
 		 */
 		public function setup_pageurl() {
-			$this->pageurl->path = DplusWire::wire('config')->pages->ajaxload."bookings/";
+			$this->pageurl->path = Dplus\ProcessWire\DplusWire::wire('config')->pages->ajaxload."bookings/";
 		}
 		/**
 		 * Defines the interval
@@ -242,7 +242,7 @@
 		 * @uses
 		 */
 		public function generate_refreshlink() {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_refreshurl();
 			$icon = $bootstrap->icon('fa fa-refresh');
 			$ajaxdata = $this->generate_ajaxdataforcontento();
@@ -255,7 +255,7 @@
 		 * @uses
 		 */
 		public function generate_cleardateparameterslink() {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_refreshurl();
 			$icon = $bootstrap->icon('fa fa-times');
 			$ajaxdata = $this->generate_ajaxdataforcontento();
@@ -351,7 +351,7 @@
 		 * @return void
 		 */
 		protected function determine_interval() {
-			$days = DplusDateTime::subtract_days($this->filters['bookdate'][0], $this->filters['bookdate'][1]);
+			$days = Dplus\Base\DplusDateTime::subtract_days($this->filters['bookdate'][0], $this->filters['bookdate'][1]);
 
 			if ($days >= 90 && empty($this->interval)) {
 				$this->set_interval('month');
@@ -377,7 +377,7 @@
 		 */
 		public function generate_viewsalesordersbydayurl($date) {
 			$url = new Purl\Url($this->pageurl->getUrl());
-			$url->path = DplusWire::wire('config')->pages->ajaxload."bookings/sales-orders/";
+			$url->path = Dplus\ProcessWire\DplusWire::wire('config')->pages->ajaxload."bookings/sales-orders/";
 			$url->query = '';
 			$url->query->set('date', $date);
 			return $url->getUrl();
@@ -390,7 +390,7 @@
 		 * @uses   $this->generate_viewsalesordersbydayurl($date)
 		 */
 		public function generate_viewsalesordersbydaylink($date) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_viewsalesordersbydayurl($date);
 			$icon = $bootstrap->icon('glyphicon glyphicon-new-window');
 			$ajaxdata = "data-modal=$this->modal";
@@ -404,7 +404,7 @@
 		 * @uses   $this->generate_viewsalesordersbydayurl($date)
 		 */
 		public function generate_viewsalesordersbydaybacklink($date) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_viewsalesordersbydayurl($date);
 			$icon = $bootstrap->icon('fa fa-arrow-circle-left');
 			$ajaxdata = "data-modal=$this->modal";
@@ -419,7 +419,7 @@
 		 */
 		public function generate_viewsalesorderdayurl($ordn, $date) {
 			$url = new Purl\Url($this->pageurl->getUrl());
-			$url->path = DplusWire::wire('config')->pages->ajaxload."bookings/sales-order/";
+			$url->path = Dplus\ProcessWire\DplusWire::wire('config')->pages->ajaxload."bookings/sales-order/";
 			$url->query = '';
 			$url->query->set('ordn', $ordn);
 			$url->query->set('date', $date);
@@ -434,7 +434,7 @@
 		 * @uses $this->generate_viewsalesorderdayurl($ordn, $date);
 		 */
 		public function generate_viewsalesorderdaylink($ordn, $date) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_viewsalesorderdayurl($ordn, $date);
 			$icon = $bootstrap->icon('glyphicon glyphicon-new-window');
 			$ajaxdata = "data-modal=$this->modal";
@@ -452,7 +452,7 @@
 			$lastofmonth = date("m/$daysinmonth/Y", strtotime($date));
 			
 			$url = new Purl\Url($this->pageurl->getUrl());
-			$url->path = DplusWire::wire('config')->pages->ajaxload."bookings/";
+			$url->path = Dplus\ProcessWire\DplusWire::wire('config')->pages->ajaxload."bookings/";
 			$url->query = '';
 			$url->query->set('filter', 'filter');
 			$url->query->set('bookdate', "$firstofmonth|$lastofmonth");
@@ -465,10 +465,10 @@
 		 * @return string       HTML Link
 		 */
 		public function generate_viewmonthlink($date) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_viewmonthurl($date);
 			$ajaxdata = $this->generate_ajaxdataforcontento();
-			$monthyear = DplusDateTime::format_date($date, 'F Y');
+			$monthyear = Dplus\Base\DplusDateTime::format_date($date, 'F Y');
 			return $bootstrap->a("href=$href|class=load-and-show|$ajaxdata|title=View $monthyear bookings", "$monthyear");
 		}
 	}

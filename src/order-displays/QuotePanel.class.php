@@ -1,4 +1,6 @@
 <?php
+	use Dplus\ProcessWire\DplusWire as DplusWire;
+	
 	/**
 	 * Class for dealing with list of quotes
 	 */
@@ -101,14 +103,14 @@
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
 		public function generate_loadlink() {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_loadurl();
 			$ajaxdata = $this->generate_ajaxdataforcontento();
 			return $bootstrap->create_element('a', "href=$href|class=generate-load-link|$ajaxdata", "Load Quotes");
 		}
 
 		public function generate_refreshlink() {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_loadurl();
 			$icon = $bootstrap->icon('fa fa-refresh');
 			$ajaxdata = $this->generate_ajaxdataforcontento();
@@ -116,7 +118,7 @@
 		}
 
 		public function generate_expandorcollapselink(Order $quote) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 
 			if ($this->activeID == $quote->quotnbr) {
 				$href = $this->generate_closedetailsurl();
@@ -143,7 +145,7 @@
 		}
 
 		public function generate_shiptopopover(Order $quote) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$address = $quote->shipaddress.'<br>';
 			$address .= (!empty($quote->shipaddress2)) ? $quote->shipaddress2."<br>" : '';
 			$address .= $quote->shipcity.", ". $quote->shipstate.' ' . $quote->shipzip;
@@ -153,7 +155,7 @@
 		}
 
 		public function generate_iconlegend() {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$content = $bootstrap->create_element('i', 'class=glyphicon glyphicon-shopping-cart|title=Re-order Icon', '') . ' = Re-order <br>';
 			$content .= $bootstrap->create_element('i', "class=material-icons|title=Documents Icon", '&#xE873;') . '&nbsp; = Documents <br>';
 			$content .= $bootstrap->create_element('i', 'class=glyphicon glyphicon-plane hover|title=Tracking Icon', '') . ' = Tracking <br>';
@@ -191,7 +193,7 @@
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
 		public function generate_loaddplusnoteslink(Order $quote, $linenbr = '0') {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_dplusnotesrequesturl($quote, $linenbr);
 
 			if ($quote->can_edit()) {
@@ -214,14 +216,14 @@
 		}
 
 		public function generate_viewlinkeduseractionslink(Order $quote) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_viewlinkeduseractionsurl($quote);
 			$icon = $bootstrap->create_element('span','class=h3', $bootstrap->icon('glyphicon glyphicon-check'));
 			return $bootstrap->create_element('a', "href=$href|class=load-into-modal|data-modal=$this->modal", $icon." View Associated Actions");
 		}
 
 		public function generate_editlink(Order $quote) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 
 			if (DplusWire::wire('user')->hasquotelocked) {
 				if ($quote->quotnbr == DplusWire::wire('user')->lockedqnbr) {
@@ -241,7 +243,7 @@
 		}
 
 		public function generate_loaddocumentslink(Order $quote, OrderDetail $quotedetail = null) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_documentsrequesturl($quote, $quotedetail);
 			$icon = $bootstrap->icon('material-icons md-36', '&#xE873;');
 			$ajaxdata = $this->generate_ajaxdataforcontento();
@@ -254,7 +256,7 @@
 		}
 
 		public function generate_detailvieweditlink(Order $quote, OrderDetail $detail) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_detailviewediturl($quote, $detail);
 			return $bootstrap->create_element('a', "href=$href|class=update-line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$quote->custid|aria-label=View Detail Line", $detail->itemid);
 		}
@@ -268,8 +270,8 @@
 			return '';
 		}
 
-		public function generate_filter(ProcessWire\WireInput $input) {
-			$stringerbell = new StringerBell();
+		public function generate_filter(\ProcessWire\WireInput $input) {
+			$stringerbell = new Dplus\Base\StringerBell();
 			parent::generate_filter($input);
 
 			if (isset($this->filters['quotdate'])) {

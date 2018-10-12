@@ -4,8 +4,8 @@
 	 * like Sales Order Head or Quote Head
 	 */
     class FormFieldsConfig {
-		use ThrowErrorTrait;
-		use MagicMethodTraits;
+		use Dplus\Base\ThrowErrorTrait;
+		use Dplus\Base\MagicMethodTraits;
 		
 		/**
 		 * Form Type

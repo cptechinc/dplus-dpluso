@@ -1,11 +1,12 @@
 <?php
+	
 	/**
 	 * Class for dealing with the display of arrays of UserAction
 	 * Content
 	 */
 	class ActionsPanel extends UserActionDisplay {
-		use Filterable;
-		use AttributeParser;
+		use Dplus\Base\Filterable;
+		use Dplus\Base\AttributeParser;
 
 		/**
 		* Session Identifier
@@ -195,10 +196,10 @@
 		 * @param bool                  $throughajax If panel was loaded through ajax
 		 * @param string                $panelID     Panel element ID
 		 */
-		public function __construct($sessionID, \Purl\Url $pageurl, ProcessWire\WireInput $input, $throughajax = false, $panelID = '') {
+		public function __construct($sessionID, \Purl\Url $pageurl, \ProcessWire\WireInput $input, $throughajax = false, $panelID = '') {
 			$this->sessionID = $sessionID;
 			$this->pageurl = new \Purl\Url($pageurl->getUrl());
-			$this->pagenbr = Paginator::generate_pagenbr($pageurl);
+			$this->pagenbr = Dplus\Content\Paginator::generate_pagenbr($pageurl);
 			$this->throughajax = $throughajax;
 			$this->panelID = !empty($panelID) ? $panelID : $this->panelID;
 			$this->inmodal = $this->pageurl->query->get('modal') ? true : false;
@@ -248,7 +249,7 @@
 		public function generate_refreshurl() {
 			$url = new \Purl\Url($this->pageurl->getUrl());
 			$url->query->remove('modal');
-			$url->path = DplusWire::wire('config')->pages->useractions;
+			$url->path = Dplus\ProcessWire\DplusWire::wire('config')->pages->useractions;
 			return $url->getUrl();
 		}
 
@@ -271,13 +272,13 @@
 		 * @return string URL to load add new action[type=$this->actiontype] form
 		 */
 		public function generate_addactionurl() {
-			if (DplusWire::wire('config')->cptechcustomer == 'stempf') {
+			if (Dplus\ProcessWire\DplusWire::wire('config')->cptechcustomer == 'stempf') {
 				$actiontype = ($this->actiontype == 'all') ? 'task' : $this->actiontype;
 			} else {
 				$actiontype = '';
 			}
 			$url = new \Purl\Url($this->generate_refreshurl());
-			$url->path = DplusWire::wire('config')->pages->useractions."add/";
+			$url->path = Dplus\ProcessWire\DplusWire::wire('config')->pages->useractions."add/";
 			$url->query = '';
 			$url->query->set('type', $actiontype);
 			return $url->getUrl();
@@ -425,7 +426,7 @@
 		 * @return array         Array of UserAction
 		 */
 		public function get_actions($debug = false) {
-			return get_actions($this->filters, $this->filterable, DplusWire::wire('session')->display, $this->pagenbr, $debug);
+			return get_actions($this->filters, $this->filterable, Dplus\ProcessWire\DplusWire::wire('session')->display, $this->pagenbr, $debug);
 		}
 
 		/**
@@ -598,7 +599,7 @@
 		/* =============================================================
 			CLASS FUNCTIONS
 		============================================================ */
-		public function generate_filter(ProcessWire\WireInput $input) {
+		public function generate_filter(\ProcessWire\WireInput $input) {
 			$this->generate_defaultfilter($input);
 
 			// IF NO CHOSEN TASK STATE THEN DEFAULT TO INCOMPLETES
@@ -608,7 +609,7 @@
 
 			// IF ASSIGNED USERS AREN'T BEING PROVIDED, THEN DEFAULT TO CURRENT USER
 			if (!isset($this->filters['assignedto'])) {
-				$this->filters['assignedto'] = array(DplusWire::wire('user')->loginid);
+				$this->filters['assignedto'] = array(Dplus\ProcessWire\DplusWire::wire('user')->loginid);
 			}
 
 
@@ -654,7 +655,7 @@
 		 * @return string  HTML Link
 		 */
 		public function generate_refreshlink() {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_refreshurl();
 			$icon = $bootstrap->icon('material-icons md-18', '&#xE86A;');
 			$ajaxdata = $this->generate_ajaxdataforcontento();
@@ -667,10 +668,10 @@
 		 * @return string HTML Link
 		 */
 		public function generate_addlink() {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_addactionurl();
 			$icon = $bootstrap->icon('material-icons md-18', '&#xE146;');
-			if (DplusWire::wire('config')->cptechcustomer == 'stempf') {
+			if (Dplus\ProcessWire\DplusWire::wire('config')->cptechcustomer == 'stempf') {
 				$ajaxclass = $this->inmodal ? 'modal-load' : 'load-into-modal';
 				return $bootstrap->create_element('a', "href=$href|class=btn btn-info btn-xs $ajaxclass pull-right hidden-print|data-modal=$this->modal|role=button|title=Add Action", $icon);
 			}
@@ -682,7 +683,7 @@
 		 * @return string  HTML Link
 		 */
 		public function generate_clearfilterlink() {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_loadurl();
 			$icon = $bootstrap->icon('fa fa-times');
 			$ajaxdata = $this->generate_ajaxdataforcontento();
@@ -694,7 +695,7 @@
 		 * @return string  HTML Link to Print Page
 		 */
 		public function generate_printlink() {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_refreshurl();
 			$icon = $bootstrap->icon('glyphicon glyphicon-print');
 			return $bootstrap->create_element('a', "href=$href|class=h3|target=_blank", $icon." View Printable");
@@ -702,7 +703,7 @@
 
 
 		public function generate_completetasklink(UserAction $task) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_viewactionjsonurl($task);
 			$icon = $bootstrap->icon('fa fa-check-circle');
 			$icon .= ' <span class="sr-only">Mark as Complete</span>';
@@ -714,8 +715,8 @@
 		 * @return string HTML Link
 		 */
 		public function generate_legend() {
-			$bootstrap = new HTMLWriter();
-			$tb = new Table('class=table table-bordered table-condensed table-striped');
+			$bootstrap = new Dplus\Content\HTMLWriter();
+			$tb = new Dplus\Content\Table('class=table table-bordered table-condensed table-striped');
 			$tb->tr('class=bg-warning')->td('', 'Task Overdue');
 			$tb->tr('class=bg-info')->td('', 'Task Rescheduled');
 			$tb->tr('class=bg-success')->td('', 'Task Completed');
@@ -756,7 +757,7 @@
 		 * @uses Contento
 		 */
 		public function generate_calendar($month, $year) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 
 			$dateComponents = getdate();
 			// Create array containing abbreviations of days of week.
@@ -777,7 +778,7 @@
 			$weekdayindex = $dateComponents['wday'];
 
 			// Create the table tag opener and day headers
-			$tb = new Table('class=calendar table table-condensed table-bordered');
+			$tb = new Dplus\Content\Table('class=calendar table table-condensed table-bordered');
 
 			// Create the calendar headers
 			$tb->tablesection('thead');

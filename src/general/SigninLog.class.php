@@ -1,8 +1,8 @@
 <?php
     class SigninLog {
-        use ThrowErrorTrait;
-		use MagicMethodTraits;
-        use AttributeParser;
+        use Dplus\Base\ThrowErrorTrait;
+		use Dplus\Base\MagicMethodTraits;
+        use Dplus\Base\AttributeParser;
         /**
 		 * Array of logins
 		 * @var array
@@ -180,7 +180,7 @@
 		}
 
 		public function generate_clearsearchlink() {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_loadurl();
 			$icon = $bootstrap->icon('fa fa-search-minus');
             $ajaxdata = $this->generate_ajaxdataforcontento();

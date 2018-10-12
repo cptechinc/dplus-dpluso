@@ -1,7 +1,9 @@
-<?php 	
+<?php
+	use Dplus\ProcessWire\DplusWire as DplusWire;
+	
 	class SalesOrderPanel extends OrderPanel implements OrderDisplayInterface, SalesOrderDisplayInterface, OrderPanelInterface, SalesOrderPanelInterface {
 		use SalesOrderDisplayTraits;
-		
+
 		/**
 		 * Array of SalesOrders
 		 * @var array
@@ -19,19 +21,20 @@
 				'datatype' => 'char',
 				'label' => 'CustID'
 			),
-			'orderno' => array(
+			'ordernumber' => array(
 				'querytype' => 'between',
 				'datatype' => 'char',
 				'label' => 'Order #'
 			),
-			'ordertotal' => array(
+			'total_order' => array(
 				'querytype' => 'between',
 				'datatype' => 'numeric',
 				'label' => 'Order Total'
 			),
-			'orderdate' => array(
+			'order_date' => array(
 				'querytype' => 'between',
 				'datatype' => 'date',
+				'date-format' => 'Ymd',
 				'label' => 'Order Date'
 			),
 			'status' => array(
@@ -45,39 +48,51 @@
 				'label' => 'Sales Person 1'
 			)
 		);
-		
+
 		public function __construct($sessionID, \Purl\Url $pageurl, $modal, $loadinto, $ajax) {
 			parent::__construct($sessionID, $pageurl, $modal, $loadinto, $ajax);
 			$this->pageurl = new Purl\Url($pageurl->getUrl());
 			$this->setup_pageurl();
 		}
-		
+
 		/* =============================================================
 			SalesOrderPanelInterface Functions
 		============================================================ */
 		public function get_ordercount($debug = false) {
-			$count = count_userorders($this->sessionID, $this->filters, $this->filterable, $debug);
+			$count = count_salesorders($this->filters, $this->filterable, $debug);
 			return $debug ? $count : $this->count = $count;
 		}
-		
+
 		public function get_orders($debug = false) {
-			$useclass = true;
 			if ($this->tablesorter->orderby) {
-				if ($this->tablesorter->orderby == 'orderdate') {
-					$orders = get_userordersorderdate($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
-				} else {
-					$orders = get_userordersorderby($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $this->filters, $this->filterable, $useclass, $debug);
-				}
+				$orders = get_salesorders_orderby(DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $this->filters, $this->filterable, $useclass = true, $debug);
 			} else {
 				// DEFAULT BY ORDER DATE SINCE SALES ORDER # CAN BE ROLLED OVER
-				$this->tablesorter->sortrule = 'DESC'; 
-				//$this->tablesorter->orderby = 'orderno';
-				//$orders = get_salesrepordersorderby($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $useclass, $debug);
-				$orders = get_userordersorderdate($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
+				$this->tablesorter->orderby = 'order_date';
+				$this->tablesorter->sortrule = 'DESC';
+				$orders = get_salesorders_orderby(DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $this->filters, $this->filterable, $useclass = true, $debug);
 			}
 			return $debug ? $orders : $this->orders = $orders;
 		}
-		
+
+		/**
+		 * Returns the Max Sales Order Total
+		 * @param  bool   $debug Return SQL Query?
+		 * @return float         Max Sales Order Total
+		 */
+		public function get_maxsalesordertotal($debug = false) {
+			return get_maxsalesordertotal($custID = '', $shipID = '', $debug);
+		}
+
+		/**
+		 * Returns the Min Sales Order Total
+		 * @param  bool   $debug Return SQL Query?
+		 * @return float         Min Sales Order Total
+		 */
+		public function get_minsalesordertotal($debug = false) {
+			return get_minsalesordertotal($custID = '', $shipID = '', $debug);
+		}
+
 		/* =============================================================
 			OrderPanelInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
@@ -88,51 +103,51 @@
 			$this->pageurl->query->remove('ajax');
 			$this->paginationinsertafter = 'sales-orders';
 		}
-		
+
 		public function generate_expandorcollapselink(Order $order) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			
-			if ($order->orderno == $this->activeID) {
+			if ($order->ordernumber == $this->activeID) {
 				$href = $this->generate_closedetailsurl($order);
 				$ajaxdata = $this->generate_ajaxdataforcontento();
 				$addclass = 'load-link';
 				$icon = '-';
 			} else {
 				$href = $this->generate_loaddetailsurl($order);
-				$ajaxdata = "data-loadinto=$this->loadinto|data-focus=#$order->orderno";
+				$ajaxdata = "data-loadinto=$this->loadinto|data-focus=#$order->ordernumber";
 				$addclass = 'generate-load-link';
 				$icon = '+';
 			}
 			return $bootstrap->create_element('a', "href=$href|class=btn btn-sm btn-primary $addclass|$ajaxdata", $icon);
 		}
-		
+
 		public function generate_rowclass(Order $order) {
-			return ($this->activeID == $order->orderno) ? 'selected' : '';
+			return ($this->activeID == $order->ordernumber) ? 'selected' : '';
 		}
-		
-		public function generate_loadurl() { 
+
+		public function generate_loadurl() {
 			$url = new \Purl\Url($this->pageurl->getUrl());
 			$url->path = DplusWire::wire('config')->pages->orders.'redir/';
 			$url->query->setData(array('action' => 'load-orders'));
 			return $url->getUrl();
 		}
-		
+
 		public function generate_refreshlink() {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_loadurl();
 			$icon = $bootstrap->icon('fa fa-refresh');
 			$ajaxdata = $this->generate_ajaxdataforcontento();
 			return $bootstrap->create_element('a', "href=$href|class=generate-load-link|$ajaxdata", "$icon Refresh Orders");
 		}
-		
-		public function generate_closedetailsurl() { 
+
+		public function generate_closedetailsurl() {
 			$url = new \Purl\Url($this->pageurl->getUrl());
 			$url->query->setData(array('ordn' => false, 'show' => false));
 			return $url->getUrl();
 		}
-		
+
 		public function generate_iconlegend() {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$content = $bootstrap->create_element('i', 'class=glyphicon glyphicon-shopping-cart|title=Re-order Icon', '') . ' = Re-order <br>';
 			$content .= $bootstrap->create_element('i', "class=material-icons|title=Documents Icon", '&#xE873;') . '&nbsp; = Documents <br>'; 
 			$content .= $bootstrap->create_element('i', 'class=glyphicon glyphicon-plane hover|title=Tracking Icon', '') . ' = Tracking <br>';
@@ -143,21 +158,15 @@
 			$attr .= "|data-html=true|title=Icons Definition|data-content=$content";
 			return $bootstrap->create_element('a', $attr, 'Icon Definitions');
 		}
-		
+
 		public function generate_loaddetailsurl(Order $order) {
+			$pageurl = new \Purl\Url($this->pageurl->getUrl());
+			$pageurl->query->set('ordn', $order->ordernumber);
 			$url = new \Purl\Url($this->generate_loaddetailsurltrait($order));
-			$url->query->set('page', $this->pagenbr);
-			$url->query->set('orderby', $this->tablesorter->orderbystring);
-			
-			if (!empty($this->filters)) {
-				$url->query->set('filter', 'filter');
-				foreach ($this->filters as $filter => $value) {
-					$url->query->set($filter, implode('|', $value));
-				}
-			}
+			$url->query->set('page', $pageurl->getUrl());
 			return $url->getUrl();
 		}
-		
+
 		public function generate_lastloadeddescription() {
 			if (DplusWire::wire('session')->{'orders-loaded-for'}) {
 				if (DplusWire::wire('session')->{'orders-loaded-for'} == DplusWire::wire('user')->loginid) {
@@ -166,10 +175,10 @@
 			}
 			return '';
 		}
-		
+
 		/**
 		 * Returns HTML form for reordering SalesOrderDetails
-		 * @param  Order       $order  SalesOrder 
+		 * @param  Order       $order  SalesOrder
 		 * @param  OrderDetail $detail SalesOrderDetail
 		 * @return string              HTML Form
 		 */
@@ -178,10 +187,10 @@
 				return '';
 			}
 			$action = DplusWire::wire('config')->pages->cart.'redir/';
-			$id = $order->orderno.'-'.$detail->itemid.'-form';
-			$form = new FormMaker("method=post|action=$action|class=item-reorder|id=$id");
+			$id = $order->ordernumber.'-'.$detail->itemid.'-form';
+			$form = new Dplus\Content\FormMaker("method=post|action=$action|class=item-reorder|id=$id");
 			$form->input("type=hidden|name=action|value=add-to-cart");
-			$form->input("type=hidden|name=ordn|value=$order->orderno");
+			$form->input("type=hidden|name=ordn|value=$order->ordernumber");
 			$form->input("type=hidden|name=custID|value=$order->custid");
 			$form->input("type=hidden|name=itemID|value=$detail->itemid");
 			$form->input("type=hidden|name=qty|value=".intval($detail->qty));
@@ -189,42 +198,42 @@
 			$form->button("type=submit|class=btn btn-primary btn-xs", $form->bootstrap->icon('glyphicon glyphicon-shopping-cart'). $form->bootstrap->create_element('span', 'class=sr-only', 'Submit Reorder'));
 			return $form->finish();
 		}
-		
+
 		public function generate_filter(ProcessWire\WireInput $input) {
-			$stringerbell = new StringerBell();
+			$stringerbell = new Dplus\Base\StringerBell();
 			parent::generate_filter($input);
-			
-			if (isset($this->filters['orderdate'])) {
-				if (empty($this->filters['orderdate'][0])) {
-					$this->filters['orderdate'][0] = date('m/d/Y', strtotime(get_minorderdate($this->sessionID, 'orderdate')));
+
+			if (isset($this->filters['order_date'])) {
+				if (empty($this->filters['order_date'][0])) {
+					$this->filters['order_date'][0] = date('m/d/Y', strtotime(get_minsalesorderdate('order_date')));
 				}
-				
-				if (empty($this->filters['orderdate'][1])) {
-					$this->filters['orderdate'][1] = date('m/d/Y');
+
+				if (empty($this->filters['order_date'][1])) {
+					$this->filters['order_date'][1] = date('m/d/Y');
 				}
 			}
-			
-			if (isset($this->filters['ordertotal'])) {
-				if (!strlen($this->filters['ordertotal'][0])) {
-					$this->filters['ordertotal'][0] = '0.00';
+
+			if (isset($this->filters['total_order'])) {
+				if (!strlen($this->filters['total_order'][0])) {
+					$this->filters['total_order'][0] = '0.00';
 				}
-				
-				for ($i = 0; $i < (sizeof($this->filters['ordertotal']) + 1); $i++) {
-					if (isset($this->filters['ordertotal'][$i])) {
-						if (strlen($this->filters['ordertotal'][$i])) {
-							$this->filters['ordertotal'][$i] = number_format($this->filters['ordertotal'][$i], 2, '.', '');
+
+				for ($i = 0; $i < (sizeof($this->filters['total_order']) + 1); $i++) {
+					if (isset($this->filters['total_order'][$i])) {
+						if (strlen($this->filters['total_order'][$i])) {
+							$this->filters['total_order'][$i] = number_format($this->filters['total_order'][$i], 2, '.', '');
 						}
 					}
 				}
 			}		
 		}
-		
+
 		/* =============================================================
 			SalesOrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
 		public function generate_loadtrackinglink(Order $order) { 
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			if ($order->has_tracking()) {
 				$href = $this->generate_trackingrequesturl($order);
 				$content = $bootstrap->create_element('span', "class=sr-only", 'View Tracking');
@@ -237,22 +246,22 @@
 				return $bootstrap->create_element('a', "href=#|class=h3 text-muted|title=No Tracking Info Available", $content);
 			}
 		}
-		
+
 		public function generate_trackingrequesturl(Order $order) {
 			$url = new \Purl\Url($this->generate_trackingrequesturltrait($order));
 			$url->query->set('page', $this->pagenbr);
 			$url->query->set('orderby', $this->tablesorter->orderbystring);
 			return $url->getUrl();
 		}
-		
+
 		/* =============================================================
 			OrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
 		public function generate_loaddplusnoteslink(Order $order, $linenbr = '0') {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_dplusnotesrequesturl($order, $linenbr);
-			
+
 			if ($order->can_edit()) {
 				$title = ($order->has_notes()) ? "View and Create Order Notes" : "Create Order Notes";
 				$addclass = ($order->has_notes()) ? '' : 'text-muted';
@@ -264,9 +273,9 @@
 			$link = $bootstrap->create_element('a', "href=$href|class=load-notes $addclass|title=$title|data-modal=$this->modal", $content);
 			return $link;
 		}
-		
+
 		public function generate_loaddocumentslink(Order $order, OrderDetail $orderdetail = null) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_documentsrequesturl($order, $orderdetail);
 			$icon = $bootstrap->icon('fa fa-file-text');
 			$ajaxdata = $this->generate_ajaxdataforcontento();
@@ -277,16 +286,16 @@
 				return $bootstrap->create_element('a', "href=#|class=h3 text-muted|title=No Documents Available", $icon);
 			}
 		}
-		
+
 		public function generate_documentsrequesturl(Order $order, OrderDetail $orderdetail = null) {
 			$url = new \Purl\Url($this->generate_documentsrequesturltrait($order, $orderdetail));
 			$url->query->set('page', $this->pagenbr);
 			$url->query->set('orderby', $this->tablesorter->orderbystring);
 			return $url->getUrl();
 		}
-		
+
 		public function generate_editlink(Order $order) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			/*
 				ORDER LOCK LOGIC
 				-------------------------------------
@@ -298,9 +307,9 @@
 			if ($order->can_edit()) {
 				$icon = $bootstrap->icon('glyphicon glyphicon-pencil');
 				$title = "Edit this Order";
-			} elseif ($order->editord == 'L') {
+			} elseif ($order->is_lockedbyuser()) {
 				if (DplusWire::wire('user')->hasorderlocked) {
-					if ($order->orderno == DplusWire::wire('user')->lockedordn) {
+					if ($order->ordernumber == DplusWire::wire('user')->lockedordn) {
 						$icon = $bootstrap->icon('glyphicon glyphicon-wrench');
 						$title = "Edit this Order";
 					} else {
@@ -315,19 +324,24 @@
 				$icon = $bootstrap->icon('glyphicon glyphicon-eye-open');
 				$title = "Open in read-only mode";
 			}
-			$href = $this->generate_editurl($order);
+			$url = new Purl\Url($this->generate_editurl($order));
+			
+			if ($order->can_edit() || $order->is_lockedbyuser()) {
+				$url->query->set('edit', 'edit');
+			}
+			$href = $url->getUrl();
 			return $bootstrap->create_element('a', "href=$href|class=edit-order h3|title=$title", $icon);
 		}
-		
+
 		public function generate_viewlinkeduseractionslink(Order $order) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_viewlinkeduseractionsurl($order);
 			$icon = $bootstrap->create_element('span','class=h3', $bootstrap->icon('glyphicon glyphicon-check'));
 			return $bootstrap->create_element('a', "href=$href|class=load-into-modal|data-modal=$this->modal", $icon." View Associated Actions");
 		}
-		
+
 		public function generate_detailvieweditlink(Order $order, OrderDetail $detail) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_detailviewediturl($order, $detail);
 			return $bootstrap->create_element('a', "href=$href|class=update-line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$order->custid|aria-label=View Detail Line", $detail->itemid);	
 		}

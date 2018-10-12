@@ -3,9 +3,9 @@
      * Class for dealing with the Customer Index database table
      */
     class CustomerIndex {
-        use ThrowErrorTrait;
-		use MagicMethodTraits;
-        use AttributeParser;
+        use Dplus\Base\ThrowErrorTrait;
+		use Dplus\Base\MagicMethodTraits;
+        use Dplus\Base\AttributeParser;
         
         /**
 		 * Array of filters that will apply to the orders
@@ -40,7 +40,7 @@
         
         /**
          * Table Sorter - for sorting results
-         * @var TablePageSorter
+         * @var  Dplus\Content\TablePageSorter
          */
         protected $tablesorter;
         
@@ -72,7 +72,7 @@
             $this->pageurl = new Purl\Url($url->getUrl());
             $this->loadinto = $this->focus = $loadinto;
 			$this->ajaxdata = "data-loadinto='$this->loadinto' data-focus='$this->focus'";
-            $this->tablesorter = new TablePageSorter($this->pageurl->query->get('orderby'));
+            $this->tablesorter = new  Dplus\Content\TablePageSorter($this->pageurl->query->get('orderby'));
         }
         
         /**
@@ -125,7 +125,7 @@
          * @return array           Customer Index records that match the Query
          */
         public function search_custindexpaged($q, $page = 1, $loginID = '', $debug = false) {
-            return search_custindexpaged($q, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->get_orderbystring(), $loginID, $debug);
+            return search_custindexpaged($q, Dplus\ProcessWire\DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->get_orderbystring(), $loginID, $debug);
         }
         
         /**
@@ -145,6 +145,6 @@
          * @return string Customer Index grouping description
          */
         public function get_configcustindexgroupby() {
-            return DplusWire::wire('pages')->get('/config/customer/')->group_custindexby->title;
+            return Dplus\ProcessWire\DplusWire::wire('pages')->get('/config/customer/')->group_custindexby->title;
         }
     }

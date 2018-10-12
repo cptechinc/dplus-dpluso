@@ -1,4 +1,7 @@
 <?php
+    use Dplus\ProcessWire\DplusWire as DplusWire;
+    use Dplus\Content\HTMLWriter as HTMLWriter;
+    
     class EditUserActionsDisplay extends UserActionDisplay {
         /* =============================================================
  		   CLASS FUNCTIONS

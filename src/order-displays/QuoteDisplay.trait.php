@@ -1,4 +1,6 @@
 <?php
+	use Dplus\ProcessWire\DplusWire as DplusWire;
+	
 	/**
 	 * Traits that will be shared accross QuotePanels and Quote Displays
 	 */
@@ -14,7 +16,7 @@
 		 * @return string          HTML to load the dplus notes
 		 */
 		public function generate_loaddplusnoteslink(Order $quote, $linenbr = '0') {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_dplusnotesrequesturl($quote, $linenbr);
 
 			if ($quote->can_edit()) {
@@ -60,7 +62,7 @@
 		 * @return string                   HTML link
 		 */
 		public function generate_loadheaderdocumentslink(Order $quote, OrderDetail $quotedetail = null) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_documentsrequesturl($quote, $quotedetail);
 			$icon = $bootstrap->icon('fa fa-file-text');
 			$ajaxdata = "data-loadinto=.docs|data-focus=.docs|data-click=#documents-link";
@@ -79,7 +81,7 @@
 		 * @return string                   HTML link
 		 */
 		public function generate_loaddetaildocumentslink(Order $quote, OrderDetail $quotedetail = null) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_documentsrequesturl($quote, $quotedetail);
 			$icon = $bootstrap->icon('fa fa-file-text');
 			$ajaxdata = "data-loadinto=.docs|data-focus=.docs|data-click=#documents-link";
@@ -128,7 +130,7 @@
 			if (!has_dpluspermission(DplusWire::wire('user')->loginid, 'eso')) {
 				return false;
 			}
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_orderquoteurl($quote);
 			$icon = $bootstrap->icon('glyphicon glyphicon-print');
 			return $bootstrap->create_element('a', "href=$href|class=btn btn-sm btn-default", $icon." Send To Order");
@@ -153,7 +155,7 @@
 		 * @uses          $this->generate_viewprinturl($quote);
 		 */
 		public function generate_viewprintlink(Order $quote) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_viewprinturl($quote);
 			$icon = $bootstrap->create_element('span','class=h3', $bootstrap->icon('glyphicon glyphicon-print'));
 			return $bootstrap->create_element('a', "href=$href|target=_blank", $icon." View Printable Quote");
@@ -229,7 +231,7 @@
 		 * @return string              HTML link to load details
 		 */
 		public function generate_viewdetaillink(Order $quote, OrderDetail $detail) {
-			$bootstrap = new HTMLWriter();
+			$bootstrap = new Dplus\Content\HTMLWriter();
 			$href = $this->generate_viewdetailurl($quote, $detail);
 			$icon = $bootstrap->icon('fa fa-info-circle');
 			return $bootstrap->create_element('a', "href=$href|class=h3 view-item-details detail-line-icon|data-itemid=$detail->itemid|data-kit=$detail->kititemflag|data-modal=#ajax-modal", $icon);
