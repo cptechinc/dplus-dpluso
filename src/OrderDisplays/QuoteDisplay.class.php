@@ -1,4 +1,6 @@
 <?php 
+	namespace Dplus\Dpluso\OrderDisplays;
+	
 	class QuoteDisplay extends OrderDisplay implements OrderDisplayInterface, QuoteDisplayInterface {
 		use QuoteDisplayTraits;
 		

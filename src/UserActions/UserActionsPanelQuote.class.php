@@ -1,4 +1,6 @@
 <?php
+	namespace Dplus\Dpluso\UserActions;
+	
 	class QuoteActionsPanel extends ActionsPanel {
 		/**
 		 * Panel Type

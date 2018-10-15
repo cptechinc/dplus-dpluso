@@ -1,4 +1,6 @@
 <?php
+	namespace Dplus\Dpluso\OrderDisplays;
+	
 	use \Dplus\Base\QueryBuilder as QueryBuilder;
 	
 	/**

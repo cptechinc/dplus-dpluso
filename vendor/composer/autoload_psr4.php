@@ -6,4 +6,12 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Dplus\\Dpluso\\UserActions\\' => array($baseDir . '/src/UserActions'),
+    'Dplus\\Dpluso\\OrderDisplays\\' => array($baseDir . '/src/OrderDisplays'),
+    'Dplus\\Dpluso\\Model\\' => array($baseDir . '/src/Model'),
+    'Dplus\\Dpluso\\Items\\' => array($baseDir . '/src/Items'),
+    'Dplus\\Dpluso\\General\\' => array($baseDir . '/src/General'),
+    'Dplus\\Dpluso\\Customer\\' => array($baseDir . '/src/Customer'),
+    'Dplus\\Dpluso\\Configs\\' => array($baseDir . '/src/Configs'),
+    'Dplus\\Dpluso\\Bookings\\' => array($baseDir . '/src/Bookings'),
 );

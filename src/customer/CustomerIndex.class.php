@@ -1,4 +1,6 @@
 <?php
+    namespace Dplus\Dpluso\Customer;
+    
     /**
      * Class for dealing with the Customer Index database table
      */

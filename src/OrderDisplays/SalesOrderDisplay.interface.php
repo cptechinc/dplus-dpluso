@@ -1,4 +1,6 @@
-<?php 
+<?php
+	namespace Dplus\Dpluso\OrderDisplays;
+	
 	/**
 	 * Functions that Sales Order Display classes must implement or extend
 	 */

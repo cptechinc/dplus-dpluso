@@ -5,15 +5,22 @@
     "keywords": ["order-displays", "user-actions", "customer", "items"],
     "homepage": "http://github.com/cptechinc/dplus-dpluso",
 	"autoload": {
-		"classmap": [
-			"src/OrderDisplays/",
-			"src/UserActions/",
-			"src/Bookings/",
-			"src/Items/",
-			"src/Configs/",
-			"src/Customer/",
-			"src/General/",
-			"src/Model/"
+		"psr-4": {
+			"Dplus\\Dpluso\\Bookings\\": "src/Bookings/",
+			"Dplus\\Dpluso\\Configs\\": "src/Configs/",
+			"Dplus\\Dpluso\\Customer\\": "src/Customer/",
+			"Dplus\\Dpluso\\General\\": "src/General/",
+			"Dplus\\Dpluso\\Items\\": "src/Items/",
+			"Dplus\\Dpluso\\Model\\": "src/Model/",
+			"Dplus\\Dpluso\\OrderDisplays\\": "src/OrderDisplays/",
+			"Dplus\\Dpluso\\UserActions\\": "src/UserActions/"
+		},
+		"files": [
+			"src/Customer/Contact.class.php",
+			"src/Customer/Customer.class.php",
+			"src/Model/LogmUser.class.php",
+			"src/Model/Vendor.class.php",
+			"src/UserActions/UserAction.class.php"
 		]
 	}
 }

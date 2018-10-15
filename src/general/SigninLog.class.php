@@ -1,4 +1,6 @@
 <?php
+	namespace Dplus\Dpluso\General;
+	
     class SigninLog {
         use Dplus\Base\ThrowErrorTrait;
 		use Dplus\Base\MagicMethodTraits;

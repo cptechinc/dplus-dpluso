@@ -1,4 +1,6 @@
-<?php 
+<?php
+	namespace Dplus\Dpluso\OrderDisplays;
+	
 	class RepSalesOrderPanel extends SalesOrderPanel {
 		
 		/* =============================================================

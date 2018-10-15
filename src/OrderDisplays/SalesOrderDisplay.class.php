@@ -1,4 +1,6 @@
 <?php 
+	namespace Dplus\Dpluso\OrderDisplays;
+	
 	class SalesOrderDisplay extends OrderDisplay implements OrderDisplayInterface, SalesOrderDisplayInterface {
 		use SalesOrderDisplayTraits;
 		

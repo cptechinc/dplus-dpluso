@@ -1,4 +1,6 @@
 <?php
+	namespace Dplus\Dpluso\UserActions;
+	
     use Dplus\ProcessWire\DplusWire as DplusWire;
     
     class UserActionDisplay {

@@ -1,4 +1,6 @@
-<?php 	
+<?php
+	namespace Dplus\Dpluso\OrderDisplays;
+	
 	class RepQuotePanel extends QuotePanel {
 		
 		public function __construct($sessionID, \Purl\Url $pageurl, $modal, $loadinto, $ajax) {

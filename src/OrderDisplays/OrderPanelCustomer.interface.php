@@ -1,4 +1,6 @@
 <?php 
+	namespace Dplus\Dpluso\OrderDisplays;
+	
 	/**
 	 * Functions that Customer OrderPanels have to implement
 	 */

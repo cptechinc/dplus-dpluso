@@ -1,4 +1,6 @@
 <?php
+    namespace Dplus\Dpluso\UserActions;
+    
     use Dplus\ProcessWire\DplusWire as DplusWire;
     use Dplus\Content\HTMLWriter as HTMLWriter;
     

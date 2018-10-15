@@ -1,4 +1,6 @@
-<?php 
+<?php
+	namespace Dplus\Dpluso\OrderDisplays;
+	
 	/**
 	 * Functions that Sales Order Panels Must Implement or Extend
 	 */

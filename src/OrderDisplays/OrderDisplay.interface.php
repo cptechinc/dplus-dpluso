@@ -1,4 +1,6 @@
 <?php 
+	namespace Dplus\Dpluso\OrderDisplays;
+	
 	/**
 	 * List of functions that need to be implemented by OrderDisplays
 	 */

@@ -1,4 +1,6 @@
 <?php
+	namespace Dplus\Dpluso\OrderDisplays;
+	
 	use Dplus\ProcessWire\DplusWire as DplusWire;
 	
 	class SalesOrderPanel extends OrderPanel implements OrderDisplayInterface, SalesOrderDisplayInterface, OrderPanelInterface, SalesOrderPanelInterface {

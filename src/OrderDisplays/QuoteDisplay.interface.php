@@ -1,4 +1,6 @@
 <?php 
+	namespace Dplus\Dpluso\OrderDisplays;
+	
 	/**
 	 * Functions QuoteDisplay classes have to implement
 	 */

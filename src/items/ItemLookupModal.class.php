@@ -1,4 +1,6 @@
 <?php 
+	namespace Dplus\Dpluso\Items;
+	
 	use Dplus\ProcessWire\DplusWire as DplusWire;
 	
 	/**

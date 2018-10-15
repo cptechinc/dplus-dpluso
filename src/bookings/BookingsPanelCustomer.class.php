@@ -1,4 +1,6 @@
 <?php
+	namespace Dplus\Dpluso\Bookings;
+	
 	/**
 	 * Class for handling of getting and displaying booking records from the database for a Customer
 	 * @author Barbara Bullemer barbara@cptechinc.com

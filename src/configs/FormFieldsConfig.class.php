@@ -1,4 +1,6 @@
 <?php 
+	namespace Dplus\Dpluso\Configs;
+	
 	/**
 	 * Used for establishing form rules for forms
 	 * like Sales Order Head or Quote Head

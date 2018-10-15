@@ -1,4 +1,5 @@
 <?php
+	namespace Dplus\Dpluso\UserActions;
 	
 	/**
 	 * Class for dealing with the display of arrays of UserAction

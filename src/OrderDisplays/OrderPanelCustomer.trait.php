@@ -1,4 +1,6 @@
 <?php
+	namespace Dplus\Dpluso\OrderDisplays;
+	
 	/**
 	 * Traits for defining a Customer on the orderpanels
 	 */

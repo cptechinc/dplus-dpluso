@@ -1,4 +1,6 @@
 <?php
+	namespace Dplus\Dpluso\UserActions;
+	
 	class CustomerActionsPanel extends ActionsPanel {
 		/**
 		* Customer Identifier
