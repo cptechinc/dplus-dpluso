@@ -6,14 +6,6 @@ namespace Composer\Autoload;
 
 class ComposerStaticInitde55f17c88d493db7f2fa2056536094d
 {
-    public static $files = array (
-        '3fb322b21083c248099f382ee991bd5b' => __DIR__ . '/../..' . '/src/Customer/Contact.class.php',
-        'e42e25465468f501564e2af872a036be' => __DIR__ . '/../..' . '/src/Customer/Customer.class.php',
-        'c144d74923bc586d7e0aff8eefd626f2' => __DIR__ . '/../..' . '/src/Model/LogmUser.class.php',
-        '8c12e147657bd76c2b80ae913d9e76a2' => __DIR__ . '/../..' . '/src/Model/Vendor.class.php',
-        'c79817d1449e7f1de66d60a63fcd6503' => __DIR__ . '/../..' . '/src/UserActions/UserAction.class.php',
-    );
-
     public static $prefixLengthsPsr4 = array (
         'D' => 
         array (
@@ -64,6 +56,8 @@ class ComposerStaticInitde55f17c88d493db7f2fa2056536094d
     );
 
     public static $classMap = array (
+        'Contact' => __DIR__ . '/../..' . '/src/Customer/Contact.class.php',
+        'Customer' => __DIR__ . '/../..' . '/src/Customer/Customer.class.php',
         'Dplus\\Dpluso\\Bookings\\BookingsPanel' => __DIR__ . '/../..' . '/src/Bookings/BookingsPanel.class.php',
         'Dplus\\Dpluso\\Bookings\\CustomerBookingsPanel' => __DIR__ . '/../..' . '/src/Bookings/BookingsPanelCustomer.class.php',
         'Dplus\\Dpluso\\Configs\\FormFieldsConfig' => __DIR__ . '/../..' . '/src/Configs/FormFieldsConfig.class.php',
@@ -104,6 +98,10 @@ class ComposerStaticInitde55f17c88d493db7f2fa2056536094d
         'Dplus\\Dpluso\\UserActions\\QuoteActionsPanel' => __DIR__ . '/../..' . '/src/UserActions/UserActionsPanelQuote.class.php',
         'Dplus\\Dpluso\\UserActions\\SalesOrderActionsPanel' => __DIR__ . '/../..' . '/src/UserActions/UserActionsPanelSalesOrder.class.php',
         'Dplus\\Dpluso\\UserActions\\UserActionDisplay' => __DIR__ . '/../..' . '/src/UserActions/UserActionDisplay.class.php',
+        'LogmUser' => __DIR__ . '/../..' . '/src/Model/LogmUser.class.php',
+        'NonExistingCustomer' => __DIR__ . '/../..' . '/src/Customer/Customer.class.php',
+        'UserAction' => __DIR__ . '/../..' . '/src/UserActions/UserAction.class.php',
+        'Vendor' => __DIR__ . '/../..' . '/src/Model/Vendor.class.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

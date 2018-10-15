@@ -15,7 +15,7 @@
 			"Dplus\\Dpluso\\OrderDisplays\\": "src/OrderDisplays/",
 			"Dplus\\Dpluso\\UserActions\\": "src/UserActions/"
 		},
-		"files": [
+		"classmap": [
 			"src/Customer/Contact.class.php",
 			"src/Customer/Customer.class.php",
 			"src/Model/LogmUser.class.php",

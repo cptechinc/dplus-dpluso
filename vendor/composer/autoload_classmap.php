@@ -6,6 +6,8 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Contact' => $baseDir . '/src/Customer/Contact.class.php',
+    'Customer' => $baseDir . '/src/Customer/Customer.class.php',
     'Dplus\\Dpluso\\Bookings\\BookingsPanel' => $baseDir . '/src/Bookings/BookingsPanel.class.php',
     'Dplus\\Dpluso\\Bookings\\CustomerBookingsPanel' => $baseDir . '/src/Bookings/BookingsPanelCustomer.class.php',
     'Dplus\\Dpluso\\Configs\\FormFieldsConfig' => $baseDir . '/src/Configs/FormFieldsConfig.class.php',
@@ -46,4 +48,8 @@ return array(
     'Dplus\\Dpluso\\UserActions\\QuoteActionsPanel' => $baseDir . '/src/UserActions/UserActionsPanelQuote.class.php',
     'Dplus\\Dpluso\\UserActions\\SalesOrderActionsPanel' => $baseDir . '/src/UserActions/UserActionsPanelSalesOrder.class.php',
     'Dplus\\Dpluso\\UserActions\\UserActionDisplay' => $baseDir . '/src/UserActions/UserActionDisplay.class.php',
+    'LogmUser' => $baseDir . '/src/Model/LogmUser.class.php',
+    'NonExistingCustomer' => $baseDir . '/src/Customer/Customer.class.php',
+    'UserAction' => $baseDir . '/src/UserActions/UserAction.class.php',
+    'Vendor' => $baseDir . '/src/Model/Vendor.class.php',
 );
