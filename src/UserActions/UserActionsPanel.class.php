@@ -1,13 +1,17 @@
 <?php
 	namespace Dplus\Dpluso\UserActions;
 	
+	use Dplus\ProcessWire\DplusWire as DplusWire;
+	use Dplus\Content\HTMLWriter as HTMLWriter;
+	use Dplus\Content\Table as Table;
+	
 	/**
 	 * Class for dealing with the display of arrays of UserAction
 	 * Content
 	 */
 	class ActionsPanel extends UserActionDisplay {
-		use Dplus\Base\Filterable;
-		use Dplus\Base\AttributeParser;
+		use \Dplus\Base\Filterable;
+		use \Dplus\Base\AttributeParser;
 
 		/**
 		* Session Identifier
@@ -47,7 +51,7 @@
 
 		/**
 		* Page URL
-		* @var Purl\Url
+		* @var \Purl\Url
 		*/
 		protected $pageurl = false;
 
@@ -192,15 +196,15 @@
 		/**
 		 * Constructor
 		 * @param string                $sessionID   Session Identifier
-		 * @param Purl\Url              $pageurl     Object that contains URL to Page
-		 * @param ProcessWire\WireInput $input       Input such as the $_GET array to run generate_filter
+		 * @param \Purl\Url              $pageurl     Object that contains URL to Page
+		 * @param \ProcessWire\WireInput $input       Input such as the $_GET array to run generate_filter
 		 * @param bool                  $throughajax If panel was loaded through ajax
 		 * @param string                $panelID     Panel element ID
 		 */
 		public function __construct($sessionID, \Purl\Url $pageurl, \ProcessWire\WireInput $input, $throughajax = false, $panelID = '') {
 			$this->sessionID = $sessionID;
 			$this->pageurl = new \Purl\Url($pageurl->getUrl());
-			$this->pagenbr = Dplus\Content\Paginator::generate_pagenbr($pageurl);
+			$this->pagenbr = \Dplus\Content\Paginator::generate_pagenbr($pageurl);
 			$this->throughajax = $throughajax;
 			$this->panelID = !empty($panelID) ? $panelID : $this->panelID;
 			$this->inmodal = $this->pageurl->query->get('modal') ? true : false;
@@ -250,7 +254,7 @@
 		public function generate_refreshurl() {
 			$url = new \Purl\Url($this->pageurl->getUrl());
 			$url->query->remove('modal');
-			$url->path = Dplus\ProcessWire\DplusWire::wire('config')->pages->useractions;
+			$url->path = DplusWire::wire('config')->pages->useractions;
 			return $url->getUrl();
 		}
 
@@ -273,13 +277,13 @@
 		 * @return string URL to load add new action[type=$this->actiontype] form
 		 */
 		public function generate_addactionurl() {
-			if (Dplus\ProcessWire\DplusWire::wire('config')->cptechcustomer == 'stempf') {
+			if (DplusWire::wire('config')->cptechcustomer == 'stempf') {
 				$actiontype = ($this->actiontype == 'all') ? 'task' : $this->actiontype;
 			} else {
 				$actiontype = '';
 			}
 			$url = new \Purl\Url($this->generate_refreshurl());
-			$url->path = Dplus\ProcessWire\DplusWire::wire('config')->pages->useractions."add/";
+			$url->path = DplusWire::wire('config')->pages->useractions."add/";
 			$url->query = '';
 			$url->query->set('type', $actiontype);
 			return $url->getUrl();
@@ -302,7 +306,7 @@
 		 * @return string URL to calendar view
 		 */
 		public function generate_calendarviewurl() {
-			$url = new Purl\Url($this->generate_refreshurl());
+			$url = new \Purl\Url($this->generate_refreshurl());
 			$url->query->set('view', 'calendar');
 			if ($url->query->get('day')) {
 				$monthyear = date('M-Y', strtotime($url->query->get('day')));
@@ -322,10 +326,10 @@
 		 * @return string        URL to view calendar at month that is $add months from $date
 		 */
 		public function generate_addmonthurl($date, $add = 1) {
-			$date = $date ? new DateTime($date) : new DateTime();
+			$date = $date ? new \DateTime($date) : new \DateTime();
 			$modify = $add > 0 ? "+$add" : "$add";
 			$date->modify("$modify month");
-			$url = new Purl\Url($this->pageurl->getUrl());
+			$url = new \Purl\Url($this->pageurl->getUrl());
 			$url->query->set('month', $date->format('M-Y'));
 			return $url->getUrl();
 		}
@@ -337,7 +341,7 @@
 		 */
 		public function generate_dayviewurl($date) {
 			$date = $date ? date('m/d/Y', strtotime($date)) : date('m/d/Y');
-			$url = new Purl\Url($this->generate_refreshurl());
+			$url = new \Purl\Url($this->generate_refreshurl());
 			$url->query->set('view', 'day');
 			$url->query->set('day', $date);
 			$url->query->remove('month');
@@ -351,7 +355,7 @@
 		 */
 		public function generate_dayviewscheduledtasksurl($date) {
 			$date = $date ? date('m/d/Y', strtotime($date)) : date('m/d/Y');
-			$url = new Purl\Url($this->generate_dayviewurl($date));
+			$url = new \Purl\Url($this->generate_dayviewurl($date));
 			$url->query->set('filter', 'filter');
 			$url->query->set('actiontype', 'task');
 			$url->query->set('duedate', $date);
@@ -367,7 +371,7 @@
 		 */
 		public function generate_daynotescreatedurl($date) {
 			$date = $date ? date('m/d/Y', strtotime($date)) : date('m/d/Y');
-			$url = new Purl\Url($this->generate_dayviewurl($date));
+			$url = new \Purl\Url($this->generate_dayviewurl($date));
 			$url->query->remove('duedate');
 			$url->query->remove('completed');
 			$url->query->set('filter', 'filter');
@@ -381,7 +385,7 @@
 		 * @return string  URL to load List View
 		 */
 		public function generate_listviewurl() {
-			$url = new Purl\Url($this->generate_refreshurl());
+			$url = new \Purl\Url($this->generate_refreshurl());
 			$url->query->remove('day');
 			$url->query->remove('month');
 			$url->query->set('view', 'list');
@@ -427,7 +431,7 @@
 		 * @return array         Array of UserAction
 		 */
 		public function get_actions($debug = false) {
-			return get_actions($this->filters, $this->filterable, Dplus\ProcessWire\DplusWire::wire('session')->display, $this->pagenbr, $debug);
+			return get_actions($this->filters, $this->filterable, DplusWire::wire('session')->display, $this->pagenbr, $debug);
 		}
 
 		/**
@@ -610,7 +614,7 @@
 
 			// IF ASSIGNED USERS AREN'T BEING PROVIDED, THEN DEFAULT TO CURRENT USER
 			if (!isset($this->filters['assignedto'])) {
-				$this->filters['assignedto'] = array(Dplus\ProcessWire\DplusWire::wire('user')->loginid);
+				$this->filters['assignedto'] = array(DplusWire::wire('user')->loginid);
 			}
 
 
@@ -656,7 +660,7 @@
 		 * @return string  HTML Link
 		 */
 		public function generate_refreshlink() {
-			$bootstrap = new Dplus\Content\HTMLWriter();
+			$bootstrap = new HTMLWriter();
 			$href = $this->generate_refreshurl();
 			$icon = $bootstrap->icon('material-icons md-18', '&#xE86A;');
 			$ajaxdata = $this->generate_ajaxdataforcontento();
@@ -669,10 +673,10 @@
 		 * @return string HTML Link
 		 */
 		public function generate_addlink() {
-			$bootstrap = new Dplus\Content\HTMLWriter();
+			$bootstrap = new HTMLWriter();
 			$href = $this->generate_addactionurl();
 			$icon = $bootstrap->icon('material-icons md-18', '&#xE146;');
-			if (Dplus\ProcessWire\DplusWire::wire('config')->cptechcustomer == 'stempf') {
+			if (DplusWire::wire('config')->cptechcustomer == 'stempf') {
 				$ajaxclass = $this->inmodal ? 'modal-load' : 'load-into-modal';
 				return $bootstrap->create_element('a', "href=$href|class=btn btn-info btn-xs $ajaxclass pull-right hidden-print|data-modal=$this->modal|role=button|title=Add Action", $icon);
 			}
@@ -684,7 +688,7 @@
 		 * @return string  HTML Link
 		 */
 		public function generate_clearfilterlink() {
-			$bootstrap = new Dplus\Content\HTMLWriter();
+			$bootstrap = new HTMLWriter();
 			$href = $this->generate_loadurl();
 			$icon = $bootstrap->icon('fa fa-times');
 			$ajaxdata = $this->generate_ajaxdataforcontento();
@@ -696,15 +700,15 @@
 		 * @return string  HTML Link to Print Page
 		 */
 		public function generate_printlink() {
-			$bootstrap = new Dplus\Content\HTMLWriter();
+			$bootstrap = new HTMLWriter();
 			$href = $this->generate_refreshurl();
 			$icon = $bootstrap->icon('glyphicon glyphicon-print');
 			return $bootstrap->create_element('a', "href=$href|class=h3|target=_blank", $icon." View Printable");
 		}
 
 
-		public function generate_completetasklink(UserAction $task) {
-			$bootstrap = new Dplus\Content\HTMLWriter();
+		public function generate_completetasklink(\UserAction $task) {
+			$bootstrap = new HTMLWriter();
 			$href = $this->generate_viewactionjsonurl($task);
 			$icon = $bootstrap->icon('fa fa-check-circle');
 			$icon .= ' <span class="sr-only">Mark as Complete</span>';
@@ -716,8 +720,8 @@
 		 * @return string HTML Link
 		 */
 		public function generate_legend() {
-			$bootstrap = new Dplus\Content\HTMLWriter();
-			$tb = new Dplus\Content\Table('class=table table-bordered table-condensed table-striped');
+			$bootstrap = new HTMLWriter();
+			$tb = new Table('class=table table-bordered table-condensed table-striped');
 			$tb->tr('class=bg-warning')->td('', 'Task Overdue');
 			$tb->tr('class=bg-info')->td('', 'Task Rescheduled');
 			$tb->tr('class=bg-success')->td('', 'Task Completed');
@@ -730,11 +734,11 @@
 		/**
 		 * Returns the row class for the action
 		 * based on if the action is rescheduled, overdue
-		 * @param  UserAction  $action action to be looked that
+		 * @param  \UserAction  $action action to be looked that
 		 * @return string      CSS class for the action
 		 * @uses UserAction is_rescheduled() -> bg-info | is_overdue() -> bg-warning | is_completed() -> bg-success
 		 */
-		public function generate_rowclass(UserAction $action) {
+		public function generate_rowclass(\UserAction $action) {
 			if ($action->actiontype == 'task') {
 				if ($action->is_rescheduled()) {
 					return 'bg-info';
@@ -758,7 +762,7 @@
 		 * @uses Contento
 		 */
 		public function generate_calendar($month, $year) {
-			$bootstrap = new Dplus\Content\HTMLWriter();
+			$bootstrap = new HTMLWriter();
 
 			$dateComponents = getdate();
 			// Create array containing abbreviations of days of week.
@@ -779,7 +783,7 @@
 			$weekdayindex = $dateComponents['wday'];
 
 			// Create the table tag opener and day headers
-			$tb = new Dplus\Content\Table('class=calendar table table-condensed table-bordered');
+			$tb = new Table('class=calendar table table-condensed table-bordered');
 
 			// Create the calendar headers
 			$tb->tablesection('thead');

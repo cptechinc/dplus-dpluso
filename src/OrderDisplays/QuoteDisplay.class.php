@@ -1,6 +1,13 @@
 <?php 
 	namespace Dplus\Dpluso\OrderDisplays;
 	
+	use Dplus\Content\HTMLWriter;
+	
+	/**
+	 * Use Statements for Model Classes which are non-namespaced
+	 */
+	use Order, OrderDetail, Quote;
+	
 	class QuoteDisplay extends OrderDisplay implements OrderDisplayInterface, QuoteDisplayInterface {
 		use QuoteDisplayTraits;
 		
@@ -19,7 +26,7 @@
 		/**
 		 * Primary Constructor
 		 * @param string   $sessionID Session Identifier
-		 * @param Purl\Url $pageurl   URL to current page
+		 * @param \Purl\Url $pageurl   URL to current page
 		 * @param string   $modal     ID of modal to use for AJAX
 		 * @param string   $qnbr      Quote Number
 		 */
@@ -50,7 +57,7 @@
 		}
 		
 		public function generate_editlink(Order $quote) {
-			$bootstrap = new Dplus\Content\HTMLWriter();
+			$bootstrap = new HTMLWriter();
 			$href = $this->generate_editurl($quote);
 			$icon = $bootstrap->icon('material-icons', '&#xE150;');
 			return $bootstrap->create_element('a', "href=$href|class=btn btn-block btn-warning", $icon. " Edit Quote");   
@@ -62,7 +69,7 @@
 		}
 		
 		public function generate_detailvieweditlink(Order $quote, OrderDetail $detail) {
-			$bootstrap = new Dplus\Content\HTMLWriter();
+			$bootstrap = new HTMLWriter();
 			$href = $this->generate_detailviewediturl($quote, $detail);
 			$icon = $bootstrap->create_element('span', 'class=h3', $bootstrap->icon('glyphicon glyphicon-eye-open'));
 			return $bootstrap->create_element('a', "href=$href|class=update-line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$quote->custid|aria-label=View Detail Line", $icon);	

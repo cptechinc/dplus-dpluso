@@ -2,7 +2,12 @@
 	namespace Dplus\Dpluso\OrderDisplays;
 	
 	/**
-	 * Functions that Sales Order Display classes must implement or extend
+	 * Use Statements for Model Classes which are non-namespaced
+	 */
+	use Order;
+	
+	/**
+	 * Functions that Sales \Order Display classes must implement or extend
 	 */
 	interface SalesOrderDisplayInterface {
 		/**
@@ -15,14 +20,14 @@
 		/**
 		 * Returns URL to load tracking for that Sales Orders
 		 * @param  Order  $order Sales Order
-		 * @return string        Sales Order Tracking Request URL
+		 * @return string        Sales \Order Tracking Request URL
 		 */
 		public function generate_trackingrequesturl(Order $order);
 		
 		/**
-		 * Returns Sales Order Details
+		 * Returns Sales \Order Details
 		 * @param  Order  $order SalesOrder
-		 * @param  bool   $debug Whether to execute query and return Sales Order Details
+		 * @param  bool   $debug Whether to execute query and return Sales \Order Details
 		 * @return array         SalesOrderDetail Array | SQL Query
 		 */
 		public function get_orderdetails(Order $order, $debug = false);

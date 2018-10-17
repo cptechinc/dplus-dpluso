@@ -1,7 +1,12 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
 	
-	use Dplus\ProcessWire\DplusWire as DplusWire;
+	use Dplus\ProcessWire\DplusWire;
+	use Dplus\Content\HTMLWriter, Dplus\Content\FormMaker;
+	use Dplus\Base\StringerBell, Dpluso\Base\DplusDateTime;
+	
+	// Use Statements for Model Classes which are non-namespaced
+	use Order, OrderDetail;
 	
 	class SalesOrderHistoryPanel extends SalesOrderPanel {
 		/**
@@ -57,7 +62,7 @@
 
 		public function __construct($sessionID, \Purl\Url $pageurl, $modal, $loadinto, $ajax) {
 			parent::__construct($sessionID, $pageurl, $modal, $loadinto, $ajax);
-			$this->pageurl = new Purl\Url($pageurl->getUrl());
+			$this->pageurl = new \Purl\Url($pageurl->getUrl());
 			$this->setup_pageurl();
 		}
 
@@ -98,27 +103,6 @@
 			$this->paginationinsertafter = 'sales-history';
 		}
 
-		public function generate_expandorcollapselink(Order $order) {
-			$bootstrap = new Dplus\Content\HTMLWriter();
-
-			if ($order->ordernumber == $this->activeID) {
-				$href = $this->generate_closedetailsurl($order);
-				$ajaxdata = $this->generate_ajaxdataforcontento();
-				$addclass = 'load-link';
-				$icon = '-';
-			} else {
-				$href = $this->generate_loaddetailsurl($order);
-				$ajaxdata = "data-loadinto=$this->loadinto|data-focus=#$order->ordernumber";
-				$addclass = 'generate-load-link';
-				$icon = '+';
-			}
-			return $bootstrap->create_element('a', "href=$href|class=btn btn-sm btn-primary $addclass|$ajaxdata", $icon);
-		}
-
-		public function generate_rowclass(Order $order) {
-			return ($this->activeID == $order->ordernumber) ? 'selected' : '';
-		}
-
 		public function generate_loadurl() {
 			$url = new \Purl\Url($this->pageurl);
 			$url->query->remove('filter');
@@ -129,7 +113,7 @@
 		}
 
 		public function generate_clearsearchlink() {
-			$bootstrap = new Dplus\Content\HTMLWriter();
+			$bootstrap = new HTMLWriter();
 			$href = $this->generate_loadurl();
 			$icon = $bootstrap->icon('fa fa-search-minus');
 			$ajaxdata = $this->generate_ajaxdataforcontento();
@@ -137,7 +121,7 @@
 		}
 
 		public function generate_refreshlink() {
-			$bootstrap = new Dplus\Content\HTMLWriter();
+			$bootstrap = new HTMLWriter();
 			$href = $this->generate_loadurl();
 			$icon = $bootstrap->icon('fa fa-refresh');
 			$ajaxdata = $this->generate_ajaxdataforcontento();
@@ -162,7 +146,7 @@
 			}
 			$action = DplusWire::wire('config')->pages->cart.'redir/';
 			$id = $order->ordernumber.'-'.$detail->itemid.'-form';
-			$form = new Dplus\Content\FormMaker("method=post|action=$action|class=item-reorder|id=$id");
+			$form = new FormMaker("method=post|action=$action|class=item-reorder|id=$id");
 			$form->input("type=hidden|name=action|value=add-to-cart");
 			$form->input("type=hidden|name=ordn|value=$order->ordernumber");
 			$form->input("type=hidden|name=custID|value=$order->custid");
@@ -173,13 +157,13 @@
 			return $form->finish();
 		}
 		
-		public function generate_filter(ProcessWire\WireInput $input) {
-			$stringerbell = new Dplus\Base\StringerBell();
+		public function generate_filter(\ProcessWire\WireInput $input) {
+			$stringerbell = new StringerBell();
 			$this->generate_defaultfilter($input);
 
 			if (isset($this->filters['order_date'])) {
 				if (empty($this->filters['order_date'][0])) {
-					$this->filters['order_date'][0] = Dplus\Base\DplusDateTime::format_date(get_minsaleshistoryorderdate('orderdate'));
+					$this->filters['order_date'][0] = DplusDateTime::format_date(get_minsaleshistoryorderdate('orderdate'));
 				}
 
 				if (empty($this->filters['order_date'][1])) {

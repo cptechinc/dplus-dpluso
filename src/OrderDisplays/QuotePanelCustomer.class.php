@@ -1,7 +1,12 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
 	
-	use Dplus\ProcessWire\DplusWire as DplusWire;
+	use Dplus\ProcessWire\DplusWire;
+	
+	/**
+	 * Use Statements for Model Classes which are non-namespaced
+	 */
+	use Order, OrderDetail;
 	
 	class CustomerQuotePanel extends QuotePanel implements OrderPanelCustomerInterface {
 		use OrderPanelCustomerTraits;
@@ -94,7 +99,7 @@
 			return '';
 		}
 		
-		public function generate_filter(Processwire\WireInput $input) {
+		public function generate_filter(\ProcessWire\WireInput $input) {
 			parent::generate_filter($input);
 			
 			if (isset($this->filters['subtotal'])) {

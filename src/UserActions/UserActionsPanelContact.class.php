@@ -93,13 +93,13 @@
 		 * @return string                 URL to load add new action[type=$this->actiontype] form
 		 */
 		public function generate_addactionurl() {
-			$url = new Purl\Url(parent::generate_addactionurl());
+			$url = new \Purl\Url(parent::generate_addactionurl());
 			$url->query->set('contactID', $this->contactID);
 			return $url->getUrl();
 		}
 
 		public function generate_clearfilterurl() {
-			$url = new Purl\Url(parent::generate_clearfilterurl());
+			$url = new \Purl\Url(parent::generate_clearfilterurl());
 			$url->query->set('contactID', $this->contactID);
 			return $url->getUrl();
 		}
@@ -133,7 +133,7 @@
 		/* =============================================================
 			CLASS FUNCTIONS
 		============================================================ */
-		public function generate_filter(ProcessWire\WireInput $input) {
+		public function generate_filter(\ProcessWire\WireInput $input) {
 			parent::generate_filter($input);
 			$this->filters['contactlink'] = array($this->contactID);
 		}

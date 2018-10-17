@@ -78,7 +78,7 @@
 			return $url->getUrl();
 		}
 
-		public function generate_loaddetailsurl(Order $order) {
+		public function generate_loaddetailsurl(\Order $order) {
 			$url = new \Purl\Url(parent::generate_loaddetailsurl($order));
 			$url->query->set('custID', $order->custid);
 			return $url->getUrl();
@@ -93,7 +93,7 @@
 			return '';
 		}
 
-		public function generate_filter(ProcessWire\WireInput $input) {
+		public function generate_filter(\ProcessWire\WireInput $input) {
 			parent::generate_filter($input);
 			$this->filters['custid'] = array($this->custID);
 
@@ -122,7 +122,7 @@
 			SalesOrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-		public function generate_trackingrequesturl(Order $order) {
+		public function generate_trackingrequesturl(\Order $order) {
 			$url = new \Purl\Url(parent::generate_trackingrequesturl($order));
 			$url->query->set('custID', $this->custID);
 			return $url->getUrl();
@@ -132,7 +132,7 @@
 			OrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-		public function generate_documentsrequesturl(Order $order, OrderDetail $orderdetail = null) {
+		public function generate_documentsrequesturl(\Order $order, \OrderDetail $orderdetail = null) {
 			$url = new \Purl\Url(parent::generate_documentsrequesturl($order, $orderdetail));
 			$url->query->set('custID', $this->custID);
 			return $url->getUrl();

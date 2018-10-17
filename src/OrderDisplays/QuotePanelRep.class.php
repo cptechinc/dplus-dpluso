@@ -5,7 +5,7 @@
 		
 		public function __construct($sessionID, \Purl\Url $pageurl, $modal, $loadinto, $ajax) {
 			parent::__construct($sessionID, $pageurl, $modal, $loadinto, $ajax);
-			$this->pageurl = new Purl\Url($pageurl->getUrl());
+			$this->pageurl = new \Purl\Url($pageurl->getUrl());
 			$this->setup_pageurl();
 		}
 		

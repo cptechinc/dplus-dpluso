@@ -2,6 +2,11 @@
 	namespace Dplus\Dpluso\OrderDisplays;
 	
 	/**
+	 * Use Statements for Model Classes which are non-namespaced
+	 */
+	use Order;
+	
+	/**
 	 * Functions QuoteDisplay classes have to implement
 	 */
     interface QuoteDisplayInterface {

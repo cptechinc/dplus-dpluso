@@ -1,13 +1,20 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
 	
-	use \Dplus\Base\QueryBuilder as QueryBuilder;
+	use Dplus\Base\QueryBuilder;
+	use Dplus\Content\TablePageSorter;
+	use Dplus\Content\HTMLWriter;
+	
+	/**
+	 * Use Statements for Model Classes which are non-namespaced
+	 */
+	use Order;
 	
 	/**
 	 * Blueprint class for dealing with lists of orders and their display
 	 */
 	abstract class OrderPanel extends OrderDisplay {
-		use Dplus\Base\AttributeParser;
+		use \Dplus\Base\AttributeParser;
 
 		/**
 		 * ID of HTML element to focus on after ajax load
@@ -47,7 +54,7 @@
 
 		/**
 		 * Object to sort the columns
-		 * @var Dplus\Content\TablePageSorter
+		 * @var \Dplus\Content\TablePageSorter
 		 */
 		public $tablesorter; // Will be instatnce of TablePageSorter
 
@@ -90,7 +97,7 @@
 		/**
 		 * Constructor
 		 * @param string  $sessionID  Session Identifier
-		 * @param Purl\Url $pageurl   Page URL Object
+		 * @param \Purl\Url $pageurl   Page URL Object
 		 * @param string  $modal      ID of Modal Element
 		 * @param string  $loadinto   ID of element to AJAX Load into
 		 * @param bool  $ajax         Use Ajax
@@ -100,7 +107,7 @@
 			parent::__construct($sessionID, $pageurl, $modal);
 			$this->loadinto = $this->focus = $loadinto;
 			$this->ajaxdata = "data-loadinto='$this->loadinto' data-focus='$this->focus'";
-			$this->tablesorter = new Dplus\Content\TablePageSorter($this->pageurl->query->get('orderby'));
+			$this->tablesorter = new TablePageSorter($this->pageurl->query->get('orderby'));
 
 			if ($ajax) {
 				$this->collapse = '';
@@ -133,7 +140,7 @@
 		 * @return string        HTML for bootstrap popover
 		 */
 		public function generate_shiptopopover(Order $order) {
-			$bootstrap = new Dplus\Content\HTMLWriter();
+			$bootstrap = new HTMLWriter();
 			$address = $order->shipto_address1.'<br>';
 			$address .= (!empty($order->shipto_address2)) ? $order->shipto_address2."<br>" : '';
 			$address .= $order->shipto_city.", ". $order->shipto_state.' ' . $order->shipto_zip;
@@ -150,7 +157,7 @@
 		 * @return string HTML Link
 		 */
 		public function generate_clearsearchlink() {
-			$bootstrap = new Dplus\Content\HTMLWriter();
+			$bootstrap = new HTMLWriter();
 			$href = $this->generate_loadurl();
 			$icon = $bootstrap->icon('fa fa-search-minus');
 			$ajaxdata = $this->generate_ajaxdataforcontento();
@@ -162,7 +169,7 @@
 		 * @return [HTML Link
 		 */
 		public function generate_clearsortlink() {
-			$bootstrap = new Dplus\Content\HTMLWriter();
+			$bootstrap = new HTMLWriter();
 			$href = $this->generate_clearsorturl();
 			$ajaxdata = $this->generate_ajaxdataforcontento();
 			return $bootstrap->create_element('a', "href=$href|class=btn btn-warning btn-sm load-link|$ajaxdata", '(Clear Sort)');
@@ -183,7 +190,7 @@
 		 * @return string HTML link
 		 */
 		public function generate_loadlink() {
-			$bootstrap = new Dplus\Content\HTMLWriter();
+			$bootstrap = new HTMLWriter();
 			$href = $this->generate_loadurl();
 			$ajaxdata = $this->generate_ajaxdataforcontento();
 			return $bootstrap->create_element('a', "href=$href|class=generate-load-link|$ajaxdata", "Load Orders");
@@ -204,9 +211,9 @@
 		/**
 		 * Looks through the $input->get for properties that have the same name
 		 * as filterable properties, then we populate $this->filter with the key and value
-		 * @param  ProcessWire\WireInput $input Use the get property to get at the $_GET[] variables
+		 * @param  \ProcessWire\WireInput $input Use the get property to get at the $_GET[] variables
 		 */
-		public function generate_filter(ProcessWire\WireInput $input) {
+		public function generate_filter(\ProcessWire\WireInput $input) {
 			if (!$input->get->filter) {
 				$this->filters = false;
 			} else {
@@ -232,9 +239,9 @@
 		/**
 		 * Looks through the $input->get for properties that have the same name
 		 * as filterable properties, then we populate $this->filter with the key and value
-		 * @param  ProcessWire\WireInput $input Use the get property to get at the $_GET[] variables
+		 * @param  \ProcessWire\WireInput $input Use the get property to get at the $_GET[] variables
 		 */
-		public function generate_defaultfilter(ProcessWire\WireInput $input) {
+		public function generate_defaultfilter(\ProcessWire\WireInput $input) {
 			if (!$input->get->filter) {
 				$this->filters = false;
 			} else {

@@ -3,6 +3,7 @@
     
     use Dplus\ProcessWire\DplusWire as DplusWire;
     use Dplus\Content\HTMLWriter as HTMLWriter;
+    use \UserAction;
     
     class EditUserActionsDisplay extends UserActionDisplay {
         /* =============================================================
@@ -43,9 +44,5 @@
 				$salespeople[$salespersonarray['data'][$salesID]['splogin']] = $salespersonarray['data'][$salesID]['spname'];
 			}
             return $bootstrap->select("name=assignedto|class=form-control input-sm|style=width: 200px;", $salespeople, $salespersonID);
-        }
-
-        public function generate_posteditactionurl() {
-            return DplusWire::wire('config')->pages->useractions."update/";
         }
     }

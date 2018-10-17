@@ -1,18 +1,24 @@
 <?php 
 	namespace Dplus\Dpluso\OrderDisplays;
 	
-	use Dplus\ProcessWire\DplusWire as DplusWire;
+	use Dplus\ProcessWire\DplusWire;
+	use Dplus\Content\HTMLWriter;
+	
+	/**
+	 * Use Statements for Model Classes which are non-namespaced
+	 */
+	use Order;
 	
 	/**
 	 * Blueprint for Order Display classes
 	 */
 	abstract class OrderDisplay {
-		use Dplus\Base\ThrowErrorTrait;
-		use Dplus\Base\MagicMethodTraits;
+		use \Dplus\Base\ThrowErrorTrait;
+		use \Dplus\Base\MagicMethodTraits;
 		
 		/**
 		 * URL object that contains the Path to the page
-		 * @var Purl\Url
+		 * @var \Purl\Url
 		 */
 		protected $pageurl;
 		
@@ -31,7 +37,7 @@
 		/**
 		 * Base Constructor
 		 * @param string  $sessionID  Session Identifier
-		 * @param Purl\Url $pageurl   URL object to get URL
+		 * @param \Purl\Url $pageurl   URL object to get URL
 		 * @param mixed    $modal     ID of modal to use or false
 		 */
 		public function __construct($sessionID, \Purl\Url $pageurl, $modal = false) {
@@ -49,7 +55,7 @@
 		 * @return string        HTML Link
 		 */
 		public function generate_customershiptolink(Order $order) {
-			$bootstrap = new Dplus\Content\HTMLWriter();
+			$bootstrap = new HTMLWriter();
 			$href = $this->generate_customershiptourl($order);
 			$icon = $bootstrap->icon('fa fa-user');
 			return $bootstrap->create_element('a', "href=$href|class=btn btn-block btn-primary", $icon. " Go to Customer Page");   

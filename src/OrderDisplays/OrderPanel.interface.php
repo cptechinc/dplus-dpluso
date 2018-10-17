@@ -2,6 +2,11 @@
 	namespace Dplus\Dpluso\OrderDisplays;
 	
 	/**
+	 * Use Statements for Model Classes which are non-namespaced
+	 */
+	use Order;
+	
+	/**
 	 * Functions that need to be implemented by OrderPanel classes
 	 */
 	interface OrderPanelInterface {
@@ -9,21 +14,6 @@
 		 * Returns a Manipulated Purl\Url object that is the base URL for that page
 		 */
 		public function setup_pageurl();
-		
-		/**
-		 * Returns an HTML Link to expand or collapse details
-		 * @param  Order  $order SalesOrder | Quote
-		 * @return string        HTML Link to expand or collapse details
-		 */
-		public function generate_expandorcollapselink(Order $order);
-		
-		/**
-		 * Returns the row class for that order
-		 * class is determined if order number / quote number is the same as the active quote / order number
-		 * @param  Order  $order SalesOrder | Quote
-		 * @return string        HTML class e.g. selected | (blank)
-		 */
-		public function generate_rowclass(Order $order);
 		
 		/**
 		 * Returns HTML popover

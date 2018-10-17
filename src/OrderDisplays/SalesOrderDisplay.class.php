@@ -1,6 +1,13 @@
 <?php 
 	namespace Dplus\Dpluso\OrderDisplays;
 	
+	use Dplus\Content\HTMLWriter;
+	
+	/**
+	 * Use Statements for Model Classes which are non-namespaced
+	 */
+	use SalesOrder, Order, OrderDetail;
+	
 	class SalesOrderDisplay extends OrderDisplay implements OrderDisplayInterface, SalesOrderDisplayInterface {
 		use SalesOrderDisplayTraits;
 		
@@ -24,8 +31,6 @@
 			return SalesOrder::load($this->ordn, $debug);
 		}
 		
-		
-		
 		/* =============================================================
 			OrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
@@ -35,7 +40,7 @@
 		}
 		
 		public function generate_editlink(Order $order) {
-			$bootstrap = new Dplus\Content\HTMLWriter();
+			$bootstrap = new HTMLWriter();
 			$href = $this->generate_editurl($order);
 			$icon = $order->can_edit() ? $bootstrap->icon('material-icons', '&#xE150;') : $bootstrap->icon('glyphicon glyphicon-eye-open');
 			$text = $order->can_edit() ? 'Edit' : 'View';
@@ -43,7 +48,7 @@
 		}
 		
 		public function generate_detailvieweditlink(Order $order, OrderDetail $detail) {
-			$bootstrap = new Dplus\Content\HTMLWriter();
+			$bootstrap = new HTMLWriter();
 			$href = $this->generate_detailviewediturl($order, $detail);
 			$icon = $bootstrap->create_element('span', 'class=h3', $bootstrap->icon('glyphicon glyphicon-eye-open'));
 			return $bootstrap->create_element('a', "href=$href|class=update-line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$order->custid|aria-label=View Detail Line", $icon);	

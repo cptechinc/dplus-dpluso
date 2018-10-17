@@ -2,6 +2,11 @@
 	namespace Dplus\Dpluso\OrderDisplays;
 	
 	/**
+	 * Use Statements for Model Classes which are non-namespaced
+	 */
+	use Order, OrderDetail;
+	
+	/**
 	 * List of functions that need to be implemented by OrderDisplays
 	 */
 	interface OrderDisplayInterface {

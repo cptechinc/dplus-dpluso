@@ -1,7 +1,7 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
 	
-	use Dplus\ProcessWire\DplusWire as DplusWire;
+	use Dplus\ProcessWire\DplusWire;
 	
 	class CustomerSalesOrderHistoryPanel extends SalesOrderHistoryPanel {
 		use OrderPanelCustomerTraits;
@@ -79,7 +79,7 @@
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
 
-		public function generate_loaddetailsurl(Order $order) {
+		public function generate_loaddetailsurl(\Order $order) {
 			$url = new \Purl\Url(parent::generate_loaddetailsurl($order));
 			$url->query->set('custID', $this->custID);
 			if (!empty($this->shipID)) {
@@ -97,7 +97,7 @@
 			return '';
 		}
 
-		public function generate_filter(ProcessWire\WireInput $input) {
+		public function generate_filter(\ProcessWire\WireInput $input) {
 			$this->generate_defaultfilter($input);
 
 			if (isset($this->filters['order_date'])) {
@@ -135,7 +135,7 @@
 			SalesOrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-		public function generate_trackingrequesturl(Order $order) {
+		public function generate_trackingrequesturl(\Order $order) {
 			$url = new \Purl\Url(parent::generate_trackingrequesturl($order));
 			$url->query->set('custID', $this->custID);
 			if (!empty($this->shipID)) {
@@ -149,7 +149,7 @@
 			OrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-		public function generate_documentsrequesturl(Order $order, OrderDetail $orderdetail = null) {
+		public function generate_documentsrequesturl(\Order $order, \OrderDetail $orderdetail = null) {
 			$url = new \Purl\Url(parent::generate_documentsrequesturl($order, $orderdetail));
 			$url->query->set('custID', $this->custID);
 			if (!empty($this->shipID)) {

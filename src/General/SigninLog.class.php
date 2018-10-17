@@ -2,9 +2,9 @@
 	namespace Dplus\Dpluso\General;
 	
     class SigninLog {
-        use Dplus\Base\ThrowErrorTrait;
-		use Dplus\Base\MagicMethodTraits;
-        use Dplus\Base\AttributeParser;
+        use \Dplus\Base\ThrowErrorTrait;
+		use \Dplus\Base\MagicMethodTraits;
+        use \Dplus\Base\AttributeParser;
         /**
 		 * Array of logins
 		 * @var array

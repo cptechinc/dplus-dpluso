@@ -1,5 +1,6 @@
 <?php
-	use Dplus\ProcessWire\DplusWire as DplusWire;
+	use Dplus\ProcessWire\DplusWire;
+	use Dplus\Base\DplusDateTime;
 	
 	/**
 	 * Class for Notes and Tasks
@@ -9,30 +10,149 @@
 		use Dplus\Base\MagicMethodTraits;
 		use Dplus\Base\CreateFromObjectArrayTraits;
 		use Dplus\Base\CreateClassArrayTraits;
-
+		
+		/**
+		 * Action ID, derived from Database
+		 * @var int
+		 */
 		protected $id;
+		
+		/**
+		 * Date Created
+		 * @var string format: Y-m-d
+		 */
 		protected $datecreated;
+		
+		/**
+		 * Action Type
+		 * @var string task | note | action
+		 */
 		protected $actiontype;
+		
+		/**
+		 * Sub Type For Action
+		 * @var string Customer Defined
+		 */
 		protected $actionsubtype;
+		
+		/**
+		 * Date Task is Due
+		 * @var string format: Y-m-d
+		 */
 		protected $duedate;
+		
+		/**
+		 * Created By User ID
+		 * @var string
+		 */
 		protected $createdby;
+		
+		/**
+		 * Action Assigned to User ID
+		 * @var string
+		 */
 		protected $assignedto;
+		
+		/**
+		 * User ID of who assigned action
+		 * @var string
+		 */
 		protected $assignedby;
+		
+		/**
+		 * Title of Action
+		 * @var string
+		 */
 		protected $title;
+		
+		/**
+		 * Description / Notes of Action
+		 * @var string
+		 */
 		protected $textbody;
+		
+		/**
+		 * Reflection Note for Action
+		 * @var string
+		 */
 		protected $reflectnote;
+		
+		/**
+		 * Is Completed?
+		 * @var string Y | N
+		 */
 		protected $completed;
+		
+		/**
+		 * Date Action was completed
+		 * @var string format: Y-m-d | (blank)
+		 */
 		protected $datecompleted;
+		
+		/**
+		 * Date Action was updated
+		 * @var string format: Y-m-d
+		 */
 		protected $dateupdated;
+		
+		/**
+		 * Customer ID
+		 * @var string
+		 */
 		protected $customerlink;
+		
+		/**
+		 * Customer ShiptoID
+		 * @var string
+		 */
 		protected $shiptolink;
+		
+		/**
+		 * Customer Contact ID
+		 * @var string
+		 */
 		protected $contactlink;
+		
+		/**
+		 * Sales Order Number
+		 * @var string
+		 */
 		protected $salesorderlink;
+		
+		/**
+		 * Quote Number
+		 * @var string
+		 */
 		protected $quotelink;
+		
+		/**
+		 * Vendor ID
+		 * @var string
+		 */
 		protected $vendorlink;
+		
+		/**
+		 * Vendor Ship From ID
+		 * @var string
+		 */
 		protected $vendorshipfromlink;
+		
+		/**
+		 * Purchase Order Number
+		 * @var string
+		 */
 		protected $purchaseorderlink;
+		
+		/**
+		 * Action ID
+		 * @var int
+		 */
 		protected $actionlink;
+		
+		/**
+		 * ID of Action that this action was rescheduled to
+		 * @var int
+		 */
 		protected $rescheduledlink;
 
 		protected $actionlineage = array();
@@ -207,7 +327,7 @@
 		public function generate_duedatedisplay($format) {
 			switch ($this->actiontype) {
 				case 'task':
-					return Dplus\Base\DplusDateTime::format_date($this->duedate, $format);
+					return DplusDateTime::format_date($this->duedate, $format);
 					break;
 				default:
 					return 'N/A';

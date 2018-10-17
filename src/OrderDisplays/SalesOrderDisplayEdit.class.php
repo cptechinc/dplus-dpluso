@@ -1,7 +1,14 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
 	
-	use Dplus\ProcessWire\DplusWire as DplusWire;
+	use Dplus\ProcessWire\DplusWire;
+	use Dplus\Content\HTMLWriter;
+	
+	/**
+	 * Use Statements for Model Classes which are non-namespaced
+	 */
+	use Order, OrderDetail;
+	use SalesOrderEdit, OrderCreditCard;
 	
 	class EditSalesOrderDisplay extends SalesOrderDisplay {
 		use SalesOrderDisplayTraits;
@@ -61,14 +68,14 @@
 		}
 
 		public function generate_discardchangeslink(Order $order) {
-			$bootstrap = new Dplus\Content\HTMLWriter();
+			$bootstrap = new HTMLWriter();
 			$href = $this->generate_unlockurl($order);
 			$icon = $bootstrap->icon('glyphicon glyphicon-floppy-remove');
 			return $bootstrap->create_element('a', "href=$href|class=btn btn-block btn-warning", $icon. " Discard Changes, Unlock Order");
 		}
 
 		public function generate_saveunlocklink(Order $order) {
-			$bootstrap = new Dplus\Content\HTMLWriter();
+			$bootstrap = new HTMLWriter();
 			$href = $this->generate_unlockurl($order);
 			$icon = $bootstrap->icon('fa fa-unlock');
 			return $bootstrap->create_element('a', "href=$href|class=btn btn-block btn-emerald save-unlock-order|data-form=#orderhead-form", $icon. " Save and Exit");
@@ -76,14 +83,14 @@
 
 		public function generate_confirmationlink(Order $order) {
 			$href = $this->generate_confirmationurl($order);
-			$bootstrap = new Dplus\Content\HTMLWriter();
+			$bootstrap = new HTMLWriter();
 			$href = $this->generate_unlockurl($order);
 			$icon = $bootstrap->icon('fa fa-arrow-right');
 			return $bootstrap->create_element('a', "href=$href|class=btn btn-block btn-success", $icon. " Finished with Order");
 		}
 
 		public function generate_detailvieweditlink(Order $order, OrderDetail $detail) {
-			$bootstrap = new Dplus\Content\HTMLWriter();
+			$bootstrap = new HTMLWriter();
 			$href = $this->generate_detailviewediturl($order, $detail);
 			if ($order->can_edit()) {
 				$icon = $bootstrap->icon('glyphicon glyphicon-pencil');
@@ -101,7 +108,7 @@
 		 * @return string              HTML Link to delete detail line
 		 */
 		public function generate_deletedetaillink(Order $order, OrderDetail $detail) {
-			$bootstrap = new Dplus\Content\HTMLWriter();
+			$bootstrap = new HTMLWriter();
 			$icon = $bootstrap->icon('fa fa-trash') . $bootstrap->create_element('span', 'class=sr-only', 'Delete Line');
 			$url = $this->generate_ordersredirurl();
 			$url->query->setData(array('action' => 'remove-line-get', 'ordn' => $order->ordernumber, 'linenbr' => $detail->linenbr, 'page' => $this->pageurl->getUrl()));
@@ -110,13 +117,13 @@
 		}
 
 		public function generate_readonlyalert() {
-			$bootstrap = new Dplus\Content\HTMLWriter();
+			$bootstrap = new HTMLWriter();
 			$msg = $bootstrap->create_element('b', '', 'Attention!') . ' This order will open in read-only mode, you will not be able to save changes.';
 			return $bootstrap->alertpanel('warning', $msg);
 		}
 
 		public function generate_erroralert($order) {
-			$bootstrap = new Dplus\Content\HTMLWriter();
+			$bootstrap = new HTMLWriter();
 			$msg = $bootstrap->create_element('b', '', 'Error!') .' '. $order->errormsg;
 			return $bootstrap->alertpanel('danger', $msg, false);
 		}
@@ -134,7 +141,7 @@
 		 * @return string		  html for button link
 		 */
 		public function generate_loaddplusnoteslink(Order $order, $linenbr = '0') {
-			$bootstrap = new Dplus\Content\HTMLWriter();
+			$bootstrap = new HTMLWriter();
 			$href = $this->generate_dplusnotesrequesturl($order, $linenbr);
 
 			if ($order->can_edit()) {
