@@ -103,6 +103,7 @@
 
 		/**
 		 * Returns HTML Link to delete detail line
+		 * // TODO REMOVE
 		 * @param  Order       $order  Order
 		 * @param  OrderDetail $detail OrderDetail
 		 * @return string              HTML Link to delete detail line
@@ -114,6 +115,19 @@
 			$url->query->setData(array('action' => 'remove-line-get', 'ordn' => $order->ordernumber, 'linenbr' => $detail->linenbr, 'page' => $this->pageurl->getUrl()));
 			$href = $url->getUrl();
 			return $bootstrap->a("href=$href|class=btn btn-sm btn-danger|title=Delete Item", $icon);
+		}
+
+		/**
+		 * Returns URL to delete the detail line
+		 *
+		 * @param Order       $order
+		 * @param OrderDetail $detail
+		 * @return string
+		 */
+		public function generate_deletedetailurl(Order $order, OrderDetail $detail) {
+			$url = $this->generate_ordersredirurl();
+			$url->query->setData(array('action' => 'remove-line-get', 'ordn' => $order->ordernumber, 'linenbr' => $detail->linenbr, 'page' => $this->pageurl->getUrl()));
+			return $url->getUrl();
 		}
 
 		public function generate_readonlyalert() {
