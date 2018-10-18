@@ -6,55 +6,110 @@ namespace Composer\Autoload;
 
 class ComposerStaticInitde55f17c88d493db7f2fa2056536094d
 {
-    public static $files = array (
-        '8045db3cebd1e2697c5da93405d732eb' => __DIR__ . '/../..' . '/src/order-displays/OrderDisplay.class.php',
-        'b71550c24b56cbfc7eb8db3916f3f4c0' => __DIR__ . '/../..' . '/src/order-displays/OrderDisplay.interface.php',
-        '6bc1876f25a3014fff1a7abd126c679d' => __DIR__ . '/../..' . '/src/order-displays/CartDisplay.class.php',
-        '02defbbb1d62fc1960c988dfadeb07cf' => __DIR__ . '/../..' . '/src/order-displays/OrderPanel.class.php',
-        '25fafc4163db5a5f15ecdbbdcb1dd19b' => __DIR__ . '/../..' . '/src/order-displays/OrderPanel.interface.php',
-        'a6c731a7139c44df513beb7470a2d4e9' => __DIR__ . '/../..' . '/src/order-displays/OrderPanelCustomer.interface.php',
-        'c32e77499c4f4ee6142c2f897e280db9' => __DIR__ . '/../..' . '/src/order-displays/OrderPanelCustomer.trait.php',
-        'e6344ab019f6d5a7500982de08bbf429' => __DIR__ . '/../..' . '/src/order-displays/SalesOrderDisplay.interface.php',
-        '03ca54624e5b7fd30c78a1483b671794' => __DIR__ . '/../..' . '/src/order-displays/SalesOrderDisplay.trait.php',
-        'b7aaa2219f16f74e072e37f1107bef55' => __DIR__ . '/../..' . '/src/order-displays/SalesOrderDisplay.class.php',
-        'af60c85a403604c196b2b65339f5171c' => __DIR__ . '/../..' . '/src/order-displays/SalesOrderDisplayEdit.class.php',
-        '72ab468e5221b51f3cadc07b3f29a0a5' => __DIR__ . '/../..' . '/src/order-displays/SalesOrderPanel.interface.php',
-        'cf0cb5373710119e46d90633f7e16492' => __DIR__ . '/../..' . '/src/order-displays/SalesOrderPanel.class.php',
-        '3d33a18f88bb9f3a88aeedff16569640' => __DIR__ . '/../..' . '/src/order-displays/SalesOrderHistoryPanel.class.php',
-        '5dc066ca658c51d04361945b4930cf3d' => __DIR__ . '/../..' . '/src/order-displays/SalesOrderPanelRep.class.php',
-        '77b66c547c3b8ebe3e790acd3618a613' => __DIR__ . '/../..' . '/src/order-displays/SalesOrderPanelCustomer.class.php',
-        '0d5a138eb72cc65bbf617f02ccd658b9' => __DIR__ . '/../..' . '/src/order-displays/SalesOrderHistoryPanelCustomer.class.php',
-        '39cf8c4676f99f434676959e058c4eb2' => __DIR__ . '/../..' . '/src/order-displays/QuoteDisplay.interface.php',
-        'f771e50f51010ed3b784918532f43f38' => __DIR__ . '/../..' . '/src/order-displays/QuotePanel.interface.php',
-        '0e6c4b55afe0241e1e2e8d96eeccd269' => __DIR__ . '/../..' . '/src/order-displays/QuoteDisplay.trait.php',
-        'd8070e3745546e7c6ed9c208da59f22e' => __DIR__ . '/../..' . '/src/order-displays/QuoteDisplay.class.php',
-        'be39789f575248671c17f3ce61bbe652' => __DIR__ . '/../..' . '/src/order-displays/QuoteDisplayEdit.class.php',
-        '3104697135cbb8f047ba77a5af4cd7fa' => __DIR__ . '/../..' . '/src/order-displays/QuotePanel.class.php',
-        'fe0e041365aa7873152f38f4de75f03c' => __DIR__ . '/../..' . '/src/order-displays/QuotePanelRep.class.php',
-        'ca16c6aa4bd29c10ac30481097b84967' => __DIR__ . '/../..' . '/src/order-displays/QuotePanelCustomer.class.php',
-        'e4106568109bb19396ca097e30008a5d' => __DIR__ . '/../..' . '/src/user-actions/UserAction.class.php',
-        '2759868081adcb9b918194b8ac571d18' => __DIR__ . '/../..' . '/src/user-actions/UserActionDisplay.class.php',
-        'a0a3e49e22f3e98dd898e8c8687788a9' => __DIR__ . '/../..' . '/src/user-actions/UserActionDisplayEdit.class.php',
-        'f511c6273fc7a7aacb7dac7ed19997a8' => __DIR__ . '/../..' . '/src/user-actions/UserActionsPanel.class.php',
-        '762918b129f36ab3bd9ae1f5ce0c0520' => __DIR__ . '/../..' . '/src/user-actions/UserActionsPanelCustomer.class.php',
-        'e7f71a95f2d7105547db71e2de37d606' => __DIR__ . '/../..' . '/src/user-actions/UserActionsPanelContact.class.php',
-        'f1f02353158fe3b8737184da4d555e73' => __DIR__ . '/../..' . '/src/user-actions/UserActionsPanelSalesOrder.class.php',
-        'eb663fcc0408479f9e46d134349372ed' => __DIR__ . '/../..' . '/src/user-actions/UserActionsPanelQuote.class.php',
-        '0517fa862eac3f755edabf0dd30bf9b4' => __DIR__ . '/../..' . '/src/bookings/BookingsPanel.class.php',
-        '364cb20c3708057afb027eead9ff25b0' => __DIR__ . '/../..' . '/src/bookings/BookingsPanelCustomer.class.php',
-        '93324f8e01e4e07193f8dd18788021f7' => __DIR__ . '/../..' . '/src/items/ItemLookupModal.class.php',
-        'ff1ad2f86ad922bbba20df37d1819cd0' => __DIR__ . '/../..' . '/src/configs/FormFieldsConfig.class.php',
-        '5a0480d7d7f249ba8e5fc9e0cdca2566' => __DIR__ . '/../..' . '/src/customer/CustomerIndex.class.php',
-        '5ded713ec2ddea2619d2f80f32fab34e' => __DIR__ . '/../..' . '/src/customer/Contact.class.php',
-        '46e2bad1ec1a3ead96d15786c1f950cb' => __DIR__ . '/../..' . '/src/customer/Customer.class.php',
-        '641baece6c162043a679b1ceb47cef83' => __DIR__ . '/../..' . '/src/general/SigninLog.class.php',
-        '96fc2ed03626da5606470715fd687fc9' => __DIR__ . '/../..' . '/src/model/Vendor.class.php',
-        'f6e9d16eeb60d2f1ce5fe6215419891f' => __DIR__ . '/../..' . '/src/model/LogmUser.class.php',
+    public static $prefixLengthsPsr4 = array (
+        'D' => 
+        array (
+            'Dplus\\Dpluso\\UserActions\\' => 25,
+            'Dplus\\Dpluso\\OrderDisplays\\' => 27,
+            'Dplus\\Dpluso\\Model\\' => 19,
+            'Dplus\\Dpluso\\Items\\' => 19,
+            'Dplus\\Dpluso\\General\\' => 21,
+            'Dplus\\Dpluso\\Customer\\' => 22,
+            'Dplus\\Dpluso\\Configs\\' => 21,
+            'Dplus\\Dpluso\\Bookings\\' => 22,
+        ),
+    );
+
+    public static $prefixDirsPsr4 = array (
+        'Dplus\\Dpluso\\UserActions\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/UserActions',
+        ),
+        'Dplus\\Dpluso\\OrderDisplays\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/OrderDisplays',
+        ),
+        'Dplus\\Dpluso\\Model\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/Model',
+        ),
+        'Dplus\\Dpluso\\Items\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/Items',
+        ),
+        'Dplus\\Dpluso\\General\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/General',
+        ),
+        'Dplus\\Dpluso\\Customer\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/Customer',
+        ),
+        'Dplus\\Dpluso\\Configs\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/Configs',
+        ),
+        'Dplus\\Dpluso\\Bookings\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/Bookings',
+        ),
+    );
+
+    public static $classMap = array (
+        'Contact' => __DIR__ . '/../..' . '/src/Customer/Contact.class.php',
+        'Customer' => __DIR__ . '/../..' . '/src/Customer/Customer.class.php',
+        'Dplus\\Dpluso\\Bookings\\BookingsPanel' => __DIR__ . '/../..' . '/src/Bookings/BookingsPanel.class.php',
+        'Dplus\\Dpluso\\Bookings\\CustomerBookingsPanel' => __DIR__ . '/../..' . '/src/Bookings/BookingsPanelCustomer.class.php',
+        'Dplus\\Dpluso\\Configs\\FormFieldsConfig' => __DIR__ . '/../..' . '/src/Configs/FormFieldsConfig.class.php',
+        'Dplus\\Dpluso\\Customer\\CustomerIndex' => __DIR__ . '/../..' . '/src/Customer/CustomerIndex.class.php',
+        'Dplus\\Dpluso\\General\\SigninLog' => __DIR__ . '/../..' . '/src/General/SigninLog.class.php',
+        'Dplus\\Dpluso\\Items\\ItemLookupModal' => __DIR__ . '/../..' . '/src/Items/ItemLookupModal.class.php',
+        'Dplus\\Dpluso\\Items\\ItemLookupModalOrder' => __DIR__ . '/../..' . '/src/Items/ItemLookupModal.class.php',
+        'Dplus\\Dpluso\\Items\\ItemLookupModalQuote' => __DIR__ . '/../..' . '/src/Items/ItemLookupModal.class.php',
+        'Dplus\\Dpluso\\OrderDisplays\\CartDisplay' => __DIR__ . '/../..' . '/src/OrderDisplays/CartDisplay.class.php',
+        'Dplus\\Dpluso\\OrderDisplays\\CustomerQuotePanel' => __DIR__ . '/../..' . '/src/OrderDisplays/QuotePanelCustomer.class.php',
+        'Dplus\\Dpluso\\OrderDisplays\\CustomerSalesOrderHistoryPanel' => __DIR__ . '/../..' . '/src/OrderDisplays/SalesOrderHistoryPanelCustomer.class.php',
+        'Dplus\\Dpluso\\OrderDisplays\\CustomerSalesOrderPanel' => __DIR__ . '/../..' . '/src/OrderDisplays/SalesOrderPanelCustomer.class.php',
+        'Dplus\\Dpluso\\OrderDisplays\\EditQuoteDisplay' => __DIR__ . '/../..' . '/src/OrderDisplays/QuoteDisplayEdit.class.php',
+        'Dplus\\Dpluso\\OrderDisplays\\EditSalesOrderDisplay' => __DIR__ . '/../..' . '/src/OrderDisplays/SalesOrderDisplayEdit.class.php',
+        'Dplus\\Dpluso\\OrderDisplays\\OrderDisplay' => __DIR__ . '/../..' . '/src/OrderDisplays/OrderDisplay.class.php',
+        'Dplus\\Dpluso\\OrderDisplays\\OrderDisplayInterface' => __DIR__ . '/../..' . '/src/OrderDisplays/OrderDisplay.interface.php',
+        'Dplus\\Dpluso\\OrderDisplays\\OrderPanel' => __DIR__ . '/../..' . '/src/OrderDisplays/OrderPanel.class.php',
+        'Dplus\\Dpluso\\OrderDisplays\\OrderPanelCustomerInterface' => __DIR__ . '/../..' . '/src/OrderDisplays/OrderPanelCustomer.interface.php',
+        'Dplus\\Dpluso\\OrderDisplays\\OrderPanelCustomerTraits' => __DIR__ . '/../..' . '/src/OrderDisplays/OrderPanelCustomer.trait.php',
+        'Dplus\\Dpluso\\OrderDisplays\\OrderPanelInterface' => __DIR__ . '/../..' . '/src/OrderDisplays/OrderPanel.interface.php',
+        'Dplus\\Dpluso\\OrderDisplays\\QuoteDisplay' => __DIR__ . '/../..' . '/src/OrderDisplays/QuoteDisplay.class.php',
+        'Dplus\\Dpluso\\OrderDisplays\\QuoteDisplayInterface' => __DIR__ . '/../..' . '/src/OrderDisplays/QuoteDisplay.interface.php',
+        'Dplus\\Dpluso\\OrderDisplays\\QuoteDisplayTraits' => __DIR__ . '/../..' . '/src/OrderDisplays/QuoteDisplay.trait.php',
+        'Dplus\\Dpluso\\OrderDisplays\\QuotePanel' => __DIR__ . '/../..' . '/src/OrderDisplays/QuotePanel.class.php',
+        'Dplus\\Dpluso\\OrderDisplays\\QuotePanelInterface' => __DIR__ . '/../..' . '/src/OrderDisplays/QuotePanel.interface.php',
+        'Dplus\\Dpluso\\OrderDisplays\\RepQuotePanel' => __DIR__ . '/../..' . '/src/OrderDisplays/QuotePanelRep.class.php',
+        'Dplus\\Dpluso\\OrderDisplays\\RepSalesOrderPanel' => __DIR__ . '/../..' . '/src/OrderDisplays/SalesOrderPanelRep.class.php',
+        'Dplus\\Dpluso\\OrderDisplays\\SalesOrderDisplay' => __DIR__ . '/../..' . '/src/OrderDisplays/SalesOrderDisplay.class.php',
+        'Dplus\\Dpluso\\OrderDisplays\\SalesOrderDisplayInterface' => __DIR__ . '/../..' . '/src/OrderDisplays/SalesOrderDisplay.interface.php',
+        'Dplus\\Dpluso\\OrderDisplays\\SalesOrderDisplayTraits' => __DIR__ . '/../..' . '/src/OrderDisplays/SalesOrderDisplay.trait.php',
+        'Dplus\\Dpluso\\OrderDisplays\\SalesOrderHistoryPanel' => __DIR__ . '/../..' . '/src/OrderDisplays/SalesOrderHistoryPanel.class.php',
+        'Dplus\\Dpluso\\OrderDisplays\\SalesOrderPanel' => __DIR__ . '/../..' . '/src/OrderDisplays/SalesOrderPanel.class.php',
+        'Dplus\\Dpluso\\OrderDisplays\\SalesOrderPanelInterface' => __DIR__ . '/../..' . '/src/OrderDisplays/SalesOrderPanel.interface.php',
+        'Dplus\\Dpluso\\UserActions\\ActionsPanel' => __DIR__ . '/../..' . '/src/UserActions/UserActionsPanel.class.php',
+        'Dplus\\Dpluso\\UserActions\\ContactActionsPanel' => __DIR__ . '/../..' . '/src/UserActions/UserActionsPanelContact.class.php',
+        'Dplus\\Dpluso\\UserActions\\CustomerActionsPanel' => __DIR__ . '/../..' . '/src/UserActions/UserActionsPanelCustomer.class.php',
+        'Dplus\\Dpluso\\UserActions\\EditUserActionsDisplay' => __DIR__ . '/../..' . '/src/UserActions/UserActionDisplayEdit.class.php',
+        'Dplus\\Dpluso\\UserActions\\QuoteActionsPanel' => __DIR__ . '/../..' . '/src/UserActions/UserActionsPanelQuote.class.php',
+        'Dplus\\Dpluso\\UserActions\\SalesOrderActionsPanel' => __DIR__ . '/../..' . '/src/UserActions/UserActionsPanelSalesOrder.class.php',
+        'Dplus\\Dpluso\\UserActions\\UserActionDisplay' => __DIR__ . '/../..' . '/src/UserActions/UserActionDisplay.class.php',
+        'LogmUser' => __DIR__ . '/../..' . '/src/Model/LogmUser.class.php',
+        'NonExistingCustomer' => __DIR__ . '/../..' . '/src/Customer/Customer.class.php',
+        'UserAction' => __DIR__ . '/../..' . '/src/UserActions/UserAction.class.php',
+        'Vendor' => __DIR__ . '/../..' . '/src/Model/Vendor.class.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
+            $loader->prefixLengthsPsr4 = ComposerStaticInitde55f17c88d493db7f2fa2056536094d::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitde55f17c88d493db7f2fa2056536094d::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitde55f17c88d493db7f2fa2056536094d::$classMap;
 
         }, null, ClassLoader::class);
     }
