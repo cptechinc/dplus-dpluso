@@ -88,7 +88,8 @@
 			$icon = $bootstrap->icon('fa fa-arrow-right');
 			return $bootstrap->create_element('a', "href=$href|class=btn btn-block btn-success", $icon. " Finished with Order");
 		}
-
+		
+		// TODO REMOVE
 		public function generate_detailvieweditlink(Order $order, OrderDetail $detail) {
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_detailviewediturl($order, $detail);
@@ -100,7 +101,19 @@
 				return $bootstrap->a("href=$href|class=update-line|title=Edit Line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$order->custid|aria-label=View Detail Line", $icon);
 			}
 		}
-
+		
+		/**
+		 * Returns URL to delete detail line
+		 * @param  Order       $order  Order
+		 * @param  OrderDetail $detail OrderDetail
+		 * @return string              HTML Link to delete detail line
+		 */
+		public function generate_deletedetailurl(Order $order, OrderDetail $detail) {
+			$url = $this->generate_ordersredirurl();
+			$url->query->setData(array('action' => 'remove-line-get', 'ordn' => $order->ordernumber, 'linenbr' => $detail->linenbr, 'page' => $this->pageurl->getUrl()));
+			return $url->getUrl();
+		}
+		
 		/**
 		 * Returns HTML Link to delete detail line
 		 * // TODO REMOVE
@@ -115,19 +128,6 @@
 			$url->query->setData(array('action' => 'remove-line-get', 'ordn' => $order->ordernumber, 'linenbr' => $detail->linenbr, 'page' => $this->pageurl->getUrl()));
 			$href = $url->getUrl();
 			return $bootstrap->a("href=$href|class=btn btn-sm btn-danger|title=Delete Item", $icon);
-		}
-
-		/**
-		 * Returns URL to delete the detail line
-		 *
-		 * @param Order       $order
-		 * @param OrderDetail $detail
-		 * @return string
-		 */
-		public function generate_deletedetailurl(Order $order, OrderDetail $detail) {
-			$url = $this->generate_ordersredirurl();
-			$url->query->setData(array('action' => 'remove-line-get', 'ordn' => $order->ordernumber, 'linenbr' => $detail->linenbr, 'page' => $this->pageurl->getUrl()));
-			return $url->getUrl();
 		}
 
 		public function generate_readonlyalert() {
