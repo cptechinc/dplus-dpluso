@@ -1,5 +1,5 @@
 <?php
-	use Dplus\ProcessWire\DplusWire as DplusWire;
+	use Dplus\ProcessWire\DplusWire;
 	
 	/**
 	 * Dplus User that has their email, name, loginid, role, company, fax, phone
