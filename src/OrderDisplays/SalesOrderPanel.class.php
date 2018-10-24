@@ -1,11 +1,11 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
-	
+
 	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Content\HTMLWriter;
 	use Dplus\Content\FormMaker;
 	use Dplus\Base\StringerBell;
-	
+
 	class SalesOrderPanel extends OrderPanel implements OrderDisplayInterface, SalesOrderDisplayInterface, OrderPanelInterface, SalesOrderPanelInterface {
 		use SalesOrderDisplayTraits;
 
@@ -133,10 +133,10 @@
 		public function generate_iconlegend() {
 			$bootstrap = new HTMLWriter();
 			$content = $bootstrap->create_element('i', 'class=glyphicon glyphicon-shopping-cart|title=Re-order Icon', '') . ' = Re-order <br>';
-			$content .= $bootstrap->create_element('i', "class=material-icons|title=Documents Icon", '&#xE873;') . '&nbsp; = Documents <br>'; 
+			$content .= $bootstrap->create_element('i', "class=material-icons|title=Documents Icon", '&#xE873;') . '&nbsp; = Documents <br>';
 			$content .= $bootstrap->create_element('i', 'class=glyphicon glyphicon-plane hover|title=Tracking Icon', '') . ' = Tracking <br>';
 			$content .= $bootstrap->create_element('i', 'class=material-icons|title=Notes Icon', '&#xE0B9;') . ' = Notes <br>';
-			$content .= $bootstrap->create_element('i', 'class=glyphicon glyphicon-pencil|title=Edit \Order Icon', '') . ' = Edit \Order <br>'; 
+			$content .= $bootstrap->create_element('i', 'class=glyphicon glyphicon-pencil|title=Edit \Order Icon', '') . ' = Edit \Order <br>';
 			$content = str_replace('"', "'", $content);
 			$attr = "tabindex=0|role=button|class=btn btn-sm btn-info|data-toggle=popover|data-placement=bottom|data-trigger=focus";
 			$attr .= "|data-html=true|title=Icons Definition|data-content=$content";
@@ -189,7 +189,7 @@
 
 			if (isset($this->filters['order_date'])) {
 				if (empty($this->filters['order_date'][0])) {
-					$this->filters['order_date'][0] = date('m/d/Y', strtotime(get_minsalesorderdate('order_date')));
+					$this->filters['order_date'][0] = date('m/d/Y', strtotime(get_minorderdate('order_date')));
 				}
 
 				if (empty($this->filters['order_date'][1])) {
@@ -209,14 +209,14 @@
 						}
 					}
 				}
-			}		
+			}
 		}
 
 		/* =============================================================
 			SalesOrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-		public function generate_loadtrackinglink(\Order $order) { 
+		public function generate_loadtrackinglink(\Order $order) {
 			$bootstrap = new HTMLWriter();
 			if ($order->has_tracking()) {
 				$href = $this->generate_trackingrequesturl($order);
@@ -309,7 +309,7 @@
 				$title = "Open in read-only mode";
 			}
 			$url = new \Purl\Url($this->generate_editurl($order));
-			
+
 			if ($order->can_edit() || $order->is_lockedbyuser()) {
 				$url->query->set('edit', 'edit');
 			}
@@ -327,6 +327,6 @@
 		public function generate_detailvieweditlink(\Order $order, \OrderDetail $detail) {
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_detailviewediturl($order, $detail);
-			return $bootstrap->create_element('a', "href=$href|class=update-line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$order->custid|aria-label=View Detail Line", $detail->itemid);	
+			return $bootstrap->create_element('a', "href=$href|class=update-line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$order->custid|aria-label=View Detail Line", $detail->itemid);
 		}
 	}
