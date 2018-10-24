@@ -1,5 +1,5 @@
 <?php
-	use Dplus\ProcessWire\DplusWire;
+	use Dplus\ProcessWire\DplusWire as DplusWire;
 	
 	/**
 	 * Dplus User that has their email, name, loginid, role, company, fax, phone
@@ -68,6 +68,13 @@
 		 * @var string X
 		 */
 		protected $dummy;
+		
+		/**
+		 * Role ID
+		 * // Example SalesPerson ID
+		 * @var string
+		 */
+		protected $roleid;
 
 		/**
 		 * Property aliases
@@ -96,7 +103,15 @@
 		 * @return string DPLUSO user type
 		 */
 		public function get_dplusorole() {
-			return array_search(strtolower($this->role), DplusWire::wire('config')->roles);
+			return array_search(strtolower($this->role), DplusWire::wire('config')->dplus_dplusoroles);
+		}
+		
+		/**
+		 * Returns if User is a Sales Rep
+		 * @return bool Is User a Sales Rep?
+		 */
+		public function is_salesrep() {
+			return $this->get_dplusrole() == DplusWire::wire('config')->user_roles['sales-rep']['dplus-code'];
 		}
 
 		/**
