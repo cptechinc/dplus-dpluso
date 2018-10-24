@@ -1,13 +1,20 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
-
-	use Dplus\ProcessWire\DplusWire as DplusWire;
+	
+	use Purl\Url;
+	use ProcessWire\WireInput;
+	use Dplus\ProcessWire\DplusWire;
+	
+	/**
+	 * Use Statements for Model Classes which are non-namespaced
+	 */
+	use Order, OrderDetail;
 	
 	class CustomerSalesOrderPanel extends SalesOrderPanel implements OrderPanelCustomerInterface {
 		use OrderPanelCustomerTraits;
 
-		public $orders = array();
-		public $filterable = array(
+		protected $orders = array();
+		protected $filterable = array(
 			'custpo' => array(
 				'querytype' => 'between',
 				'datatype' => 'char',
@@ -17,6 +24,11 @@
 				'querytype' => 'between',
 				'datatype' => 'char',
 				'label' => 'CustID'
+			),
+			'shiptoid' => array(
+				'querytype' => 'in',
+				'datatype' => 'char',
+				'label' => 'ShiptoID'
 			),
 			'ordernumber' => array(
 				'querytype' => 'between',
@@ -39,47 +51,26 @@
 				'datatype' => 'char',
 				'label' => 'Status'
 			),
-			'salesperson_1' => array(
+			'salesperson' => array(
 				'querytype' => 'in',
 				'datatype' => 'char',
-				'label' => 'Sales Person 1'
+				'label' => 'Sales Rep'
 			)
 		);
-
-		/* =============================================================
-			SalesOrderPanelInterface Functions
-		============================================================ */
-		/**
-		 * Returns the Max Sales Order Total
-		 * @param  bool   $debug Return SQL Query?
-		 * @return float         Max Sales Order Total
-		 */
-		public function get_maxsalesordertotal($debug = false) {
-			return get_maxsalesordertotal($this->custID, $this->shipID, $debug);
-		}
-
-		/**
-		 * Returns the Min Sales Order Total
-		 * @param  bool   $debug Return SQL Query?
-		 * @return float         Min Sales Order Total
-		 */
-		public function get_minsalesordertotal($debug = false) {
-			return get_minsalesordertotal($this->custID, $this->shipID, $debug);
-		}
 
 		/* =============================================================
 			OrderPanelInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
 		public function generate_loadurl() {
-			$url = new \Purl\Url(parent::generate_loadurl());
+			$url = new Url(parent::generate_loadurl());
 			$url->query->set('action', 'load-cust-orders');
 			$url->query->set('custID', $this->custID);
 			return $url->getUrl();
 		}
 
-		public function generate_loaddetailsurl(\Order $order) {
-			$url = new \Purl\Url(parent::generate_loaddetailsurl($order));
+		public function generate_loaddetailsurl(Order $order) {
+			$url = new Url(parent::generate_loaddetailsurl($order));
 			$url->query->set('custID', $order->custid);
 			return $url->getUrl();
 		}
@@ -93,9 +84,13 @@
 			return '';
 		}
 
-		public function generate_filter(\ProcessWire\WireInput $input) {
+		public function generate_filter(WireInput $input) {
 			parent::generate_filter($input);
-			$this->filters['custid'] = array($this->custID);
+			$this->filters['custid'][] = $this->custID;
+			
+			if (!empty($this->shipID)) {
+				$this->filters['shiptoid'][] = $this->shipID;
+			}
 
 			if (isset($this->filters['order_date'])) {
 				if (empty($this->filters['order_date'][0])) {
@@ -122,8 +117,8 @@
 			SalesOrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-		public function generate_trackingrequesturl(\Order $order) {
-			$url = new \Purl\Url(parent::generate_trackingrequesturl($order));
+		public function generate_trackingrequesturl(Order $order) {
+			$url = new Url(parent::generate_trackingrequesturl($order));
 			$url->query->set('custID', $this->custID);
 			return $url->getUrl();
 		}
@@ -132,8 +127,8 @@
 			OrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-		public function generate_documentsrequesturl(\Order $order, \OrderDetail $orderdetail = null) {
-			$url = new \Purl\Url(parent::generate_documentsrequesturl($order, $orderdetail));
+		public function generate_documentsrequesturl(Order $order, OrderDetail $orderdetail = null) {
+			$url = new Url(parent::generate_documentsrequesturl($order, $orderdetail));
 			$url->query->set('custID', $this->custID);
 			return $url->getUrl();
 		}

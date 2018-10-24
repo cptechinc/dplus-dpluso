@@ -2,8 +2,8 @@
 	namespace Dplus\Dpluso\OrderDisplays;
 	
 	use Dplus\ProcessWire\DplusWire;
-	use Dplus\Content\HTMLWriter, Dplus\Content\FormMaker;
-	use Dplus\Base\StringerBell, Dpluso\Base\DplusDateTime;
+	use Dplus\Content\FormMaker;
+	use Dplus\Base\DplusDateTime;
 	
 	// Use Statements for Model Classes which are non-namespaced
 	use Order, OrderDetail;
@@ -13,9 +13,9 @@
 		 * Array of SalesOrderHistory
 		 * @var array
 		 */
-		public $orders = array();
-		public $paneltype = 'shipped-order';
-		public $filterable = array(
+		protected $orders = array();
+		protected $paneltype = 'shipped-order';
+		protected $filterable = array(
 			'custpo' => array(
 				'querytype' => 'between',
 				'datatype' => 'char',
@@ -25,6 +25,11 @@
 				'querytype' => 'between',
 				'datatype' => 'char',
 				'label' => 'CustID'
+			),
+			'shiptoid' => array(
+				'querytype' => 'between',
+				'datatype' => 'char',
+				'label' => 'ShiptoID'
 			),
 			'ordernumber' => array(
 				'querytype' => 'between',
@@ -53,10 +58,10 @@
 				'datatype' => 'char',
 				'label' => 'Status'
 			),
-			'salesperson_1' => array(
+			'salesperson' => array(
 				'querytype' => 'in',
 				'datatype' => 'char',
-				'label' => 'Sales Person 1'
+				'label' => 'Sales Person'
 			)
 		);
 
@@ -69,25 +74,20 @@
 		/* =============================================================
 			SalesOrderPanelInterface Functions
 		============================================================ */
-		public function get_ordercount($loginID = '', $debug = false) {
-			$count = count_usersaleshistory($this->filters, $this->filterable, $loginID, $debug);
+		public function get_ordercount($debug = false) {
+			$count = count_saleshistory($this->filters, $this->filterable, $debug);
 			return $debug ? $count : $this->count = $count;
 		}
 
-		public function get_orders($loginID = '', $debug = false) {
+		public function get_orders($debug = false) {
 			$useclass = true;
 			if ($this->tablesorter->orderby) {
-				if ($this->tablesorter->orderby == 'order_date') {
-					$orders = get_usersaleshistoryorderdate(DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $loginID, $useclass, $debug);
-				} elseif ($this->tablesorter->orderby == 'invoice_date') {
-					$orders = get_usersaleshistoryinvoicedate(DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $loginID, $useclass, $debug);
-				} else {
-					$orders = get_usersaleshistoryorderby(DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $this->filters, $this->filterable, $loginID, $useclass, $debug);
-				}
+				$orders = get_saleshistory_orderby(DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $this->filters, $this->filterable, $useclass, $debug);
 			} else {
 				// DEFAULT BY Invoice DATE SINCE SALES ORDER # CAN BE ROLLED OVER
+				$this->tablesorter->orderby = 'invoice_date';
 				$this->tablesorter->sortrule = 'DESC';
-				$orders = get_usersaleshistoryinvoicedate(DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $loginID, $useclass, $debug);
+				$orders = get_saleshistory_orderby(DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $this->filters, $this->filterable, $useclass, $debug);
 			}
 			return $debug ? $orders : $this->orders = $orders;
 		}
@@ -110,22 +110,6 @@
 				$url->query->remove($filtercolumns);
 			}
 			return $url->getUrl();
-		}
-
-		public function generate_clearsearchlink() {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_loadurl();
-			$icon = $bootstrap->icon('fa fa-search-minus');
-			$ajaxdata = $this->generate_ajaxdataforcontento();
-			return $bootstrap->create_element('a', "href=$href|class=load-link btn btn-warning btn-block|$ajaxdata", "Clear Search $icon");
-		}
-
-		public function generate_refreshlink() {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_loadurl();
-			$icon = $bootstrap->icon('fa fa-refresh');
-			$ajaxdata = $this->generate_ajaxdataforcontento();
-			return $bootstrap->create_element('a', "href=$href|class=load-and-show|$ajaxdata", "$icon Refresh History");
 		}
 
 		public function generate_closedetailsurl() {
@@ -158,12 +142,11 @@
 		}
 		
 		public function generate_filter(\ProcessWire\WireInput $input) {
-			$stringerbell = new StringerBell();
-			$this->generate_defaultfilter($input);
+			parent::generate_filter($input);
 
 			if (isset($this->filters['order_date'])) {
 				if (empty($this->filters['order_date'][0])) {
-					$this->filters['order_date'][0] = DplusDateTime::format_date(get_minsaleshistoryorderdate('orderdate'));
+					$this->filters['order_date'][0] = DplusDateTime::format_date($this->get_minsaleshistoryorderdate('order_date'));
 				}
 
 				if (empty($this->filters['order_date'][1])) {
@@ -173,7 +156,7 @@
 
 			if (isset($this->filters['invoice_date'])) {
 				if (empty($this->filters['invoice_date'][0])) {
-					$this->filters['invoice_date'][0] = date('m/d/Y', strtotime(get_minsaleshistoryorderdate('invoice_date')));
+					$this->filters['invoice_date'][0] = date('m/d/Y', strtotime($this->get_minsaleshistoryorderdate('invoice_date')));
 				}
 
 				if (empty($this->filters['invoice_date'][1])) {

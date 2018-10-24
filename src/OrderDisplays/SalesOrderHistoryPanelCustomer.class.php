@@ -6,9 +6,9 @@
 	class CustomerSalesOrderHistoryPanel extends SalesOrderHistoryPanel {
 		use OrderPanelCustomerTraits;
 
-		public $orders = array();
-		public $paneltype = 'shipped-order';
-		public $filterable = array(
+		protected $orders = array();
+		protected $paneltype = 'shipped-order';
+		protected $filterable = array(
 			'custpo' => array(
 				'querytype' => 'between',
 				'datatype' => 'char',
@@ -18,6 +18,11 @@
 				'querytype' => 'between',
 				'datatype' => 'char',
 				'label' => 'CustID'
+			),
+			'shiptoid' => array(
+				'querytype' => 'in',
+				'datatype' => 'char',
+				'label' => 'shiptoID'
 			),
 			'ordernumber' => array(
 				'querytype' => 'between',
@@ -41,38 +46,12 @@
 				'date-format' => 'Ymd',
 				'label' => 'Invoice Date'
 			),
-			'salesperson_1' => array(
+			'salesperson' => array(
 				'querytype' => 'in',
 				'datatype' => 'char',
 				'label' => 'Sales Person 1'
 			)
 		);
-
-		/* =============================================================
-			SalesOrderPanelInterface Functions
-		============================================================ */
-		public function get_ordercount($loginID = '', $debug = false) {
-			$count = count_customersaleshistory($this->custID, $this->shipID, $this->filters, $this->filterable, $loginID, $debug);
-			return $debug ? $count : $this->count = $count;
-		}
-
-		public function get_orders($loginID = '', $debug = false) {
-			$useclass = true;
-			if ($this->tablesorter->orderby) {
-				if ($this->tablesorter->orderby == 'order_date') {
-					$orders = get_customersaleshistoryorderdate($this->custID, $this->shipID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $loginID, $useclass, $debug);
-				} elseif ($this->tablesorter->orderby == 'invoice_date') {
-					$orders = get_customersaleshistoryinvoicedate($this->custID, $this->shipID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $loginID, $useclass, $debug);
-				} else {
-					$orders = get_customersaleshistoryorderby($this->custID, $this->shipID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $this->filters, $this->filterable, $loginID, $useclass, $debug);
-				}
-			} else {
-				// DEFAULT BY ORDER DATE SINCE SALES ORDER # CAN BE ROLLED OVER
-				$this->tablesorter->sortrule = 'DESC';
-				$orders = get_customersaleshistoryorderdate($this->custID, $this->shipID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $loginID, $useclass, $debug);
-			}
-			return $debug ? $orders : $this->orders = $orders;
-		}
 
 		/* =============================================================
 			OrderPanelInterface Functions
@@ -98,11 +77,18 @@
 		}
 
 		public function generate_filter(\ProcessWire\WireInput $input) {
-			$this->generate_defaultfilter($input);
-
+			parent::generate_filter($input);
+			
+			$this->filters['custid'][] = $this->custID;
+			
+			if (!empty($this->shipID)) {
+				$this->filters['shiptoid'][] = $this->shipID;
+			}
+			
+			
 			if (isset($this->filters['order_date'])) {
 				if (empty($this->filters['order_date'][0])) {
-					$this->filters['order_date'][0] = date('m/d/Y', strtotime(get_minsaleshistoryorderdate('order_date', $this->custID, $this->shipID)));
+					$this->filters['order_date'][0] = date('m/d/Y', strtotime($this->get_minsaleshistoryorderdate('order_date')));
 				}
 
 				if (empty($this->filters['order_date'][1])) {
@@ -112,7 +98,7 @@
 
 			if (isset($this->filters['invoice_date'])) {
 				if (empty($this->filters['invoice_date'][0])) {
-					$this->filters['invoice_date'][0] = date('m/d/Y', strtotime(get_minsaleshistoryorderdate('invoice_date', $this->custID, $this->shipID)));
+					$this->filters['invoice_date'][0] = date('m/d/Y', strtotime($this->get_minsaleshistoryorderdate('invoice_date')));
 				}
 
 				if (empty($this->filters['invoice_date'][1])) {

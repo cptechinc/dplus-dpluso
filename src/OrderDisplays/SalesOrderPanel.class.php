@@ -1,10 +1,17 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
 	
+	use Purl\Url;
+	use ProcessWire\WireInput;
 	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Content\HTMLWriter;
 	use Dplus\Content\FormMaker;
 	use Dplus\Base\StringerBell;
+	
+	/**
+	 * Use Statements for Model Classes which are non-namespaced
+	 */
+	use Order, OrderDetail;
 	
 	class SalesOrderPanel extends OrderPanel implements OrderDisplayInterface, SalesOrderDisplayInterface, OrderPanelInterface, SalesOrderPanelInterface {
 		use SalesOrderDisplayTraits;
@@ -13,9 +20,9 @@
 		 * Array of SalesOrders
 		 * @var array
 		 */
-		public $orders = array();
-		public $paneltype = 'sales-order';
-		public $filterable = array(
+		protected $orders = array();
+		protected $paneltype = 'sales-order';
+		protected $filterable = array(
 			'custpo' => array(
 				'querytype' => 'between',
 				'datatype' => 'char',
@@ -29,34 +36,34 @@
 			'ordernumber' => array(
 				'querytype' => 'between',
 				'datatype' => 'char',
-				'label' => '\Order #'
+				'label' => 'Order #'
 			),
 			'total_order' => array(
 				'querytype' => 'between',
 				'datatype' => 'numeric',
-				'label' => '\Order Total'
+				'label' => 'Order Total'
 			),
 			'order_date' => array(
 				'querytype' => 'between',
 				'datatype' => 'date',
 				'date-format' => 'Ymd',
-				'label' => '\Order Date'
+				'label' => 'Order Date'
 			),
 			'status' => array(
 				'querytype' => 'in',
 				'datatype' => 'char',
 				'label' => 'Status'
 			),
-			'salesperson_1' => array(
+			'salesperson' => array(
 				'querytype' => 'in',
 				'datatype' => 'char',
-				'label' => 'Sales Person 1'
+				'label' => 'Sales Rep'
 			)
 		);
 
-		public function __construct($sessionID, \Purl\Url $pageurl, $modal, $loadinto, $ajax) {
+		public function __construct($sessionID, Url $pageurl, $modal, $loadinto, $ajax) {
 			parent::__construct($sessionID, $pageurl, $modal, $loadinto, $ajax);
-			$this->pageurl = new \Purl\Url($pageurl->getUrl());
+			$this->pageurl = new Url($pageurl->getUrl());
 			$this->setup_pageurl();
 		}
 
@@ -81,22 +88,34 @@
 		}
 
 		/**
-		 * Returns the Max Sales \Order Total
+		 * Returns the Max Sales Order Total
 		 * @param  bool   $debug Return SQL Query?
-		 * @return float         Max Sales \Order Total
+		 * @return float         Max Sales Order Total
 		 */
 		public function get_maxsalesordertotal($debug = false) {
-			return get_maxsalesordertotal($custID = '', $shipID = '', $debug);
+			return get_maxsalesordertotal($custID = '', $shipID = '', $this->filters, $this->filterable, $debug);
 		}
 
 		/**
-		 * Returns the Min Sales \Order Total
+		 * Returns the Min Sales Order Total
 		 * @param  bool   $debug Return SQL Query?
-		 * @return float         Min Sales \Order Total
+		 * @return float         Min Sales Order Total
 		 */
 		public function get_minsalesordertotal($debug = false) {
-			return get_minsalesordertotal($custID = '', $shipID = '', $debug);
+			return get_minsalesordertotal($custID = '', $shipID = '', $this->filters, $this->filterable, $debug);
 		}
+		
+		/**
+		 * REturns the Min Sales Order Date field value for $field
+		 * @param  string $field Date Column to return Min Date
+		 * @param  bool   $debug Run in debug? If so, return SQL Query
+		 * @return string        Min $field Date
+		 */
+		public function get_mindate($field = 'order_date', $debug = false) {
+			return get_minsalesorderdate($field, $custID = '', $shipID = '', $this->filters, $this->filterable, $debug);
+		}
+		
+		
 
 		/* =============================================================
 			OrderPanelInterface Functions
@@ -110,22 +129,16 @@
 		}
 
 		public function generate_loadurl() {
-			$url = new \Purl\Url($this->pageurl->getUrl());
-			$url->path = DplusWire::wire('config')->pages->orders.'redir/';
-			$url->query->setData(array('action' => 'load-orders'));
+			$url = new Url($this->pageurl);
+			$url->query->remove('filter');
+			foreach (array_keys($this->filterable) as $filtercolumns) {
+				$url->query->remove($filtercolumns);
+			}
 			return $url->getUrl();
 		}
 
-		public function generate_refreshlink() {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_loadurl();
-			$icon = $bootstrap->icon('fa fa-refresh');
-			$ajaxdata = $this->generate_ajaxdataforcontento();
-			return $bootstrap->create_element('a', "href=$href|class=generate-load-link|$ajaxdata", "$icon Refresh Orders");
-		}
-
 		public function generate_closedetailsurl() {
-			$url = new \Purl\Url($this->pageurl->getUrl());
+			$url = new Url($this->pageurl->getUrl());
 			$url->query->setData(array('ordn' => false, 'show' => false));
 			return $url->getUrl();
 		}
@@ -136,17 +149,17 @@
 			$content .= $bootstrap->create_element('i', "class=material-icons|title=Documents Icon", '&#xE873;') . '&nbsp; = Documents <br>'; 
 			$content .= $bootstrap->create_element('i', 'class=glyphicon glyphicon-plane hover|title=Tracking Icon', '') . ' = Tracking <br>';
 			$content .= $bootstrap->create_element('i', 'class=material-icons|title=Notes Icon', '&#xE0B9;') . ' = Notes <br>';
-			$content .= $bootstrap->create_element('i', 'class=glyphicon glyphicon-pencil|title=Edit \Order Icon', '') . ' = Edit \Order <br>'; 
+			$content .= $bootstrap->create_element('i', 'class=glyphicon glyphicon-pencil|title=Edit Order Icon', '') . ' = Edit Order <br>'; 
 			$content = str_replace('"', "'", $content);
 			$attr = "tabindex=0|role=button|class=btn btn-sm btn-info|data-toggle=popover|data-placement=bottom|data-trigger=focus";
 			$attr .= "|data-html=true|title=Icons Definition|data-content=$content";
 			return $bootstrap->create_element('a', $attr, 'Icon Definitions');
 		}
 
-		public function generate_loaddetailsurl(\Order $order) {
-			$pageurl = new \Purl\Url($this->pageurl->getUrl());
+		public function generate_loaddetailsurl(Order $order) {
+			$pageurl = new Url($this->pageurl->getUrl());
 			$pageurl->query->set('ordn', $order->ordernumber);
-			$url = new \Purl\Url($this->generate_loaddetailsurltrait($order));
+			$url = new Url($this->generate_loaddetailsurltrait($order));
 			$url->query->set('page', $pageurl->getUrl());
 			return $url->getUrl();
 		}
@@ -162,11 +175,11 @@
 
 		/**
 		 * Returns HTML form for reordering SalesOrderDetails
-		 * @param  \Order       $order  SalesOrder
-		 * @param  \OrderDetail $detail SalesOrderDetail
+		 * @param  Order       $order  SalesOrder
+		 * @param  OrderDetail $detail SalesOrderDetail
 		 * @return string              HTML Form
 		 */
-		public function generate_detailreorderform(\Order $order, \OrderDetail $detail) {
+		public function generate_detailreorderform(Order $order, OrderDetail $detail) {
 			if (empty(($detail->itemid))) {
 				return '';
 			}
@@ -183,13 +196,13 @@
 			return $form->finish();
 		}
 
-		public function generate_filter(\ProcessWire\WireInput $input) {
+		public function generate_filter(WireInput $input) {
 			$stringerbell = new StringerBell();
 			parent::generate_filter($input);
 
 			if (isset($this->filters['order_date'])) {
 				if (empty($this->filters['order_date'][0])) {
-					$this->filters['order_date'][0] = date('m/d/Y', strtotime(get_minsalesorderdate('order_date')));
+					$this->filters['order_date'][0] = date('m/d/Y', strtotime($this->get_mindate('order_date')));
 				}
 
 				if (empty($this->filters['order_date'][1])) {
@@ -216,7 +229,7 @@
 			SalesOrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-		public function generate_loadtrackinglink(\Order $order) { 
+		public function generate_loadtrackinglink(Order $order) { 
 			$bootstrap = new HTMLWriter();
 			if ($order->has_tracking()) {
 				$href = $this->generate_trackingrequesturl($order);
@@ -231,8 +244,8 @@
 			}
 		}
 
-		public function generate_trackingrequesturl(\Order $order) {
-			$url = new \Purl\Url($this->generate_trackingrequesturltrait($order));
+		public function generate_trackingrequesturl(Order $order) {
+			$url = new Url($this->generate_trackingrequesturltrait($order));
 			$url->query->set('page', $this->pagenbr);
 			$url->query->set('orderby', $this->tablesorter->orderbystring);
 			return $url->getUrl();
@@ -242,15 +255,15 @@
 			OrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-		public function generate_loaddplusnoteslink(\Order $order, $linenbr = '0') {
+		public function generate_loaddplusnoteslink(Order $order, $linenbr = '0') {
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_dplusnotesrequesturl($order, $linenbr);
 
 			if ($order->can_edit()) {
-				$title = ($order->has_notes()) ? "View and Create \Order Notes" : "Create \Order Notes";
+				$title = ($order->has_notes()) ? "View and Create Order Notes" : "Create Order Notes";
 				$addclass = ($order->has_notes()) ? '' : 'text-muted';
 			} else {
-				$title = ($order->has_notes()) ? "View \Order Notes" : "View \Order Notes";
+				$title = ($order->has_notes()) ? "View Order Notes" : "View Order Notes";
 				$addclass = ($order->has_notes()) ? '' : 'text-muted';
 			}
 			$content = $bootstrap->icon('material-icons md-36', '&#xE0B9;');
@@ -258,7 +271,7 @@
 			return $link;
 		}
 
-		public function generate_loaddocumentslink(\Order $order, \OrderDetail $orderdetail = null) {
+		public function generate_loaddocumentslink(Order $order, OrderDetail $orderdetail = null) {
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_documentsrequesturl($order, $orderdetail);
 			$icon = $bootstrap->icon('fa fa-file-text');
@@ -271,14 +284,14 @@
 			}
 		}
 
-		public function generate_documentsrequesturl(\Order $order, \OrderDetail $orderdetail = null) {
-			$url = new \Purl\Url($this->generate_documentsrequesturltrait($order, $orderdetail));
+		public function generate_documentsrequesturl(Order $order, OrderDetail $orderdetail = null) {
+			$url = new Url($this->generate_documentsrequesturltrait($order, $orderdetail));
 			$url->query->set('page', $this->pagenbr);
 			$url->query->set('orderby', $this->tablesorter->orderbystring);
 			return $url->getUrl();
 		}
 
-		public function generate_editlink(\Order $order) {
+		public function generate_editlink(Order $order) {
 			$bootstrap = new HTMLWriter();
 			/*
 				ORDER LOCK LOGIC
@@ -308,7 +321,7 @@
 				$icon = $bootstrap->icon('glyphicon glyphicon-eye-open');
 				$title = "Open in read-only mode";
 			}
-			$url = new \Purl\Url($this->generate_editurl($order));
+			$url = new Url($this->generate_editurl($order));
 			
 			if ($order->can_edit() || $order->is_lockedbyuser()) {
 				$url->query->set('edit', 'edit');
@@ -317,14 +330,14 @@
 			return $bootstrap->create_element('a', "href=$href|class=edit-order h3|title=$title", $icon);
 		}
 
-		public function generate_viewlinkeduseractionslink(\Order $order) {
+		public function generate_viewlinkeduseractionslink(Order $order) {
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_viewlinkeduseractionsurl($order);
 			$icon = $bootstrap->create_element('span','class=h3', $bootstrap->icon('glyphicon glyphicon-check'));
 			return $bootstrap->create_element('a', "href=$href|class=load-into-modal|data-modal=$this->modal", $icon." View Associated Actions");
 		}
 
-		public function generate_detailvieweditlink(\Order $order, \OrderDetail $detail) {
+		public function generate_detailvieweditlink(Order $order, OrderDetail $detail) {
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_detailviewediturl($order, $detail);
 			return $bootstrap->create_element('a', "href=$href|class=update-line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$order->custid|aria-label=View Detail Line", $detail->itemid);	

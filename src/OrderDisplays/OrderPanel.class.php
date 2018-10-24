@@ -1,6 +1,9 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
-	
+
+	use ProcessWire\WireInput;
+	use Purl\Url;
+	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Base\QueryBuilder;
 	use Dplus\Content\TablePageSorter;
 	use Dplus\Content\HTMLWriter;
@@ -9,101 +12,118 @@
 	 * Use Statements for Model Classes which are non-namespaced
 	 */
 	use Order;
+	use LogmUser;
 	
 	/**
 	 * Blueprint class for dealing with lists of orders and their display
 	 */
 	abstract class OrderPanel extends OrderDisplay {
+		use \Dplus\Base\MagicMethodTraits;
+		use \Dplus\Base\ThrowErrorTrait;
 		use \Dplus\Base\AttributeParser;
+		use \Dplus\Base\Filterable;
+		
+		/**
+		 * User ID for the panel is getting orders for
+		 * // NOTE If User ID belongs to a Sales Rep it will autopopulate the filter for salesperson
+		 * @var string
+		 */
+		protected $userID;
 
 		/**
 		 * ID of HTML element to focus on after ajax load
 		 * @var string e.g. #orderpanel
 		 */
-		public $focus;
+		protected $focus;
 
 		/**
 		 * ID of HTML element to load into after ajax load
 		 * @var string e.g. #orderpanel
 		 */
-		public $loadinto;
+		protected $loadinto;
 
 		/**
 		 * String of data attributes
 		 * @var string e.g. data-loadinto='$this->loadinto' data-focus='$this->focus'
 		 */
-		public $ajaxdata;
+		protected $ajaxdata;
 
 		/**
 		 * Segment of URL to place the pagination segment
 		 * @var string
 		 */
-		public $paginationinsertafter;
+		protected $paginationinsertafter;
 
 		/**
 		 * Boolean to decide if this has been loaded through ajax
 		 * @var bool
 		 */
-		public $throughajax;
+		protected $throughajax;
 
 		/**
 		 * Whether or not the panel div shows opened or collapse
 		 * @var string
 		 */
-		public $collapse = 'collapse';
+		protected $collapse = 'collapse';
 
 		/**
 		 * Object to sort the columns
 		 * @var \Dplus\Content\TablePageSorter
 		 */
-		public $tablesorter; // Will be instatnce of TablePageSorter
+		protected $tablesorter; // Will be instatnce of TablePageSorter
 
 		/**
 		 * Page Number
 		 * @var int
 		 */
-		public $pagenbr;
+		protected $pagenbr;
 
 		/**
 		 * Which Order Number is the active Order
 		 * @var string
 		 */
-		public $activeID = false;
+		protected $activeID = false;
 
 		/**
 		 * Number of Orders
 		 * @var int
 		 */
-		public $count;
+		protected $count;
 
 		/**
 		 * Array of filters that will apply to the orders
 		 * @var array
 		 */
-		public $filters = false; // Will be instance of array
+		protected $filters = array(
+			'salesperson' => array(
+				'querytype' => 'in',
+				'datatype' => 'char',
+				'label' => 'Sales Rep'
+			)
+		);
 
 		/**
 		 * Array of key->array of filterable columns
 		 * @var array
 		 */
-		public $filterable;
+		protected $filterable;
 
 		/**
 		 * Panel Type
 		 * @var string
 		 */
-		public $paneltype;
+		protected $paneltype;
 
 		/**
 		 * Constructor
 		 * @param string  $sessionID  Session Identifier
-		 * @param \Purl\Url $pageurl   Page URL Object
+		 * @param Url $pageurl   Page URL Object
 		 * @param string  $modal      ID of Modal Element
 		 * @param string  $loadinto   ID of element to AJAX Load into
 		 * @param bool  $ajax         Use Ajax
 		 * @uses
 		 */
-		public function __construct($sessionID, \Purl\Url $pageurl, $modal, $loadinto, $ajax) {
+		public function __construct($sessionID, Url $pageurl, $modal, $loadinto, $ajax) {
 			parent::__construct($sessionID, $pageurl, $modal);
 			$this->loadinto = $this->focus = $loadinto;
 			$this->ajaxdata = "data-loadinto='$this->loadinto' data-focus='$this->focus'";
@@ -122,6 +142,10 @@
 		 * @uses parent::setup_pageurl()
 		 */
 		abstract public function setup_pageurl();
+		
+		public function set_user($userID) {
+			$this->userID = $userID;
+		}
 
 		/* =============================================================
 			Class Functions
@@ -153,47 +177,13 @@
 			OrderPanelInterface Functions
 		============================================================ */
 		/**
-		 * Returns HTML link for clearing the search
-		 * @return string HTML Link
-		 */
-		public function generate_clearsearchlink() {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_loadurl();
-			$icon = $bootstrap->icon('fa fa-search-minus');
-			$ajaxdata = $this->generate_ajaxdataforcontento();
-			return $bootstrap->create_element('a', "href=$href|class=generate-load-link btn btn-warning btn-block|$ajaxdata", "Clear Search $icon");
-		}
-
-		/**
-		 * Returns HTML link for clearing the sort
-		 * @return [HTML Link
-		 */
-		public function generate_clearsortlink() {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_clearsorturl();
-			$ajaxdata = $this->generate_ajaxdataforcontento();
-			return $bootstrap->create_element('a', "href=$href|class=btn btn-warning btn-sm load-link|$ajaxdata", '(Clear Sort)');
-		}
-
-		/**
 		 * Returns URL with the sort parameters removed
 		 * @return string URL to load
 		 */
 		public function generate_clearsorturl() {
-			$url = new \Purl\Url($this->pageurl->getUrl());
+			$url = new Url($this->pageurl->getUrl());
 			$url->query->remove("orderby");
 			return $url->getUrl();
-		}
-
-		/**
-		 * Returns HTML link to load the Orders/Quotes
-		 * @return string HTML link
-		 */
-		public function generate_loadlink() {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_loadurl();
-			$ajaxdata = $this->generate_ajaxdataforcontento();
-			return $bootstrap->create_element('a', "href=$href|class=generate-load-link|$ajaxdata", "Load Orders");
 		}
 
 		/**
@@ -202,7 +192,7 @@
 		 * @return string         URL with the column sortby with the correct rule
 		 */
 		public function generate_tablesortbyurl($column) {
-			$url = new \Purl\Url($this->pageurl->getUrl());
+			$url = new Url($this->pageurl->getUrl());
 			$url->query->set("orderby", "$column-".$this->tablesorter->generate_columnsortingrule($column));
 			return $url->getUrl();
 		}
@@ -211,83 +201,17 @@
 		/**
 		 * Looks through the $input->get for properties that have the same name
 		 * as filterable properties, then we populate $this->filter with the key and value
-		 * @param  \ProcessWire\WireInput $input Use the get property to get at the $_GET[] variables
+		 * @param  WireInput $input Use the get property to get at the $_GET[] variables
 		 */
-		public function generate_filter(\ProcessWire\WireInput $input) {
-			if (!$input->get->filter) {
-				$this->filters = false;
-			} else {
-				$this->filters = array();
-				foreach ($this->filterable as $filter => $type) {
-					if (!empty($input->get->$filter)) {
-						if (!is_array($input->get->$filter)) {
-							$value = $input->get->text($filter);
-							$this->filters[$filter] = explode('|', $value);
-						} else {
-							$this->filters[$filter] = $input->get->$filter;
-						}
-					} elseif (is_array($input->get->$filter)) {
-						if (strlen($input->get->$filter[0])) {
-							$this->filters[$filter] = $input->get->$filter;
-						}
-					}
-				}
+		public function generate_filter(WireInput $input) {
+			$this->generate_defaultfilter($input);
+			$this->userID = !empty($this->userID) ? $this->userID : DplusWire::wire('user')->loginid;
+			
+			$user = LogmUser::load($this->userID);
+			
+			if ($user->is_salesrep()) {
+				$this->filters['salesperson'][] = $user->roleid;
 			}
-		}
-
-
-		/**
-		 * Looks through the $input->get for properties that have the same name
-		 * as filterable properties, then we populate $this->filter with the key and value
-		 * @param  \ProcessWire\WireInput $input Use the get property to get at the $_GET[] variables
-		 */
-		public function generate_defaultfilter(\ProcessWire\WireInput $input) {
-			if (!$input->get->filter) {
-				$this->filters = false;
-			} else {
-				$this->filters = array();
-				foreach ($this->filterable as $filter => $type) {
-					if (!empty($input->get->$filter)) {
-						if (!is_array($input->get->$filter)) {
-							$value = $input->get->text($filter);
-							$this->filters[$filter] = explode('|', $value);
-						} else {
-							$this->filters[$filter] = $input->get->$filter;
-						}
-					} elseif (is_array($input->get->$filter)) {
-						if (strlen($input->get->$filter[0])) {
-							$this->filters[$filter] = $input->get->$filter;
-						}
-					}
-				}
-			}
-		}
-
-		/**
-		 * Grab the value of the filter at index
-		 * Goes through the $this->filters array, looks at index $filtername
-		 * grabs the value at index provided
-		 * @param  string $key        Key in filters
-		 * @param  int    $index      Which index to look at for value
-		 * @return mixed              value of key index
-		 */
-		public function get_filtervalue($key, $index = 0) {
-			if (empty($this->filters)) return '';
-			if (isset($this->filters[$key])) {
-				return (isset($this->filters[$key][$index])) ? $this->filters[$key][$index] : '';
-			}
-			return '';
-		}
-
-		/**
-		 * Checks if $this->filters has value of $value
-		 * @param  string $key        string
-		 * @param  mixed $value       value to look for
-		 * @return bool               whether or not if value is in the filters array at the key $key
-		 */
-		public function has_filtervalue($key, $value) {
-			if (empty($this->filters)) return false;
-			return (isset($this->filters[$key])) ? in_array($value, $this->filters[$key]) : false;
 		}
 
 		/**
