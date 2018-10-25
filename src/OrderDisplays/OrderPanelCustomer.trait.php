@@ -1,6 +1,13 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
 	
+	use Dplus\Base\QueryBuilder;
+	
+	/**
+	 * Use Statements for Model Classes which are non-namespaced
+	 */
+	use LogmUser;
+	
 	/**
 	 * Traits for defining a Customer on the orderpanels
 	 */
@@ -42,6 +49,33 @@
 			if (!empty($this->shipID)) {
 				$this->pageurl->path->add("shipto-$this->shipID");
 				$this->paginationinsertafter = "shipto-$this->shipID";
+			}
+		}
+		
+		/**
+		 * Returns a descrption of the filters being applied to the orderpanel
+		 * @return string Description of the filters
+		 */
+		public function generate_filterdescription() {
+			$user = LogmUser::load($this->userID);
+			$filters = $this->filters;
+
+			if ($user->is_salesrep()) {
+				unset($this->$filters['salesperson']);
+			}
+			
+			unset($filters['custid']);
+			unset($filters['shiptoid']);
+			
+			if (empty($filters)) {
+				return '';
+			} else {
+				$desc = 'Searching '.$this->generate_paneltypedescription().' with';
+
+				foreach ($filters as $filter => $value) {
+					$desc .= " " . QueryBuilder::generate_filterdescription($filter, $value, $this->filterable);
+				}
+				return $desc;
 			}
 		}
 	}

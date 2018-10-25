@@ -83,6 +83,34 @@
 			}
 			return '';
 		}
+		
+		/**
+		 * Returns Min Date for $datetype
+		 * @param  string $datetype Date Column
+		 * @param  bool   $debug    Run in debug? If so, return SQL Query
+		 * @return string           Min Date
+		 */
+		public function get_mindate($datetype = 'quotdate', $debug = false) {
+			return get_minquotedate($this->sessionID, $this->custID,  $this->shiptoID, $datetype, $this->filters, $this->filterable, $debug);
+		}
+		
+		/**
+		 * Returns Max Quote Total
+		 * @param  bool   $debug  Run in debug? If so, return SQL Query
+		 * @return float          Max Quote Total
+		 */
+		public function get_maxquotetotal($debug = false) {
+			return get_maxquotetotal($this->sessionID, $this->custID, $this->shiptoID, $this->filters, $this->filterable, $debug);
+		}
+		
+		/**
+		 * Returns Min Quote Total
+		 * @param  bool   $debug  Run in debug? If so, return SQL Query
+		 * @return float          Miin Quote Total
+		 */
+		public function get_minquotetotal($debug = false) {
+			return get_minquotetotal($this->sessionID, $this->custID, $this->shiptoID, $this->filters, $this->filterable, $debug);
+		}
 
 		public function generate_filter(WireInput $input) {
 			parent::generate_filter($input);

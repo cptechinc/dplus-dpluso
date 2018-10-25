@@ -1,12 +1,11 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
-	
+
 	use Purl\Url;
 	use ProcessWire\WireInput;
 	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Content\HTMLWriter;
 	use Dplus\Content\FormMaker;
-	use Dplus\Base\StringerBell;
 	
 	/**
 	 * Use Statements for Model Classes which are non-namespaced
@@ -114,8 +113,6 @@
 		public function get_mindate($field = 'order_date', $debug = false) {
 			return get_minsalesorderdate($field, $custID = '', $shipID = '', $this->filters, $this->filterable, $debug);
 		}
-		
-		
 
 		/* =============================================================
 			OrderPanelInterface Functions
@@ -197,7 +194,6 @@
 		}
 
 		public function generate_filter(WireInput $input) {
-			$stringerbell = new StringerBell();
 			parent::generate_filter($input);
 
 			if (isset($this->filters['order_date'])) {

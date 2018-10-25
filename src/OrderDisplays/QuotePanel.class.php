@@ -1,6 +1,8 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
-	
+
+	use Purl\Url;
+	use ProcessWire\WireInput;
 	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Content\HTMLWriter;
 	
@@ -59,9 +61,9 @@
 			)
 		);
 
-		public function __construct($sessionID, \Purl\Url $pageurl, $modal, $loadinto, $ajax) {
+		public function __construct($sessionID, Url $pageurl, $modal, $loadinto, $ajax) {
 			parent::__construct($sessionID, $pageurl, $modal, $loadinto, $ajax);
-			$this->pageurl = $this->pageurl = new \Purl\Url($pageurl->getUrl());
+			$this->pageurl = $this->pageurl = new Url($pageurl->getUrl());
 			$this->setup_pageurl();
 		}
 
@@ -93,7 +95,7 @@
 		 * @return string           Min Date
 		 */
 		public function get_mindate($datetype = 'quotdate', $debug = false) {
-			return get_minquotedate($this->sessionID, $datetype, $this->filters, $this->filterable, $debug);
+			return get_minquotedate($this->sessionID, $custID = '', $shiptoID = '', $datetype, $this->filters, $this->filterable, $debug);
 		}
 		
 		/**
@@ -102,7 +104,7 @@
 		 * @return float          Max Quote Total
 		 */
 		public function get_maxquotetotal($debug = false) {
-			return get_maxquotetotal($this->sessionID, $this->filters, $this->filterable, $debug);
+			return get_maxquotetotal($this->sessionID, $custID = '', $shiptoID = '', $this->filters, $this->filterable, $debug);
 		}
 		
 		/**
@@ -111,7 +113,7 @@
 		 * @return float          Miin Quote Total
 		 */
 		public function get_minquotetotal($debug = false) {
-			return get_minquotetotal($this->sessionID, $this->filters, $this->filterable, $debug);
+			return get_minquotetotal($this->sessionID, $custID = '', $shiptoID = '', $this->filters, $this->filterable, $debug);
 		}
 
 		/**
@@ -144,7 +146,7 @@
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
 		public function generate_closedetailsurl() {
-			$url = new \Purl\Url($this->pageurl->getUrl());
+			$url = new Url($this->pageurl->getUrl());
 			$url->query->setData(array('qnbr' => false, 'show' => false));
 			return $url->getUrl();
 		}
@@ -173,14 +175,14 @@
 		}
 
 		public function generate_loadurl() {
-			$url = new \Purl\Url($this->pageurl->getUrl());
+			$url = new Url($this->pageurl->getUrl());
 			$url->path = DplusWire::wire('config')->pages->quotes.'redir/';
 			$url->query->setData(array('action' => 'load-quotes'));
 			return $url->getUrl();
 		}
 
 		public function generate_loaddetailsurl(Order $quote) {
-			$url = new \Purl\Url($this->generate_loaddetailsurltrait($quote));
+			$url = new Url($this->generate_loaddetailsurltrait($quote));
 			$url->query->set('page', $this->pagenbr);
 			$url->query->set('orderby', $this->tablesorter->orderbystring);
 
@@ -214,7 +216,7 @@
 		}
 
 		public function generate_documentsrequesturl(Order $quote, OrderDetail $quotedetail = null) {
-			$url = new \Purl\Url($this->generate_documentsrequesturltrait($quote, $quotedetail));
+			$url = new Url($this->generate_documentsrequesturltrait($quote, $quotedetail));
 			$url->query->set('page', $this->pagenbr);
 			$url->query->set('orderby', $this->tablesorter->orderbystring);
 			return $url->getUrl();
@@ -275,7 +277,7 @@
 			return '';
 		}
 
-		public function generate_filter(\ProcessWire\WireInput $input) {
+		public function generate_filter(WireInput $input) {
 			parent::generate_filter($input);
 
 			if (isset($this->filters['quotdate'])) {

@@ -1,11 +1,15 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
 	
+	use Purl\Url;
+	use ProcessWire\WireInput;
 	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Content\FormMaker;
 	use Dplus\Base\DplusDateTime;
 	
-	// Use Statements for Model Classes which are non-namespaced
+	/**
+	 * Use Statements for Model Classes which are non-namespaced
+	 */
 	use Order, OrderDetail;
 	
 	class SalesOrderHistoryPanel extends SalesOrderPanel {
@@ -65,9 +69,9 @@
 			)
 		);
 
-		public function __construct($sessionID, \Purl\Url $pageurl, $modal, $loadinto, $ajax) {
+		public function __construct($sessionID, Url $pageurl, $modal, $loadinto, $ajax) {
 			parent::__construct($sessionID, $pageurl, $modal, $loadinto, $ajax);
-			$this->pageurl = new \Purl\Url($pageurl->getUrl());
+			$this->pageurl = new Url($pageurl->getUrl());
 			$this->setup_pageurl();
 		}
 
@@ -91,6 +95,34 @@
 			}
 			return $debug ? $orders : $this->orders = $orders;
 		}
+		
+		/**
+		 * Returns the Max Sales Order Total
+		 * @param  bool   $debug Return SQL Query?
+		 * @return float         Max Sales Order Total
+		 */
+		public function get_maxsalesordertotal($debug = false) {
+			return get_maxsaleshistoryordertotal($custID = '', $shipID = '', $this->filters, $this->filterable, $debug);
+		}
+
+		/**
+		 * Returns the Min Sales Order Total
+		 * @param  bool   $debug Return SQL Query?
+		 * @return float         Min Sales Order Total
+		 */
+		public function get_minsalesordertotal($debug = false) {
+			return get_minsaleshistoryordertotal($custID = '', $shipID = '', $this->filters, $this->filterable, $debug);
+		}
+		
+		/**
+		 * REturns the Min Sales Order Date field value for $field
+		 * @param  string $field Date Column to return Min Date
+		 * @param  bool   $debug Run in debug? If so, return SQL Query
+		 * @return string        Min $field Date
+		 */
+		public function get_mindate($field = 'order_date', $debug = false) {
+			return get_minsaleshistoryorderdate($field, $custID = '', $shipID = '', $this->filters, $this->filterable, $debug);
+		}
 
 		/* =============================================================
 			OrderPanelInterface Functions
@@ -104,7 +136,7 @@
 		}
 
 		public function generate_loadurl() {
-			$url = new \Purl\Url($this->pageurl);
+			$url = new Url($this->pageurl);
 			$url->query->remove('filter');
 			foreach (array_keys($this->filterable) as $filtercolumns) {
 				$url->query->remove($filtercolumns);
@@ -113,7 +145,7 @@
 		}
 
 		public function generate_closedetailsurl() {
-			$url = new \Purl\Url($this->pageurl->getUrl());
+			$url = new Url($this->pageurl->getUrl());
 			$url->query->setData(array('ordn' => false, 'show' => false));
 			return $url->getUrl();
 		}
@@ -141,12 +173,12 @@
 			return $form->finish();
 		}
 		
-		public function generate_filter(\ProcessWire\WireInput $input) {
+		public function generate_filter(WireInput $input) {
 			parent::generate_filter($input);
 
 			if (isset($this->filters['order_date'])) {
 				if (empty($this->filters['order_date'][0])) {
-					$this->filters['order_date'][0] = DplusDateTime::format_date($this->get_minsaleshistoryorderdate('order_date'));
+					$this->filters['order_date'][0] = DplusDateTime::format_date($this->get_mindate('order_date'));
 				}
 
 				if (empty($this->filters['order_date'][1])) {
@@ -156,7 +188,7 @@
 
 			if (isset($this->filters['invoice_date'])) {
 				if (empty($this->filters['invoice_date'][0])) {
-					$this->filters['invoice_date'][0] = date('m/d/Y', strtotime($this->get_minsaleshistoryorderdate('invoice_date')));
+					$this->filters['invoice_date'][0] = date('m/d/Y', strtotime($this->get_mindate('invoice_date')));
 				}
 
 				if (empty($this->filters['invoice_date'][1])) {
@@ -184,7 +216,7 @@
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
 		public function generate_trackingrequesturl(Order $order) {
-			$url = new \Purl\Url($this->generate_trackingrequesturltrait($order));
+			$url = new Url($this->generate_trackingrequesturltrait($order));
 			$url->query->set('page', $this->pagenbr);
 			$url->query->set('orderby', $this->tablesorter->orderbystring);
 			$url->query->set('type', 'history');
@@ -196,7 +228,7 @@
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
 		public function generate_documentsrequesturl(Order $order, OrderDetail $orderdetail = null) {
-			$url = new \Purl\Url($this->generate_documentsrequesturltrait($order, $orderdetail));
+			$url = new Url($this->generate_documentsrequesturltrait($order, $orderdetail));
 			$url->query->set('page', $this->pagenbr);
 			$url->query->set('orderby', $this->tablesorter->orderbystring);
 			$url->query->set('type', 'history');

@@ -1,8 +1,8 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
 
-	use ProcessWire\WireInput;
 	use Purl\Url;
+	use ProcessWire\WireInput;
 	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Base\QueryBuilder;
 	use Dplus\Content\TablePageSorter;
@@ -219,13 +219,22 @@
 		 * @return string Description of the filters
 		 */
 		public function generate_filterdescription() {
-			if (empty($this->filters)) return '';
-			$desc = 'Searching '.$this->generate_paneltypedescription().' with';
+			$user = LogmUser::load($this->userID);
+			$filters = $this->filters;
 
-			foreach ($this->filters as $filter => $value) {
-				$desc .= " " . QueryBuilder::generate_filterdescription($filter, $value, $this->filterable);
+			if ($user->is_salesrep()) {
+				unset($filters['salesperson']);
 			}
-			return $desc;
+			
+			if (empty($filters)) {
+				return '';
+			} else {
+				$desc = 'Searching '.$this->generate_paneltypedescription().' with';
+				foreach ($filters as $filter => $value) {
+					$desc .= " " . QueryBuilder::generate_filterdescription($filter, $value, $this->filterable);
+				}
+				return $desc;
+			}
 		}
 
 		/**
