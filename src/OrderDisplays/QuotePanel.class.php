@@ -71,7 +71,7 @@
 			$this->pageurl->path = DplusWire::wire('config')->pages->ajax."load/quotes/";
 			$this->pageurl->query->remove('display');
 			$this->pageurl->query->remove('ajax');
-			$this->pageurl->paginationinsertafter = 'quotes';
+			$this->paginationinsertafter = 'quotes';
 		}
 
 		/* =============================================================
