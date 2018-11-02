@@ -115,6 +115,22 @@
 		}
 
 		/**
+		 * Returns if User is a Sales Manager
+		 * @return bool Is User a Sales Manager?
+		 */
+		public function is_salesmanager() {
+			return $this->get_dplusrole() == DplusWire::wire('config')->user_roles['sales-manager']['dplus-code'];
+		}
+		
+		/**
+		 * Returns if User is an Admin
+		 * @return bool Is User an Admin?
+		 */
+		public function is_admin() {
+			return $this->get_dplusrole() == DplusWire::wire('config')->user_roles['admin']['dplus-code'];
+		}
+
+		/**
 		 * Get the Loginid needed for the custperm table based on permissions
 		 * @return string admin | $this->loginid
 		 */
