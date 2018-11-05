@@ -134,6 +134,17 @@
 		}
 
 		/**
+		 * Returns URL to Request Release Order
+		 * @param  Order  $order SalesOrder
+		 * @return string        URL to edit order page
+		 */
+		public function generate_releaseurl(Order $order) {
+			$url = $this->generate_ordersredirurl();
+			$url->query->setData(array('action' => 'release-order','ordn' => $order->ordernumber));
+			return $url->getUrl();
+		}
+
+		/**
 		 * Returns HTML link to view print page for Sales Order
 		 * @param  Order  $order SalesOrder
 		 * @return string        HTML link to view print page
