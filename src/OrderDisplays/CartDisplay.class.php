@@ -3,9 +3,9 @@
 	
 	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Content\HTMLWriter;
-	use \CartQuote, \CartDetail;
-	use \Order, \OrderDetail;
-	use \Qnote;
+	use CartQuote, CartDetail;
+	use Order, OrderDetail;
+	use Qnote;
 	
 	
 	/**

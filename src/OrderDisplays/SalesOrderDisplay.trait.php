@@ -1,7 +1,7 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
 	
-	use Dplus\ProcessWire\DplusWire as DplusWire;
+	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Content\HTMLWriter;
 	
 	/**
