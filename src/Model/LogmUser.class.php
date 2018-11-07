@@ -103,7 +103,13 @@
 		 * @return string DPLUSO user type
 		 */
 		public function get_dplusorole() {
-			return array_search(strtolower($this->role), DplusWire::wire('config')->dplus_dplusoroles);
+			$role = $this->get_dplusrole();
+			
+			if (in_array($role, array_keys(DplusWire::wire('config')->dplus_dplusoroles))) {
+				return DplusWire::wire('config')->dplus_dplusoroles[$role];
+			} else {
+				return false;
+			}
 		}
 		
 		/**
