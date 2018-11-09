@@ -3,6 +3,10 @@
 	
 	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Content\HTMLWriter;
+
+	/**
+	 * Use Statements for Model Classes which are non-namespaced
+	 */
 	use CartQuote, CartDetail;
 	use Order, OrderDetail;
 	use Qnote;
