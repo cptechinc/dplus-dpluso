@@ -126,7 +126,12 @@
 		public function __construct($sessionID, Url $pageurl, $modal, $loadinto, $ajax) {
 			parent::__construct($sessionID, $pageurl, $modal);
 			$this->loadinto = $this->focus = $loadinto;
-			$this->ajaxdata = "data-loadinto='$this->loadinto' data-focus='$this->focus'";
+			if (!empty($this->loadinto)) {
+				$this->ajaxdata = "data-loadinto='$this->loadinto' data-focus='$this->focus'";
+			} else {
+				$this->ajaxdata = '';
+			}
+			
 			$this->tablesorter = new TablePageSorter($this->pageurl->query->get('orderby'));
 
 			if ($ajax) {
