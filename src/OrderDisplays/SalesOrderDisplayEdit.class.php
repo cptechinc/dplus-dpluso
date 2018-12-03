@@ -71,14 +71,14 @@
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_unlockurl($order);
 			$icon = $bootstrap->icon('glyphicon glyphicon-floppy-remove');
-			return $bootstrap->create_element('a', "href=$href|class=btn btn-block btn-warning", $icon. " Discard Changes, Unlock Order");
+			return $bootstrap->a("href=$href|class=btn btn-block btn-warning", $icon. " Discard Changes, Unlock Order");
 		}
 
 		public function generate_saveunlocklink(Order $order) {
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_unlockurl($order);
 			$icon = $bootstrap->icon('fa fa-unlock');
-			return $bootstrap->create_element('a', "href=$href|class=btn btn-block btn-emerald save-unlock-order|data-form=#orderhead-form", $icon. " Save and Exit");
+			return $bootstrap->a("href=$href|class=btn btn-block btn-emerald save-unlock-order|data-form=#orderhead-form", $icon. " Save and Exit");
 		}
 
 		public function generate_confirmationlink(Order $order) {
@@ -86,7 +86,7 @@
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_unlockurl($order);
 			$icon = $bootstrap->icon('fa fa-arrow-right');
-			return $bootstrap->create_element('a', "href=$href|class=btn btn-block btn-success", $icon. " Finished with Order");
+			return $bootstrap->a("href=$href|class=btn btn-block btn-success", $icon. " Finished with Order");
 		}
 		
 		// TODO REMOVE
@@ -95,7 +95,7 @@
 			$href = $this->generate_detailviewediturl($order, $detail);
 			if ($order->can_edit()) {
 				$icon = $bootstrap->icon('glyphicon glyphicon-pencil');
-				return $bootstrap->create_element('a', "href=$href|class=btn btn-sm btn-warning update-line|title=Edit Line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$order->custid|aria-label=View Detail Line", $icon);
+				return $bootstrap->a("href=$href|class=btn btn-sm btn-warning update-line|title=Edit Line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$order->custid|aria-label=View Detail Line", $icon);
 			} else {
 				$icon = $bootstrap->icon('fa fa-eye');
 				return $bootstrap->a("href=$href|class=update-line|title=Edit Line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$order->custid|aria-label=View Detail Line", $icon);
@@ -123,7 +123,7 @@
 		 */
 		public function generate_deletedetaillink(Order $order, OrderDetail $detail) {
 			$bootstrap = new HTMLWriter();
-			$icon = $bootstrap->icon('fa fa-trash') . $bootstrap->create_element('span', 'class=sr-only', 'Delete Line');
+			$icon = $bootstrap->icon('fa fa-trash') . $bootstrap->span('class=sr-only', 'Delete Line');
 			$url = $this->generate_ordersredirurl();
 			$url->query->setData(array('action' => 'remove-line-get', 'ordn' => $order->ordernumber, 'linenbr' => $detail->linenbr, 'page' => $this->pageurl->getUrl()));
 			$href = $url->getUrl();
@@ -132,13 +132,13 @@
 
 		public function generate_readonlyalert() {
 			$bootstrap = new HTMLWriter();
-			$msg = $bootstrap->create_element('b', '', 'Attention!') . ' This order will open in read-only mode, you will not be able to save changes.';
+			$msg = $bootstrap->b('', 'Attention!') . ' This order will open in read-only mode, you will not be able to save changes.';
 			return $bootstrap->alertpanel('warning', $msg);
 		}
 
 		public function generate_erroralert($order) {
 			$bootstrap = new HTMLWriter();
-			$msg = $bootstrap->create_element('b', '', 'Error!') .' '. $order->errormsg;
+			$msg = $bootstrap->b('', 'Error!') .' '. $order->errormsg;
 			return $bootstrap->alertpanel('danger', $msg, false);
 		}
 
@@ -166,10 +166,10 @@
 
 			if (intval($linenbr) > 0) {
 				$content = $bootstrap->icon('material-icons md-36', '&#xE0B9;');
-				$link = $bootstrap->create_element('a', "href=$href|class=load-notes|title=$title|data-modal=$this->modal", $content);
+				$link = $bootstrap->a("href=$href|class=load-notes|title=$title|data-modal=$this->modal", $content);
 			} else {
 				$content = $bootstrap->icon('material-icons', '&#xE0B9;') . ' ' . $title;
-				$link = $bootstrap->create_element('a', "href=$href|class=btn btn-default load-notes|title=$title|data-modal=$this->modal", $content);
+				$link = $bootstrap->a("href=$href|class=btn btn-default load-notes|title=$title|data-modal=$this->modal", $content);
 			}
 			return $link;
 		}

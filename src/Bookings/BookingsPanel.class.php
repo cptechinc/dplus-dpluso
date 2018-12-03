@@ -252,7 +252,7 @@
 			$href = $this->generate_refreshurl();
 			$icon = $bootstrap->icon('fa fa-refresh');
 			$ajaxdata = $this->generate_ajaxdataforcontento();
-			return $bootstrap->create_element('a', "href=$href|class=load-link|$ajaxdata", "$icon Refresh Bookings");
+			return $bootstrap->a("href=$href|class=load-link|$ajaxdata", "$icon Refresh Bookings");
 		}
 
 		/**
@@ -265,7 +265,7 @@
 			$href = $this->generate_refreshurl();
 			$icon = $bootstrap->icon('fa fa-times');
 			$ajaxdata = $this->generate_ajaxdataforcontento();
-			return $bootstrap->create_element('a', "href=$href|class=btn btn-xs btn-warning load-and-show|$ajaxdata", "$icon Remove Date Parameters");
+			return $bootstrap->a("href=$href|class=btn btn-xs btn-warning load-and-show|$ajaxdata", "$icon Remove Date Parameters");
 		}
 
 		/**
@@ -400,7 +400,7 @@
 			$href = $this->generate_viewsalesordersbydayurl($date);
 			$icon = $bootstrap->icon('glyphicon glyphicon-new-window');
 			$ajaxdata = "data-modal=$this->modal";
-			return $bootstrap->create_element('a', "href=$href|class=btn btn-primary btn-sm load-into-modal info-screen|$ajaxdata", "$icon View Sales Orders");
+			return $bootstrap->a("href=$href|class=btn btn-primary btn-sm load-into-modal info-screen|$ajaxdata", "$icon View Sales Orders");
 		}
 		
 		/**
@@ -414,7 +414,7 @@
 			$href = $this->generate_viewsalesordersbydayurl($date);
 			$icon = $bootstrap->icon('fa fa-arrow-circle-left');
 			$ajaxdata = "data-modal=$this->modal";
-			return $bootstrap->create_element('a', "href=$href|class=btn btn-primary btn-sm load-into-modal info-screen|$ajaxdata", "$icon Back to Bookings on $date");
+			return $bootstrap->a("href=$href|class=btn btn-primary btn-sm load-into-modal info-screen|$ajaxdata", "$icon Back to Bookings on $date");
 		}
 
 		/**
@@ -444,7 +444,7 @@
 			$href = $this->generate_viewsalesorderdayurl($ordn, $date);
 			$icon = $bootstrap->icon('glyphicon glyphicon-new-window');
 			$ajaxdata = "data-modal=$this->modal";
-			return $bootstrap->create_element('a', "href=$href|class=modal-load btn btn-primary btn-sm|$ajaxdata", "$icon View Sales Order changes on $date");
+			return $bootstrap->a("href=$href|class=modal-load btn btn-primary btn-sm|$ajaxdata", "$icon View Sales Order changes on $date");
 		}
 		
 		/**

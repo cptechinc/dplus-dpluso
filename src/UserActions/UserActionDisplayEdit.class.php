@@ -20,9 +20,9 @@
             $content = '';
             foreach ($subtypes as $subtype) {
                 if ($subtype->name == $action->actionsubtype) {
-                    $content .= $bootstrap->create_element('button', "class=btn btn-primary select-button-choice btn-sm|type=button|data-value=$subtype->name", $subtype->subtypeicon . ' '. $subtype->actionsubtypelabel);
+                    $content .= $bootstrap->button("class=btn btn-primary select-button-choice btn-sm|type=button|data-value=$subtype->name", $subtype->subtypeicon . ' '. $subtype->actionsubtypelabel);
                 } else {
-                    $content .= $bootstrap->create_element('button', "class=btn btn-default select-button-choice btn-sm|type=button|data-value=$subtype->name", $subtype->subtypeicon . ' '. $subtype->actionsubtypelabel);
+                    $content .= $bootstrap->button("class=btn btn-default select-button-choice btn-sm|type=button|data-value=$subtype->name", $subtype->subtypeicon . ' '. $subtype->actionsubtypelabel);
                 }
             }
             $content .= $bootstrap->open('input', "type=hidden|class=select-button-value required|name=subtype|value=$action->actionsubtype");

@@ -665,7 +665,7 @@
 			$icon = $bootstrap->icon('material-icons md-18', '&#xE86A;');
 			$ajaxdata = $this->generate_ajaxdataforcontento();
 			$ajaxclass = $this->inmodal ? 'modal-load' : 'load-link';
-			return $bootstrap->create_element('a', "href=$href|class=btn btn-info btn-xs $ajaxclass actions-refresh pull-right hidden-print|title=button|title=Refresh Actions|aria-label=Refresh Actions|$ajaxdata|data-modal=$this->modal", $icon);
+			return $bootstrap->a("href=$href|class=btn btn-info btn-xs $ajaxclass actions-refresh pull-right hidden-print|title=button|title=Refresh Actions|aria-label=Refresh Actions|$ajaxdata|data-modal=$this->modal", $icon);
 		}
 
 		/**
@@ -678,9 +678,9 @@
 			$icon = $bootstrap->icon('material-icons md-18', '&#xE146;');
 			if (DplusWire::wire('config')->cptechcustomer == 'stempf') {
 				$ajaxclass = $this->inmodal ? 'modal-load' : 'load-into-modal';
-				return $bootstrap->create_element('a', "href=$href|class=btn btn-info btn-xs $ajaxclass pull-right hidden-print|data-modal=$this->modal|role=button|title=Add Action", $icon);
+				return $bootstrap->a("href=$href|class=btn btn-info btn-xs $ajaxclass pull-right hidden-print|data-modal=$this->modal|role=button|title=Add Action", $icon);
 			}
-			return $bootstrap->create_element('a', "href=$href|class=btn btn-info btn-xs add-action pull-right hidden-print|data-modal=$this->modal|role=button|title=Add Action", $icon);
+			return $bootstrap->a("href=$href|class=btn btn-info btn-xs add-action pull-right hidden-print|data-modal=$this->modal|role=button|title=Add Action", $icon);
 		}
 
 		/**
@@ -692,7 +692,7 @@
 			$href = $this->generate_loadurl();
 			$icon = $bootstrap->icon('fa fa-times');
 			$ajaxdata = $this->generate_ajaxdataforcontento();
-			return $bootstrap->create_element('a', "href=$href|class=load-link btn btn-sm btn-warning btn-block|$ajaxdata", "Clear Filter $icon");
+			return $bootstrap->a("href=$href|class=load-link btn btn-sm btn-warning btn-block|$ajaxdata", "Clear Filter $icon");
 		}
 
 		/**
@@ -703,7 +703,7 @@
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_refreshurl();
 			$icon = $bootstrap->icon('glyphicon glyphicon-print');
-			return $bootstrap->create_element('a', "href=$href|class=h3|target=_blank", $icon." View Printable");
+			return $bootstrap->a("href=$href|class=h3|target=_blank", $icon." View Printable");
 		}
 
 
@@ -712,7 +712,7 @@
 			$href = $this->generate_viewactionjsonurl($task);
 			$icon = $bootstrap->icon('fa fa-check-circle');
 			$icon .= ' <span class="sr-only">Mark as Complete</span>';
-			return $bootstrap->create_element('a', "href=$href|role=button|class=btn btn-xs btn-primary complete-action|title=Mark Task as Complete", $icon);
+			return $bootstrap->a("href=$href|role=button|class=btn btn-xs btn-primary complete-action|title=Mark Task as Complete", $icon);
 		}
 
 		/**
@@ -728,7 +728,7 @@
 			$content = str_replace('"', "'", $tb->close());
 			$attr = "tabindex=0|role=button|class=btn btn-sm btn-info|data-toggle=popover|data-placement=bottom|data-trigger=focus";
 			$attr .= "|data-html=true|title=Icons Definition|data-content=$content";
-			return $bootstrap->create_element('a', $attr, 'Icon Definitions');
+			return $bootstrap->a($attr, 'Icon Definitions');
 		}
 
 		/**

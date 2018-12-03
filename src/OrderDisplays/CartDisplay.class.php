@@ -47,7 +47,7 @@
 			$title = ($detail->has_notes()) ? "View and Create Quote Notes" : "Create Quote Notes";
 			$addclass = ($detail->has_notes()) ? '' : 'text-muted';
 			$content = $bootstrap->icon('material-icons md-36', '&#xE0B9;');
-			$link = $bootstrap->create_element('a', "href=$href|class=load-notes $addclass|title=$title|data-modal=$this->modal", $content);
+			$link = $bootstrap->a( "href=$href|class=load-notes $addclass|title=$title|data-modal=$this->modal", $content);
 			return $link;
 		}
 
@@ -63,7 +63,7 @@
 			$title = ($has_notes) ? "View and Create Quote Notes" : "Create Quote Notes";
 			$addclass = ($has_notes) ? '' : 'text-muted';
 			$content = $bootstrap->icon('material-icons md-36', '&#xE0B9;');
-			$link = $bootstrap->create_element('a', "href=$href|class=load-notes $addclass|title=$title|data-modal=$this->modal", $content);
+			$link = $bootstrap->a("href=$href|class=load-notes $addclass|title=$title|data-modal=$this->modal", $content);
 			return $link;
 		}
 
@@ -121,8 +121,8 @@
 		public function generate_detailvieweditlink(Order $cart, OrderDetail $detail) {
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_detailviewediturl($cart, $detail);
-			$icon = $bootstrap->create_element('button', 'class=btn btn-sm btn-warning detail-line-icon', $bootstrap->icon('glyphicon glyphicon-pencil'));
-			return $bootstrap->create_element('a', "href=$href|class=update-line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$cart->custid|aria-label=View Detail Line", $icon);
+			$icon = $bootstrap->button('class=btn btn-sm btn-warning detail-line-icon', $bootstrap->icon('glyphicon glyphicon-pencil'));
+			return $bootstrap->a("href=$href|class=update-line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$cart->custid|aria-label=View Detail Line", $icon);
 		}
 
 		/**

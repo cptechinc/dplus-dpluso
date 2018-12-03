@@ -58,7 +58,7 @@
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_customershiptourl($order);
 			$icon = $bootstrap->icon('fa fa-user');
-			return $bootstrap->create_element('a', "href=$href|class=btn btn-block btn-primary", $icon. " Go to Customer Page");   
+			return $bootstrap->a("href=$href|class=btn btn-block btn-primary", $icon. " Go to Customer Page");   
 		}
 		
 		/**

@@ -147,15 +147,15 @@
 
 		public function generate_iconlegend() {
 			$bootstrap = new HTMLWriter();
-			$content = $bootstrap->create_element('i', 'class=glyphicon glyphicon-shopping-cart|title=Re-order Icon', '') . ' = Re-order <br>';
-			$content .= $bootstrap->create_element('i', "class=material-icons|title=Documents Icon", '&#xE873;') . '&nbsp; = Documents <br>';
-			$content .= $bootstrap->create_element('i', 'class=glyphicon glyphicon-plane hover|title=Tracking Icon', '') . ' = Tracking <br>';
-			$content .= $bootstrap->create_element('i', 'class=material-icons|title=Notes Icon', '&#xE0B9;') . ' = Notes <br>';
-			$content .= $bootstrap->create_element('i', 'class=glyphicon glyphicon-pencil|title=Edit Order Icon', '') . ' = Edit Order <br>'; 
+			$content = $bootstrap->i('class=glyphicon glyphicon-shopping-cart|title=Re-order Icon', '') . ' = Re-order <br>';
+			$content .= $bootstrap->i("class=material-icons|title=Documents Icon", '&#xE873;') . '&nbsp; = Documents <br>';
+			$content .= $bootstrap->i('class=glyphicon glyphicon-plane hover|title=Tracking Icon', '') . ' = Tracking <br>';
+			$content .= $bootstrap->i('class=material-icons|title=Notes Icon', '&#xE0B9;') . ' = Notes <br>';
+			$content .= $bootstrap->i('class=glyphicon glyphicon-pencil|title=Edit Order Icon', '') . ' = Edit Order <br>'; 
 			$content = str_replace('"', "'", $content);
 			$attr = "tabindex=0|role=button|class=btn btn-sm btn-info|data-toggle=popover|data-placement=bottom|data-trigger=focus";
 			$attr .= "|data-html=true|title=Icons Definition|data-content=$content";
-			return $bootstrap->create_element('a', $attr, 'Icon Definitions');
+			return $bootstrap->a( $attr, 'Icon Definitions');
 		}
 
 		public function generate_loaddetailsurl(Order $order) {
@@ -194,7 +194,7 @@
 			$form->input("type=hidden|name=itemID|value=$detail->itemid");
 			$form->input("type=hidden|name=qty|value=".intval($detail->qty));
 			$form->input("type=hidden|name=desc|value=$detail->desc1");
-			$form->button("type=submit|class=btn btn-primary btn-xs", $form->bootstrap->icon('glyphicon glyphicon-shopping-cart'). $form->bootstrap->create_element('span', 'class=sr-only', 'Submit Reorder'));
+			$form->button("type=submit|class=btn btn-primary btn-xs", $form->bootstrap->icon('glyphicon glyphicon-shopping-cart'). $form->bootstrap->span('class=sr-only', 'Submit Reorder'));
 			return $form->finish();
 		}
 
@@ -234,14 +234,14 @@
 			$bootstrap = new HTMLWriter();
 			if ($order->has_tracking()) {
 				$href = $this->generate_trackingrequesturl($order);
-				$content = $bootstrap->create_element('span', "class=sr-only", 'View Tracking');
+				$content = $bootstrap->span("class=sr-only", 'View Tracking');
 				$content .= $bootstrap->icon('glyphicon glyphicon-plane hover');
 				$ajaxdata = $this->generate_ajaxdataforcontento();
-				return $bootstrap->create_element('a', "href=$href|class=h3 generate-load-link|title=Click to view Tracking|$ajaxdata", $content);
+				return $bootstrap->a("href=$href|class=h3 generate-load-link|title=Click to view Tracking|$ajaxdata", $content);
 			} else {
-				$content = $bootstrap->create_element('span', "class=sr-only", 'No Tracking Information Available');
+				$content = $bootstrap->span("class=sr-only", 'No Tracking Information Available');
 				$content .= $bootstrap->icon('glyphicon glyphicon-plane hover');
-				return $bootstrap->create_element('a', "href=#|class=h3 text-muted|title=No Tracking Info Available", $content);
+				return $bootstrap->a("href=#|class=h3 text-muted|title=No Tracking Info Available", $content);
 			}
 		}
 
@@ -268,7 +268,7 @@
 				$addclass = ($order->has_notes()) ? '' : 'text-muted';
 			}
 			$content = $bootstrap->icon('material-icons md-36', '&#xE0B9;');
-			$link = $bootstrap->create_element('a', "href=$href|class=load-notes $addclass|title=$title|data-modal=$this->modal", $content);
+			$link = $bootstrap->a("href=$href|class=load-notes $addclass|title=$title|data-modal=$this->modal", $content);
 			return $link;
 		}
 
@@ -280,9 +280,9 @@
 			$documentsTF = ($orderdetail) ? $orderdetail->has_documents() : $order->has_documents();
 			
 			if ($documentsTF) {
-				return $bootstrap->create_element('a', "href=$href|class=h3 generate-load-link|title=Click to view Documents|$ajaxdata", $icon);
+				return $bootstrap->a("href=$href|class=h3 generate-load-link|title=Click to view Documents|$ajaxdata", $icon);
 			} else {
-				return $bootstrap->create_element('a', "href=#|class=h3 text-muted|title=No Documents Available", $icon);
+				return $bootstrap->a("href=#|class=h3 text-muted|title=No Documents Available", $icon);
 			}
 		}
 
@@ -329,19 +329,19 @@
 				$url->query->set('edit', 'edit');
 			}
 			$href = $url->getUrl();
-			return $bootstrap->create_element('a', "href=$href|class=edit-order h3|title=$title", $icon);
+			return $bootstrap->a("href=$href|class=edit-order h3|title=$title", $icon);
 		}
 
 		public function generate_viewlinkeduseractionslink(Order $order) {
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_viewlinkeduseractionsurl($order);
-			$icon = $bootstrap->create_element('span','class=h3', $bootstrap->icon('glyphicon glyphicon-check'));
-			return $bootstrap->create_element('a', "href=$href|class=load-into-modal|data-modal=$this->modal", $icon." View Associated Actions");
+			$icon = $bootstrap->span('class=h3', $bootstrap->icon('glyphicon glyphicon-check'));
+			return $bootstrap->a("href=$href|class=load-into-modal|data-modal=$this->modal", $icon." View Associated Actions");
 		}
 
 		public function generate_detailvieweditlink(Order $order, OrderDetail $detail) {
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_detailviewediturl($order, $detail);
-			return $bootstrap->create_element('a', "href=$href|class=update-line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$order->custid|aria-label=View Detail Line", $detail->itemid);
+			return $bootstrap->a("href=$href|class=update-line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$order->custid|aria-label=View Detail Line", $detail->itemid);
 		}
 	}

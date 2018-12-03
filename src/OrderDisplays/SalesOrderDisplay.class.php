@@ -44,14 +44,14 @@
 			$href = $this->generate_editurl($order);
 			$icon = $order->can_edit() ? $bootstrap->icon('material-icons', '&#xE150;') : $bootstrap->icon('glyphicon glyphicon-eye-open');
 			$text = $order->can_edit() ? 'Edit' : 'View';
-			return $bootstrap->create_element('a', "href=$href|class=btn btn-block btn-warning", $icon. " $text Sales Order");   
+			return $bootstrap->a("href=$href|class=btn btn-block btn-warning", $icon. " $text Sales Order");   
 		}
 		
 		public function generate_detailvieweditlink(Order $order, OrderDetail $detail) {
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_detailviewediturl($order, $detail);
-			$icon = $bootstrap->create_element('span', 'class=h3', $bootstrap->icon('glyphicon glyphicon-eye-open'));
-			return $bootstrap->create_element('a', "href=$href|class=update-line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$order->custid|aria-label=View Detail Line", $icon);	
+			$icon = $bootstrap->span('class=h3', $bootstrap->icon('glyphicon glyphicon-eye-open'));
+			return $bootstrap->a("href=$href|class=update-line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$order->custid|aria-label=View Detail Line", $icon);	
 		}
 		
 		/* =============================================================

@@ -175,7 +175,7 @@
 			$address .= $order->shipto_city.", ". $order->shipto_state.' ' . $order->shipto_zip;
 			$attr = "tabindex=0|role=button|class=btn btn-default bordered btn-sm|data-toggle=popover";
 			$attr .= "|data-placement=top|data-trigger=focus|data-html=true|title=Ship-To Address|data-content=$address";
-			return $bootstrap->create_element('a', $attr, '<b>?</b>');
+			return $bootstrap->a($attr, '<b>?</b>');
 		}
 
 		/* =============================================================

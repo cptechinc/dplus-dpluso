@@ -158,20 +158,20 @@
 			$address .= $quote->shipcity.", ". $quote->shipstate.' ' . $quote->shipzip;
 			$attr = "tabindex=0|role=button|class=btn btn-default bordered btn-sm|data-toggle=popover";
 			$attr .= "|data-placement=top|data-trigger=focus|data-html=true|title=Ship-To Address|data-content=$address";
-			return $bootstrap->create_element('a', $attr, '<b>?</b>');
+			return $bootstrap->a($attr, '<b>?</b>');
 		}
 
 		public function generate_iconlegend() {
 			$bootstrap = new HTMLWriter();
-			$content = $bootstrap->create_element('i', 'class=glyphicon glyphicon-shopping-cart|title=Re-order Icon', '') . ' = Re-order <br>';
-			$content .= $bootstrap->create_element('i', "class=material-icons|title=Documents Icon", '&#xE873;') . '&nbsp; = Documents <br>';
-			$content .= $bootstrap->create_element('i', 'class=glyphicon glyphicon-plane hover|title=Tracking Icon', '') . ' = Tracking <br>';
-			$content .= $bootstrap->create_element('i', 'class=material-icons|title=Notes Icon', '&#xE0B9;') . ' = Notes <br>';
-			$content .= $bootstrap->create_element('i', 'class=glyphicon glyphicon-pencil|title=Edit Order Icon', '') . ' = Edit Order <br>';
+			$content  = $bootstrap->i('class=glyphicon glyphicon-shopping-cart|title=Re-order Icon', '') . ' = Re-order <br>';
+			$content .= $bootstrap->i("class=material-icons|title=Documents Icon", '&#xE873;') . '&nbsp; = Documents <br>';
+			$content .= $bootstrap->i('class=glyphicon glyphicon-plane hover|title=Tracking Icon', '') . ' = Tracking <br>';
+			$content .= $bootstrap->i('class=material-icons|title=Notes Icon', '&#xE0B9;') . ' = Notes <br>';
+			$content .= $bootstrap->i('class=glyphicon glyphicon-pencil|title=Edit Order Icon', '') . ' = Edit Order <br>';
 			$content = str_replace('"', "'", $content);
-			$attr = "tabindex=0|role=button|class=btn btn-sm btn-info|data-toggle=popover|data-placement=bottom|data-trigger=focus";
+			$attr  = "tabindex=0|role=button|class=btn btn-sm btn-info|data-toggle=popover|data-placement=bottom|data-trigger=focus";
 			$attr .= "|data-html=true|title=Icons Definition|data-content=$content";
-			return $bootstrap->create_element('a', $attr, 'Icon Definitions');
+			return $bootstrap->a($attr, 'Icon Definitions');
 		}
 
 		public function generate_loadurl() {
@@ -211,7 +211,7 @@
 				$addclass = ($quote->has_notes()) ? '' : 'text-muted';
 			}
 			$content = $bootstrap->icon('material-icons md-36', '&#xE0B9;');
-			$link = $bootstrap->create_element('a', "href=$href|class=load-notes $addclass|title=$title|data-modal=$this->modal", $content);
+			$link = $bootstrap->a("href=$href|class=load-notes $addclass|title=$title|data-modal=$this->modal", $content);
 			return $link;
 		}
 
@@ -225,8 +225,8 @@
 		public function generate_viewlinkeduseractionslink(Order $quote) {
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_viewlinkeduseractionsurl($quote);
-			$icon = $bootstrap->create_element('span','class=h3', $bootstrap->icon('glyphicon glyphicon-check'));
-			return $bootstrap->create_element('a', "href=$href|class=load-into-modal|data-modal=$this->modal", $icon." View Associated Actions");
+			$icon = $bootstrap->span('class=h3', $bootstrap->icon('glyphicon glyphicon-check'));
+			return $bootstrap->a("href=$href|class=load-into-modal|data-modal=$this->modal", $icon." View Associated Actions");
 		}
 
 		public function generate_editlink(Order $quote) {
@@ -246,7 +246,7 @@
 			}
 
 			$href = $this->generate_editurl($quote);
-			return $bootstrap->create_element('a', "href=$href|class=edit-order h3|title=$title", $icon);
+			return $bootstrap->a("href=$href|class=edit-order h3|title=$title", $icon);
 		}
 
 		public function generate_loaddocumentslink(Order $quote, OrderDetail $quotedetail = null) {
@@ -256,16 +256,16 @@
 			$ajaxdata = $this->generate_ajaxdataforcontento();
 
 			if ($quote->has_documents()) {
-				return $bootstrap->create_element('a', "href=$href|class=generate-load-link|title=Click to view Documents|$ajaxdata", $icon);
+				return $bootstrap->a("href=$href|class=generate-load-link|title=Click to view Documents|$ajaxdata", $icon);
 			} else {
-				return $bootstrap->create_element('a', "href=#|class=text-muted|title=No Documents Available", $icon);
+				return $bootstrap->a("href=#|class=text-muted|title=No Documents Available", $icon);
 			}
 		}
 
 		public function generate_detailvieweditlink(Order $quote, OrderDetail $detail) {
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_detailviewediturl($quote, $detail);
-			return $bootstrap->create_element('a', "href=$href|class=update-line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$quote->custid|aria-label=View Detail Line", $detail->itemid);
+			return $bootstrap->a("href=$href|class=update-line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$quote->custid|aria-label=View Detail Line", $detail->itemid);
 		}
 
 		public function generate_lastloadeddescription() {
