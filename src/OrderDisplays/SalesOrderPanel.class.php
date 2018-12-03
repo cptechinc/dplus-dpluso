@@ -57,6 +57,11 @@
 				'querytype' => 'in',
 				'datatype' => 'char',
 				'label' => 'Sales Rep'
+			),
+			'holdstatus' => array(
+				'querytype' => 'in',
+				'datatype' => 'char',
+				'label' => 'Hold Status'
 			)
 		);
 
@@ -143,7 +148,7 @@
 		public function generate_iconlegend() {
 			$bootstrap = new HTMLWriter();
 			$content = $bootstrap->create_element('i', 'class=glyphicon glyphicon-shopping-cart|title=Re-order Icon', '') . ' = Re-order <br>';
-			$content .= $bootstrap->create_element('i', "class=material-icons|title=Documents Icon", '&#xE873;') . '&nbsp; = Documents <br>'; 
+			$content .= $bootstrap->create_element('i', "class=material-icons|title=Documents Icon", '&#xE873;') . '&nbsp; = Documents <br>';
 			$content .= $bootstrap->create_element('i', 'class=glyphicon glyphicon-plane hover|title=Tracking Icon', '') . ' = Tracking <br>';
 			$content .= $bootstrap->create_element('i', 'class=material-icons|title=Notes Icon', '&#xE0B9;') . ' = Notes <br>';
 			$content .= $bootstrap->create_element('i', 'class=glyphicon glyphicon-pencil|title=Edit Order Icon', '') . ' = Edit Order <br>'; 
@@ -218,7 +223,7 @@
 						}
 					}
 				}
-			}		
+			}
 		}
 
 		/* =============================================================
@@ -273,6 +278,7 @@
 			$icon = $bootstrap->icon('fa fa-file-text');
 			$ajaxdata = $this->generate_ajaxdataforcontento();
 			$documentsTF = ($orderdetail) ? $orderdetail->has_documents() : $order->has_documents();
+			
 			if ($documentsTF) {
 				return $bootstrap->create_element('a', "href=$href|class=h3 generate-load-link|title=Click to view Documents|$ajaxdata", $icon);
 			} else {
@@ -336,6 +342,6 @@
 		public function generate_detailvieweditlink(Order $order, OrderDetail $detail) {
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_detailviewediturl($order, $detail);
-			return $bootstrap->create_element('a', "href=$href|class=update-line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$order->custid|aria-label=View Detail Line", $detail->itemid);	
+			return $bootstrap->create_element('a', "href=$href|class=update-line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$order->custid|aria-label=View Detail Line", $detail->itemid);
 		}
 	}
