@@ -51,6 +51,11 @@
 				'querytype' => 'in',
 				'datatype' => 'char',
 				'label' => 'Sales Person 1'
+			),
+			'holdstatus' => array(
+				'querytype' => 'in',
+				'datatype' => 'char',
+				'label' => 'Hold Status'
 			)
 		);
 
