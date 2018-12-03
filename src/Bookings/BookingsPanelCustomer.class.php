@@ -4,7 +4,7 @@
 	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Base\DplusDateTime;
 	use Dplus\Content\HTMLWriter;
-	use \Customer;
+	use Customer;
 	
 	/**
 	 * Class for handling of getting and displaying booking records from the database for a Customer

@@ -30,34 +30,10 @@
 		public function generate_iconlegend();
 		
 		/**
-		 * Returns HTML Link to request the orders to be loaded
-		 * @return string HTML Link to request the orders to be loaded
-		 */
-		public function generate_loadlink(); // OrderPanel
-		
-		/**
 		 * Returns URL to request the orders to be loaded
 		 * @return string URLto request the orders to be loaded
 		 */
 		public function generate_loadurl();
-		
-		/**
-		 * Returns HTML link to refresh orders
-		 * @return string HTML link to refresh orders
-		 */
-		public function generate_refreshlink();
-		
-		/**
-		 * Returns HTML link to remove search parameters
-		 * @return string HTML link to remove search parameters
-		 */
-		public function generate_clearsearchlink(); // OrderPanel
-		
-		/**
-		 * Returns HTML Link to remove the sort on the panel
-		 * @return string HTML Link to remove the sort on the panel
-		 */
-		public function generate_clearsortlink(); // OrderPanel
 		
 		/**
 		 * Returns URL to remove the sort on the panel

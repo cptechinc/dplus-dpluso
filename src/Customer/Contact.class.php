@@ -1,5 +1,5 @@
 <?php
-    use Dplus\ProcessWire\DplusWire as DplusWire;
+    use Dplus\ProcessWire\DplusWire;
     
 	/**
 	 * Class for dealing with Contacts in Dpluso

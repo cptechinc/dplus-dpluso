@@ -68,6 +68,13 @@
 		 * @var string X
 		 */
 		protected $dummy;
+		
+		/**
+		 * Role ID
+		 * // Example SalesPerson ID
+		 * @var string
+		 */
+		protected $roleid;
 
 		/**
 		 * Property aliases
@@ -96,7 +103,37 @@
 		 * @return string DPLUSO user type
 		 */
 		public function get_dplusorole() {
-			return array_search(strtolower($this->role), DplusWire::wire('config')->roles);
+			$role = $this->get_dplusrole();
+			
+			if (in_array($role, array_keys(DplusWire::wire('config')->dplus_dplusoroles))) {
+				return DplusWire::wire('config')->dplus_dplusoroles[$role];
+			} else {
+				return false;
+			}
+		}
+		
+		/**
+		 * Returns if User is a Sales Rep
+		 * @return bool Is User a Sales Rep?
+		 */
+		public function is_salesrep() {
+			return $this->get_dplusrole() == DplusWire::wire('config')->user_roles['sales-rep']['dplus-code'];
+		}
+
+		/**
+		 * Returns if User is a Sales Manager
+		 * @return bool Is User a Sales Manager?
+		 */
+		public function is_salesmanager() {
+			return $this->get_dplusrole() == DplusWire::wire('config')->user_roles['sales-manager']['dplus-code'];
+		}
+		
+		/**
+		 * Returns if User is an Admin
+		 * @return bool Is User an Admin?
+		 */
+		public function is_admin() {
+			return $this->get_dplusrole() == DplusWire::wire('config')->user_roles['admin']['dplus-code'];
 		}
 
 		/**

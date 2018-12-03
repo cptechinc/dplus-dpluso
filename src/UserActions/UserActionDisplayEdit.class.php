@@ -3,7 +3,7 @@
     
     use Dplus\ProcessWire\DplusWire as DplusWire;
     use Dplus\Content\HTMLWriter as HTMLWriter;
-    use \UserAction;
+    use UserAction;
     
     class EditUserActionsDisplay extends UserActionDisplay {
         /* =============================================================

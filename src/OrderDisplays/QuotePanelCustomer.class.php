@@ -11,12 +11,22 @@
 	class CustomerQuotePanel extends QuotePanel implements OrderPanelCustomerInterface {
 		use OrderPanelCustomerTraits;
 		
-		public $quotes = array();
-		public $filterable = array(
+		protected $quotes = array();
+		protected $filterable = array(
 			'quotnbr' => array(
 				'querytype' => 'between',
 				'datatype' => 'char',
 				'label' => 'Quote #'
+			),
+			'custid' => array(
+				'querytype' => 'between',
+				'datatype' => 'char',
+				'label' => 'CustID'
+			),
+			'shiptoid' => array(
+				'querytype' => 'in',
+				'datatype' => 'char',
+				'label' => 'ShiptoID'
 			),
 			'quotdate' => array(
 				'querytype' => 'between',
@@ -37,34 +47,13 @@
 				'querytype' => 'between',
 				'datatype' => 'numeric',
 				'label' => 'Order Total'
+			),
+			'salesperson' => array(
+				'querytype' => 'in',
+				'datatype' => 'char',
+				'label' => 'Sales Rep'
 			)
 		);
-		
-		/* =============================================================
-			QuotePanelInterface Functions
-		============================================================ */
-		public function get_quotecount() {
-			$this->count = count_customerquotes($this->sessionID, $this->custID, $this->shipID, $this->filters, $this->filterable, false);
-		}
-		
-		public function get_quotes($debug = false) {
-			$useclass = true;
-			if ($this->tablesorter->orderby) {
-				if ($this->tablesorter->orderby == 'quotdate') {
-					$quotes = get_customerquotesquotedate($this->sessionID, $this->custID, $this->shipID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
-				} elseif ($this->tablesorter->orderby == 'revdate') {
-					$quotes = get_customerquotesrevdate($this->sessionID, $this->custID, $this->shipID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
-				} elseif ($this->tablesorter->orderby == 'expdate') {
-					$quotes = get_customerquotesexpdate($this->sessionID, $this->custID, $this->shipID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug); 
-				} else {
-					$quotes = get_customerquotesorderby($this->sessionID, $this->custID, $this->shipID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $this->filters, $this->filterable, $useclass, $debug);
-				}
-			} else {
-				$this->tablesorter->sortrule = 'DESC'; 
-				$quotes = get_customerquotesquotedate($this->sessionID, $this->custID, $this->shipID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
-			}
-			return $debug ? $quotes: $this->quotes = $quotes;
-		}
 		
 		/* =============================================================
 			OrderPanelInterface Functions
@@ -101,6 +90,11 @@
 		
 		public function generate_filter(\ProcessWire\WireInput $input) {
 			parent::generate_filter($input);
+			$this->filters['custid'][] = $this->custID;
+			
+			if (!empty($this->shipID)) {
+				$this->filters['shiptoid'][] = $this->shipID;
+			}
 			
 			if (isset($this->filters['subtotal'])) {
 				if (!strlen($this->filters['subtotal'][1])) {

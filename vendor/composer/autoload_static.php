@@ -83,8 +83,6 @@ class ComposerStaticInitde55f17c88d493db7f2fa2056536094d
         'Dplus\\Dpluso\\OrderDisplays\\QuoteDisplayTraits' => __DIR__ . '/../..' . '/src/OrderDisplays/QuoteDisplay.trait.php',
         'Dplus\\Dpluso\\OrderDisplays\\QuotePanel' => __DIR__ . '/../..' . '/src/OrderDisplays/QuotePanel.class.php',
         'Dplus\\Dpluso\\OrderDisplays\\QuotePanelInterface' => __DIR__ . '/../..' . '/src/OrderDisplays/QuotePanel.interface.php',
-        'Dplus\\Dpluso\\OrderDisplays\\RepQuotePanel' => __DIR__ . '/../..' . '/src/OrderDisplays/QuotePanelRep.class.php',
-        'Dplus\\Dpluso\\OrderDisplays\\RepSalesOrderPanel' => __DIR__ . '/../..' . '/src/OrderDisplays/SalesOrderPanelRep.class.php',
         'Dplus\\Dpluso\\OrderDisplays\\SalesOrderDisplay' => __DIR__ . '/../..' . '/src/OrderDisplays/SalesOrderDisplay.class.php',
         'Dplus\\Dpluso\\OrderDisplays\\SalesOrderDisplayInterface' => __DIR__ . '/../..' . '/src/OrderDisplays/SalesOrderDisplay.interface.php',
         'Dplus\\Dpluso\\OrderDisplays\\SalesOrderDisplayTraits' => __DIR__ . '/../..' . '/src/OrderDisplays/SalesOrderDisplay.trait.php',

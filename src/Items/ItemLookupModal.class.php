@@ -1,7 +1,7 @@
 <?php 
 	namespace Dplus\Dpluso\Items;
 	
-	use Dplus\ProcessWire\DplusWire as DplusWire;
+	use Dplus\ProcessWire\DplusWire;
 	
 	/**
 	 * ItemLookupModal provides functions, and holds data for the item lookup form and 

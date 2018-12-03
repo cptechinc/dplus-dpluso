@@ -1,9 +1,9 @@
 <?php
 	namespace Dplus\Dpluso\UserActions;
 	
-	use Dplus\ProcessWire\DplusWire as DplusWire;
-	use Dplus\Content\HTMLWriter as HTMLWriter;
-	use Dplus\Content\Table as Table;
+	use Dplus\ProcessWire\DplusWire;
+	use Dplus\Content\HTMLWriter;
+	use Dplus\Content\Table;
 	
 	/**
 	 * Class for dealing with the display of arrays of UserAction

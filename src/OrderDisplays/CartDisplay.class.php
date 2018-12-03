@@ -3,9 +3,13 @@
 	
 	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Content\HTMLWriter;
-	use \CartQuote, \CartDetail;
-	use \Order, \OrderDetail;
-	use \Qnote;
+
+	/**
+	 * Use Statements for Model Classes which are non-namespaced
+	 */
+	use CartQuote, CartDetail;
+	use Order, OrderDetail;
+	use Qnote;
 	
 	
 	/**

@@ -1,11 +1,15 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
 	
+	use Purl\Url;
+	use ProcessWire\WireInput;
 	use Dplus\ProcessWire\DplusWire;
-	use Dplus\Content\HTMLWriter, Dplus\Content\FormMaker;
-	use Dplus\Base\StringerBell, Dpluso\Base\DplusDateTime;
+	use Dplus\Content\FormMaker;
+	use Dplus\Base\DplusDateTime;
 	
-	// Use Statements for Model Classes which are non-namespaced
+	/**
+	 * Use Statements for Model Classes which are non-namespaced
+	 */
 	use Order, OrderDetail;
 	
 	class SalesOrderHistoryPanel extends SalesOrderPanel {
@@ -13,9 +17,9 @@
 		 * Array of SalesOrderHistory
 		 * @var array
 		 */
-		public $orders = array();
-		public $paneltype = 'shipped-order';
-		public $filterable = array(
+		protected $orders = array();
+		protected $paneltype = 'shipped-order';
+		protected $filterable = array(
 			'custpo' => array(
 				'querytype' => 'between',
 				'datatype' => 'char',
@@ -25,6 +29,11 @@
 				'querytype' => 'between',
 				'datatype' => 'char',
 				'label' => 'CustID'
+			),
+			'shiptoid' => array(
+				'querytype' => 'between',
+				'datatype' => 'char',
+				'label' => 'ShiptoID'
 			),
 			'ordernumber' => array(
 				'querytype' => 'between',
@@ -53,43 +62,66 @@
 				'datatype' => 'char',
 				'label' => 'Status'
 			),
-			'salesperson_1' => array(
+			'salesperson' => array(
 				'querytype' => 'in',
 				'datatype' => 'char',
-				'label' => 'Sales Person 1'
+				'label' => 'Sales Person'
 			)
 		);
 
-		public function __construct($sessionID, \Purl\Url $pageurl, $modal, $loadinto, $ajax) {
+		public function __construct($sessionID, Url $pageurl, $modal, $loadinto, $ajax) {
 			parent::__construct($sessionID, $pageurl, $modal, $loadinto, $ajax);
-			$this->pageurl = new \Purl\Url($pageurl->getUrl());
+			$this->pageurl = new Url($pageurl->getUrl());
 			$this->setup_pageurl();
 		}
 
 		/* =============================================================
 			SalesOrderPanelInterface Functions
 		============================================================ */
-		public function get_ordercount($loginID = '', $debug = false) {
-			$count = count_usersaleshistory($this->filters, $this->filterable, $loginID, $debug);
+		public function get_ordercount($debug = false) {
+			$count = count_saleshistory($this->filters, $this->filterable, $debug);
 			return $debug ? $count : $this->count = $count;
 		}
 
-		public function get_orders($loginID = '', $debug = false) {
+		public function get_orders($debug = false) {
 			$useclass = true;
 			if ($this->tablesorter->orderby) {
-				if ($this->tablesorter->orderby == 'order_date') {
-					$orders = get_usersaleshistoryorderdate(DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $loginID, $useclass, $debug);
-				} elseif ($this->tablesorter->orderby == 'invoice_date') {
-					$orders = get_usersaleshistoryinvoicedate(DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $loginID, $useclass, $debug);
-				} else {
-					$orders = get_usersaleshistoryorderby(DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $this->filters, $this->filterable, $loginID, $useclass, $debug);
-				}
+				$orders = get_saleshistory_orderby(DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $this->filters, $this->filterable, $useclass, $debug);
 			} else {
 				// DEFAULT BY Invoice DATE SINCE SALES ORDER # CAN BE ROLLED OVER
+				$this->tablesorter->orderby = 'invoice_date';
 				$this->tablesorter->sortrule = 'DESC';
-				$orders = get_usersaleshistoryinvoicedate(DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $loginID, $useclass, $debug);
+				$orders = get_saleshistory_orderby(DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $this->filters, $this->filterable, $useclass, $debug);
 			}
 			return $debug ? $orders : $this->orders = $orders;
+		}
+		
+		/**
+		 * Returns the Max Sales Order Total
+		 * @param  bool   $debug Return SQL Query?
+		 * @return float         Max Sales Order Total
+		 */
+		public function get_maxsalesordertotal($debug = false) {
+			return get_maxsaleshistoryordertotal($custID = '', $shipID = '', $this->filters, $this->filterable, $debug);
+		}
+
+		/**
+		 * Returns the Min Sales Order Total
+		 * @param  bool   $debug Return SQL Query?
+		 * @return float         Min Sales Order Total
+		 */
+		public function get_minsalesordertotal($debug = false) {
+			return get_minsaleshistoryordertotal($custID = '', $shipID = '', $this->filters, $this->filterable, $debug);
+		}
+		
+		/**
+		 * REturns the Min Sales Order Date field value for $field
+		 * @param  string $field Date Column to return Min Date
+		 * @param  bool   $debug Run in debug? If so, return SQL Query
+		 * @return string        Min $field Date
+		 */
+		public function get_mindate($field = 'order_date', $debug = false) {
+			return get_minsaleshistoryorderdate($field, $custID = '', $shipID = '', $this->filters, $this->filterable, $debug);
 		}
 
 		/* =============================================================
@@ -104,7 +136,7 @@
 		}
 
 		public function generate_loadurl() {
-			$url = new \Purl\Url($this->pageurl);
+			$url = new Url($this->pageurl);
 			$url->query->remove('filter');
 			foreach (array_keys($this->filterable) as $filtercolumns) {
 				$url->query->remove($filtercolumns);
@@ -112,24 +144,8 @@
 			return $url->getUrl();
 		}
 
-		public function generate_clearsearchlink() {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_loadurl();
-			$icon = $bootstrap->icon('fa fa-search-minus');
-			$ajaxdata = $this->generate_ajaxdataforcontento();
-			return $bootstrap->create_element('a', "href=$href|class=load-link btn btn-warning btn-block|$ajaxdata", "Clear Search $icon");
-		}
-
-		public function generate_refreshlink() {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_loadurl();
-			$icon = $bootstrap->icon('fa fa-refresh');
-			$ajaxdata = $this->generate_ajaxdataforcontento();
-			return $bootstrap->create_element('a', "href=$href|class=load-and-show|$ajaxdata", "$icon Refresh History");
-		}
-
 		public function generate_closedetailsurl() {
-			$url = new \Purl\Url($this->pageurl->getUrl());
+			$url = new Url($this->pageurl->getUrl());
 			$url->query->setData(array('ordn' => false, 'show' => false));
 			return $url->getUrl();
 		}
@@ -157,13 +173,12 @@
 			return $form->finish();
 		}
 		
-		public function generate_filter(\ProcessWire\WireInput $input) {
-			$stringerbell = new StringerBell();
-			$this->generate_defaultfilter($input);
+		public function generate_filter(WireInput $input) {
+			parent::generate_filter($input);
 
 			if (isset($this->filters['order_date'])) {
 				if (empty($this->filters['order_date'][0])) {
-					$this->filters['order_date'][0] = DplusDateTime::format_date(get_minsaleshistoryorderdate('orderdate'));
+					$this->filters['order_date'][0] = DplusDateTime::format_date($this->get_mindate('order_date'));
 				}
 
 				if (empty($this->filters['order_date'][1])) {
@@ -173,7 +188,7 @@
 
 			if (isset($this->filters['invoice_date'])) {
 				if (empty($this->filters['invoice_date'][0])) {
-					$this->filters['invoice_date'][0] = date('m/d/Y', strtotime(get_minsaleshistoryorderdate('invoice_date')));
+					$this->filters['invoice_date'][0] = date('m/d/Y', strtotime($this->get_mindate('invoice_date')));
 				}
 
 				if (empty($this->filters['invoice_date'][1])) {
@@ -201,7 +216,7 @@
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
 		public function generate_trackingrequesturl(Order $order) {
-			$url = new \Purl\Url($this->generate_trackingrequesturltrait($order));
+			$url = new Url($this->generate_trackingrequesturltrait($order));
 			$url->query->set('page', $this->pagenbr);
 			$url->query->set('orderby', $this->tablesorter->orderbystring);
 			$url->query->set('type', 'history');
@@ -213,7 +228,7 @@
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
 		public function generate_documentsrequesturl(Order $order, OrderDetail $orderdetail = null) {
-			$url = new \Purl\Url($this->generate_documentsrequesturltrait($order, $orderdetail));
+			$url = new Url($this->generate_documentsrequesturltrait($order, $orderdetail));
 			$url->query->set('page', $this->pagenbr);
 			$url->query->set('orderby', $this->tablesorter->orderbystring);
 			$url->query->set('type', 'history');

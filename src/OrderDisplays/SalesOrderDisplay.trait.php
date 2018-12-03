@@ -1,7 +1,7 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
 	
-	use Dplus\ProcessWire\DplusWire as DplusWire;
+	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Content\HTMLWriter;
 	
 	/**
@@ -130,6 +130,17 @@
 		public function generate_editurl(Order $order) {
 			$url = $this->generate_ordersredirurl();
 			$url->query->setData(array('action' => 'get-order-edit','ordn' => $order->ordernumber));
+			return $url->getUrl();
+		}
+
+		/**
+		 * Returns URL to Request Release Order
+		 * @param  Order  $order SalesOrder
+		 * @return string        URL to edit order page
+		 */
+		public function generate_releaseurl(Order $order) {
+			$url = $this->generate_ordersredirurl();
+			$url->query->setData(array('action' => 'release-order','ordn' => $order->ordernumber));
 			return $url->getUrl();
 		}
 

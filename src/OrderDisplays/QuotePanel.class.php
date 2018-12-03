@@ -1,9 +1,10 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
-	
+
+	use Purl\Url;
+	use ProcessWire\WireInput;
 	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Content\HTMLWriter;
-	use Dplus\Base\StringerBell;
 	
 	/**
 	 * Use Statements for Model Classes which are non-namespaced
@@ -20,9 +21,9 @@
 		 * Array of Quotes
 		 * @var array
 		 */
-		public $quotes = array();
-		public $paneltype = 'quote';
-		public $filterable = array(
+		protected $quotes = array();
+		protected $paneltype = 'quote';
+		protected $filterable = array(
 			'quotnbr' => array(
 				'querytype' => 'between',
 				'datatype' => 'char',
@@ -52,12 +53,17 @@
 				'querytype' => 'between',
 				'datatype' => 'date',
 				'label' => 'Expire Date'
+			),
+			'salesperson' => array(
+				'querytype' => 'in',
+				'datatype' => 'char',
+				'label' => 'Sales Rep'
 			)
 		);
 
-		public function __construct($sessionID, \Purl\Url $pageurl, $modal, $loadinto, $ajax) {
+		public function __construct($sessionID, Url $pageurl, $modal, $loadinto, $ajax) {
 			parent::__construct($sessionID, $pageurl, $modal, $loadinto, $ajax);
-			$this->pageurl = $this->pageurl = new \Purl\Url($pageurl->getUrl());
+			$this->pageurl = $this->pageurl = new Url($pageurl->getUrl());
 			$this->setup_pageurl();
 		}
 
@@ -65,7 +71,7 @@
 			$this->pageurl->path = DplusWire::wire('config')->pages->ajax."load/quotes/";
 			$this->pageurl->query->remove('display');
 			$this->pageurl->query->remove('ajax');
-			$this->pageurl->paginationinsertafter = 'quotes';
+			$this->paginationinsertafter = 'quotes';
 		}
 
 		/* =============================================================
@@ -78,32 +84,59 @@
 		 * @return int           Number of Quotes | SQL Query
 		 */
 		public function get_quotecount($debug = false) {
-			$count = count_userquotes($this->sessionID, $this->filters, $this->filterable, $debug);
+			$count = count_quotes($this->sessionID, $this->filters, $this->filterable, $debug);
 			return $debug ? $count : $this->count = $count;
+		}
+		
+		/**
+		 * Returns Min Date for $datetype
+		 * @param  string $datetype Date Column
+		 * @param  bool   $debug    Run in debug? If so, return SQL Query
+		 * @return string           Min Date
+		 */
+		public function get_mindate($datetype = 'quotdate', $debug = false) {
+			return get_minquotedate($this->sessionID, $custID = '', $shiptoID = '', $datetype, $this->filters, $this->filterable, $debug);
+		}
+		
+		/**
+		 * Returns Max Quote Total
+		 * @param  bool   $debug  Run in debug? If so, return SQL Query
+		 * @return float          Max Quote Total
+		 */
+		public function get_maxquotetotal($debug = false) {
+			return get_maxquotetotal($this->sessionID, $custID = '', $shiptoID = '', $this->filters, $this->filterable, $debug);
+		}
+		
+		/**
+		 * Returns Min Quote Total
+		 * @param  bool   $debug  Run in debug? If so, return SQL Query
+		 * @return float          Miin Quote Total
+		 */
+		public function get_minquotetotal($debug = false) {
+			return get_minquotetotal($this->sessionID, $custID = '', $shiptoID = '', $this->filters, $this->filterable, $debug);
 		}
 
 		/**
 		 * Returns the Quotes into the property $quotes
-		 * @param  bool   $debug Whether to run query to return quotes
-		 * @return array         Quotes | SQL Query
+		 * @param  bool   $debug Run in debug? If so, return SQL Query
+		 * @return array         Quotes
 		 * @uses
 		 */
 		public function get_quotes($debug = false) {
 			$useclass = true;
 			if ($this->tablesorter->orderby) {
 				if ($this->tablesorter->orderby == 'quotdate') {
-					$quotes = get_userquotesquotedate($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
+					$quotes = get_quotes_orderby_quotedate($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
 				} elseif ($this->tablesorter->orderby == 'revdate') {
-					$quotes = get_userquotesrevdate($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
+					$quotes = get_quotes_orderby_revdate($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
 				} elseif ($this->tablesorter->orderby == 'expdate') {
-					$quotes = get_userquotesexpdate($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
+					$quotes = get_quotes_orderby_expdate($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
 				} else {
-					$quotes = get_userquotesorderby($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $this->filters, $this->filterable, $useclass, $debug);
+					$quotes = get_quotes_orderby($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->tablesorter->orderby, $this->filters, $this->filterable, $useclass, $debug);
 				}
 			} else {
 				$this->tablesorter->sortrule = 'DESC';
-				$quotes = get_userquotesquotedate($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
-				//$quotes = get_userquotes($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->filters, $this->filterable, $useclass, $debug);
+				$quotes = get_quotes_orderby_quotedate($this->sessionID, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->sortrule, $this->filters, $this->filterable, $useclass, $debug);
 			}
 			return $debug ? $quotes: $this->quotes = $quotes;
 		}
@@ -112,23 +145,8 @@
 			OrderPanelInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-		public function generate_loadlink() {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_loadurl();
-			$ajaxdata = $this->generate_ajaxdataforcontento();
-			return $bootstrap->create_element('a', "href=$href|class=generate-load-link|$ajaxdata", "Load Quotes");
-		}
-
-		public function generate_refreshlink() {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_loadurl();
-			$icon = $bootstrap->icon('fa fa-refresh');
-			$ajaxdata = $this->generate_ajaxdataforcontento();
-			return $bootstrap->create_element('a', "href=$href|class=generate-load-link|$ajaxdata", "$icon Refresh Quotes");
-		}
-
 		public function generate_closedetailsurl() {
-			$url = new \Purl\Url($this->pageurl->getUrl());
+			$url = new Url($this->pageurl->getUrl());
 			$url->query->setData(array('qnbr' => false, 'show' => false));
 			return $url->getUrl();
 		}
@@ -157,14 +175,14 @@
 		}
 
 		public function generate_loadurl() {
-			$url = new \Purl\Url($this->pageurl->getUrl());
+			$url = new Url($this->pageurl->getUrl());
 			$url->path = DplusWire::wire('config')->pages->quotes.'redir/';
 			$url->query->setData(array('action' => 'load-quotes'));
 			return $url->getUrl();
 		}
 
 		public function generate_loaddetailsurl(Order $quote) {
-			$url = new \Purl\Url($this->generate_loaddetailsurltrait($quote));
+			$url = new Url($this->generate_loaddetailsurltrait($quote));
 			$url->query->set('page', $this->pagenbr);
 			$url->query->set('orderby', $this->tablesorter->orderbystring);
 
@@ -198,7 +216,7 @@
 		}
 
 		public function generate_documentsrequesturl(Order $quote, OrderDetail $quotedetail = null) {
-			$url = new \Purl\Url($this->generate_documentsrequesturltrait($quote, $quotedetail));
+			$url = new Url($this->generate_documentsrequesturltrait($quote, $quotedetail));
 			$url->query->set('page', $this->pagenbr);
 			$url->query->set('orderby', $this->tablesorter->orderbystring);
 			return $url->getUrl();
@@ -259,13 +277,12 @@
 			return '';
 		}
 
-		public function generate_filter(\ProcessWire\WireInput $input) {
-			$stringerbell = new StringerBell();
+		public function generate_filter(WireInput $input) {
 			parent::generate_filter($input);
 
 			if (isset($this->filters['quotdate'])) {
 				if (empty($this->filters['quotdate'][0])) {
-					$this->filters['quotdate'][0] = date('m/d/Y', strtotime(get_minquotedate($this->sessionID, 'quotdate')));
+					$this->filters['quotdate'][0] = date('m/d/Y', strtotime($this->get_mindate('quotdate')));
 				}
 
 				if (empty($this->filters['quotdate'][1])) {
@@ -275,7 +292,7 @@
 
 			if (isset($this->filters['revdate'])) {
 				if (empty($this->filters['revdate'][0])) {
-					$this->filters['revdate'][0] = date('m/d/Y', strtotime(get_minquotedate($this->sessionID, 'revdate')));
+					$this->filters['revdate'][0] = date('m/d/Y', strtotime($this->get_mindate('revdate')));
 				}
 
 				if (empty($this->filters['revdate'][1])) {
@@ -285,7 +302,7 @@
 
 			if (isset($this->filters['expdate'])) {
 				if (empty($this->filters['expdate'][0])) {
-					$this->filters['expdate'][0] = date('m/d/Y', strtotime(get_minquotedate($this->sessionID, 'expdate')));
+					$this->filters['expdate'][0] = date('m/d/Y', strtotime($this->get_mindate('expdate')));
 				}
 
 				if (empty($this->filters['expdate'][1])) {
