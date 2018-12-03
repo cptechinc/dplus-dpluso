@@ -1,10 +1,10 @@
 <?php
 	namespace Dplus\Dpluso\UserActions;
-	
+
 	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Content\HTMLWriter;
 	use Dplus\Content\Table;
-	
+
 	/**
 	 * Class for dealing with the display of arrays of UserAction
 	 * Content
@@ -702,7 +702,7 @@
 		public function generate_printlink() {
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_refreshurl();
-			$icon = $bootstrap->icon('glyphicon glyphicon-print');
+			$icon = $bootstrap->icon('fa fa-print');
 			return $bootstrap->a("href=$href|class=h3|target=_blank", $icon." View Printable");
 		}
 

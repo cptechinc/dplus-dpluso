@@ -1,6 +1,6 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
-	
+
 	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Content\HTMLWriter;
 
@@ -10,8 +10,8 @@
 	use CartQuote, CartDetail;
 	use Order, OrderDetail;
 	use Qnote;
-	
-	
+
+
 	/**
 	 * Class that handles aspects of the display of the Carthead
 	 */
@@ -121,7 +121,7 @@
 		public function generate_detailvieweditlink(Order $cart, OrderDetail $detail) {
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_detailviewediturl($cart, $detail);
-			$icon = $bootstrap->button('class=btn btn-sm btn-warning detail-line-icon', $bootstrap->icon('glyphicon glyphicon-pencil'));
+			$icon = $bootstrap->button('class=btn btn-sm btn-warning detail-line-icon', $bootstrap->icon('fa fa-pencil'));
 			return $bootstrap->a("href=$href|class=update-line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$cart->custid|aria-label=View Detail Line", $icon);
 		}
 

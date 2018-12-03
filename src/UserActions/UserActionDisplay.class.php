@@ -1,9 +1,9 @@
 <?php
 	namespace Dplus\Dpluso\UserActions;
-	
+
     use Dplus\ProcessWire\DplusWire as DplusWire;
     use Dplus\Content\HTMLWriter as HTMLWriter;
-	
+
     class UserActionDisplay {
 		use \Dplus\Base\ThrowErrorTrait;
 		use \Dplus\Base\MagicMethodTraits;
@@ -133,7 +133,7 @@
         public function generate_editactionlink(\UserAction $action) {
             $bootstrap = new HTMLWriter();
             $href = $this->generate_editactionurl($action);
-            $icon = $bootstrap->icon('glyphicon glyphicon-pencil');
+            $icon = $bootstrap->icon('fa fa-pencil');
             $type = ucfirst($action->actiontype);
             return $bootstrap->a("href=$href|role=button|class=btn btn-primary modal-load|data-modal=$this->modal|title=Edit Action", $icon. " Edit $type");
         }
@@ -161,21 +161,21 @@
         public function generate_customerpagelink(\UserAction $action) {
             $bootstrap = new HTMLWriter();
             $href = $this->generate_customerurl($action);
-            $icon = $bootstrap->icon('glyphicon glyphicon-share');
+            $icon = $bootstrap->icon('fa fa-share-square-o');
             return $bootstrap->a("href=$href", $icon." Go to Customer Page");
         }
 
         public function generate_shiptopagelink(\UserAction $action) {
             $bootstrap = new HTMLWriter();
             $href = $this->generate_customerurl($action);
-            $icon = $bootstrap->icon('glyphicon glyphicon-share');
+            $icon = $bootstrap->icon('fa fa-share-square-o');
             return $bootstrap->a("href=$href", $icon." Go to Shipto Page");
         }
 
         public function generate_contactpagelink(\UserAction $action) {
             $bootstrap = new HTMLWriter();
             $href = $this->generate_contacturl($action);
-            $icon = $bootstrap->icon('glyphicon glyphicon-share');
+            $icon = $bootstrap->icon('fa fa-share-square-o');
             return $bootstrap->a("href=$href", $icon." Go to Contact Page");
         }
     }

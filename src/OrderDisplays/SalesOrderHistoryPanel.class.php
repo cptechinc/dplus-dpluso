@@ -1,17 +1,17 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
-	
+
 	use Purl\Url;
 	use ProcessWire\WireInput;
 	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Content\FormMaker;
 	use Dplus\Base\DplusDateTime;
-	
+
 	/**
 	 * Use Statements for Model Classes which are non-namespaced
 	 */
 	use Order, OrderDetail;
-	
+
 	class SalesOrderHistoryPanel extends SalesOrderPanel {
 		/**
 		 * Array of SalesOrderHistory
@@ -95,7 +95,7 @@
 			}
 			return $debug ? $orders : $this->orders = $orders;
 		}
-		
+
 		/**
 		 * Returns the Max Sales Order Total
 		 * @param  bool   $debug Return SQL Query?
@@ -113,7 +113,7 @@
 		public function get_minsalesordertotal($debug = false) {
 			return get_minsaleshistoryordertotal($custID = '', $shipID = '', $this->filters, $this->filterable, $debug);
 		}
-		
+
 		/**
 		 * REturns the Min Sales Order Date field value for $field
 		 * @param  string $field Date Column to return Min Date
@@ -169,10 +169,10 @@
 			$form->input("type=hidden|name=itemID|value=$detail->itemid");
 			$form->input("type=hidden|name=qty|value=".intval($detail->qty));
 			$form->input("type=hidden|name=desc|value=$detail->desc1");
-			$form->button("type=submit|class=btn btn-primary btn-xs", $form->bootstrap->icon('glyphicon glyphicon-shopping-cart'). $form->bootstrap->span('class=sr-only', 'Submit Reorder'));
+			$form->button("type=submit|class=btn btn-primary btn-xs", $form->bootstrap->icon('fa fa-shopping-cart'). $form->bootstrap->span('class=sr-only', 'Submit Reorder'));
 			return $form->finish();
 		}
-		
+
 		public function generate_filter(WireInput $input) {
 			parent::generate_filter($input);
 

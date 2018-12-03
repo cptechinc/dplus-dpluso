@@ -1,14 +1,14 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
-	
+
 	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Content\HTMLWriter;
-	
+
 	/**
 	 * Use Statements for Model Classes which are non-namespaced
 	 */
 	use Order, OrderDetail;
-	
+
 	class EditQuoteDisplay extends QuoteDisplay {
 		use QuoteDisplayTraits;
 
@@ -82,7 +82,7 @@
 		public function generate_discardchangeslink(Order $quote) {
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_unlockurl($quote);
-			$icon = $bootstrap->icon('glyphicon glyphicon-floppy-remove');
+			$icon = $bootstrap->icon('fa fa-times');
 			return $bootstrap->a("href=$href|class=btn btn-block btn-warning", $icon. " Discard Changes, Unlock Quote");
 		}
 
@@ -113,7 +113,7 @@
 		public function generate_detailvieweditlink(Order $quote, OrderDetail $detail) {
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_detailviewediturl($quote, $detail);
-			$icon = $bootstrap->button('class=btn btn-sm btn-warning', $bootstrap->icon('glyphicon glyphicon-pencil'));
+			$icon = $bootstrap->button('class=btn btn-sm btn-warning', $bootstrap->icon('fa fa-pencil'));
 			return $bootstrap->a("href=$href|class=update-line|title=Edit Item|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$quote->custid|aria-label=View Detail Line", $icon);
 		}
 
@@ -125,7 +125,7 @@
 		 */
 		public function generate_deletedetaillink(Order $quote, OrderDetail $detail) {
 			$bootstrap = new HTMLWriter();
-			$icon = $bootstrap->icon('glyphicon glyphicon-trash') . $bootstrap->span('class=sr-only', 'Delete Line');
+			$icon = $bootstrap->icon('fa fa-trash-o') . $bootstrap->span('class=sr-only', 'Delete Line');
 			$url = $this->generate_quotesredirurl();
 			$url->query->setData(array('action' => 'remove-line-get', 'qnbr' => $quote->quotnbr, 'linenbr' => $detail->linenbr, 'page' => $this->pageurl->getUrl()));
 			$href = $url->getUrl();

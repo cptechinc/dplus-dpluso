@@ -1,14 +1,14 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
-	
+
 	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Content\HTMLWriter;
-	
+
 	/**
 	 * Use Statements for Model Classes which are non-namespaced
 	 */
 	use Order, OrderDetail;
-	
+
 	/**
 	 * Traits that will be shared by Sales Order Displays like Displays or Panels
 	 */
@@ -152,7 +152,7 @@
 		public function generate_viewprintlink(Order $order) {
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_viewprinturl($order);
-			$icon = $bootstrap->span('class=h3', $bootstrap->icon('glyphicon glyphicon-print'));
+			$icon = $bootstrap->span('class=h3', $bootstrap->icon('fa fa-print'));
 			return $bootstrap->a("href=$href|target=_blank", $icon." View Printable Order");
 		}
 
@@ -202,7 +202,7 @@
 		public function generate_viewlinkeduseractionslink(Order $order) {
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_viewlinkeduseractionsurl($order);
-			$icon = $bootstrap->span('class=h3', $bootstrap->icon('glyphicon glyphicon-check'));
+			$icon = $bootstrap->span('class=h3', $bootstrap->icon('fa fa-check-square-o'));
 			return $bootstrap->a("href=$href|target=_blank", $icon." View Associated Actions");
 		}
 
@@ -292,7 +292,7 @@
 		public function generate_loadtrackinglink(Order $order) {
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_trackingrequesturl($order);
-			$icon = $bootstrap->i('class=glyphicon glyphicon-plane hover|style=top: 3px; padding-right: 5px; font-size: 130%;|aria-hidden=true', '');
+			$icon = $bootstrap->i('class=fa fa-plane hover|style=top: 3px; padding-right: 5px; font-size: 130%;|aria-hidden=true', '');
 			$ajaxdata = "data-loadinto=.tracking|data-focus=.tracking|data-click=#tracking-tab-link";
 
 			if ($order->has_tracking()) {

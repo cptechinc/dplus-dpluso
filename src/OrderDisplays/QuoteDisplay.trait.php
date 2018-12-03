@@ -1,15 +1,15 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
-	
+
 	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Content\HTMLWriter;
-	
+
 	/**
 	 * Use Statements for Model Classes which are non-namespaced
 	 */
 	use Order, OrderDetail;
-	
-	
+
+
 	/**
 	 * Traits that will be shared accross QuotePanels and Quote Displays
 	 */
@@ -141,7 +141,7 @@
 			}
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_orderquoteurl($quote);
-			$icon = $bootstrap->icon('glyphicon glyphicon-print');
+			$icon = $bootstrap->icon('fa fa-print');
 			return $bootstrap->a("href=$href|class=btn btn-sm btn-default", $icon." Send To Order");
 		}
 
@@ -166,7 +166,7 @@
 		public function generate_viewprintlink(Order $quote) {
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_viewprinturl($quote);
-			$icon = $bootstrap->span('class=h3', $bootstrap->icon('glyphicon glyphicon-print'));
+			$icon = $bootstrap->span('class=h3', $bootstrap->icon('fa fa-print'));
 			return $bootstrap->a("href=$href|target=_blank", $icon." View Printable Quote");
 		}
 
@@ -217,7 +217,7 @@
 		 */
 		public function generate_viewlinkeduseractionslink(Order $quote) {
 			$href = $this->generate_viewlinkeduseractionsurl($quote);
-			$icon = $bootstrap->span('class=h3', $bootstrap->icon('glyphicon glyphicon-check'));
+			$icon = $bootstrap->span('class=h3', $bootstrap->icon('fa fa-check-square-o'));
 			return $bootstrap->a("href=$href|target=_blank", $icon." View Associated Actions");
 		}
 

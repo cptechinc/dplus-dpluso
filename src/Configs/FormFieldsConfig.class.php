@@ -1,6 +1,6 @@
-<?php 
+<?php
 	namespace Dplus\Dpluso\Configs;
-	
+
 	/**
 	 * Used for establishing form rules for forms
 	 * like Sales Order Head or Quote Head
@@ -8,14 +8,14 @@
     class FormFieldsConfig {
 		use \Dplus\Base\ThrowErrorTrait;
 		use \Dplus\Base\MagicMethodTraits;
-		
+
 		/**
 		 * Form Type
 		 * sales-order|quote
 		 * @var string
 		 */
         protected $formtype;
-		
+
 		/**
 		 * Array of fields
 		 * @example "custid": {
@@ -29,13 +29,13 @@
 		 * @var array
 		 */
         protected $fields = false;
-		
+
 		/**
 		 * Allowed Config Types
 		 * @var array
 		 */
         protected $allowedtypes = array('sales-order', 'quote');
-		
+
 		/**
 		 * Aliases for pages that have the a slightly different name but need the same config
 		 * used to load the config without changing values
@@ -45,13 +45,13 @@
 			'sales-orders' => 'sales-order',
 			'quotes' => 'quote'
 		);
-		
+
 		/**
 		 * Where the Form Config files are located
 		 * @var string
 		 */
         public static $filedir = false;
-        
+
         /**
          * Class Constructor
          * @param string $formtype Type of Form to load config, ** It can use an aliase
@@ -60,17 +60,17 @@
             $this->formtype = $formtype;
             $this->init($formtype);
         }
-		
+
 		/* =============================================================
     		GETTER FUNCTIONS
 			MagicMethodTraits
     	============================================================ */
-        
+
         /* =============================================================
     		CLASS FUNCTIONS
     	============================================================ */
 		/**
-		 * Loads the fields from the config whether from the database or the 
+		 * Loads the fields from the config whether from the database or the
 		 * default file
 		 * @param  string $formtype type of form ex sales-order | quote
 		 */
@@ -95,7 +95,7 @@
                 }
             }
         }
-        
+
 		/**
 		 * Loads the config file then converts the file into an array
 		 * Then it assigns $this->fields to that array
@@ -108,38 +108,38 @@
                 $this->error("Can't find default config for this formtype.");
             }
 		}
-        
+
 		/**
 		 * Returns if Checkbox for form config field should be fixed
 		 * @param  string $key field to load the required value from
-		 * @return string      checked | 
+		 * @return string      checked |
 		 */
         public function generate_showrequired($key) {
             return $this->fields['fields'][$key]['required'] ? 'checked' : '';
         }
-        
+
 		/**
 		 * Returns if input should have the required class
 		 * @param  string $key field to load the required value from
-		 * @return string     required | 
+		 * @return string     required |
 		 */
         public function generate_showrequiredclass($key) {
             return $this->fields['fields'][$key]['required'] ? 'required' : '';
         }
-        
+
 		/**
 		 * Returns if field should have asterisk for the label
 		 * @param  string $key field to load the required value from
-		 * @return string      <b class="text-danger">*</b> | 
+		 * @return string      <b class="text-danger">*</b> |
 		 */
         public function generate_asterisk($key) {
             return $this->fields['fields'][$key]['required'] ? '&nbsp;<b class="text-danger">*</b>' : '';
         }
-        
+
 		/**
 		 * Takes the values from the form and sets the values for the fields
 		 * @param  ProcessWire\WireInput $input Object with the input values
-		 * @return void        
+		 * @return void
 		 */
         public function generate_configfrominput(ProcessWire\WireInput $input) {
             foreach ($this->fields['fields'] as $key => $field) {
@@ -149,7 +149,7 @@
                 $this->fields['fields'][$key]['required'] = strlen($input->post->text("$key-required")) ? true : false;
             }
         }
-		
+
 		/**
 		 * Sets the Form Config file directory
 		 * @param string $dir path/to/dir
@@ -157,7 +157,7 @@
 		public static function set_defaultconfigdirectory($dir) {
 			self::$filedir = $dir;
 		}
-		
+
 		/* =============================================================
     		CRUD FUNCTIONS
     	============================================================ */
@@ -174,7 +174,7 @@
                 return create_customerconfig($this->formtype, json_encode($this->fields), $debug = false);
             }
         }
-        
+
 		/**
 		 * Uses the save() function, then it returns an array response
 		 * that can be easily used converted to JSON
@@ -191,7 +191,7 @@
                         'notifytype' => 'success',
                         'action' => $response['querytype'],
                         'message' => $msg,
-                        'icon' => 'glyphicon glyphicon-floppy-disk',
+                        'icon' => 'fa fa-floppy-o',
                     )
                 );
             } else {
@@ -202,7 +202,7 @@
                         'notifytype' => 'danger',
                         'action' => $response['querytype'],
                         'message' => $msg,
-                        'icon' => 'glyphicon glyphicon-warning-sign',
+                        'icon' => 'fa fa-exclamation-triangle',
                         'sql' => $response['sql']
                     )
                 );

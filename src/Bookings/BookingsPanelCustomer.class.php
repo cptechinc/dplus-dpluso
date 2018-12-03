@@ -1,11 +1,11 @@
 <?php
 	namespace Dplus\Dpluso\Bookings;
-	
+
 	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Base\DplusDateTime;
 	use Dplus\Content\HTMLWriter;
 	use Customer;
-	
+
 	/**
 	 * Class for handling of getting and displaying booking records from the database for a Customer
 	 * @author Barbara Bullemer barbara@cptechinc.com
@@ -272,7 +272,7 @@
 		public function generate_viewsalesordersbydaylink($date) {
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_viewsalesordersbydayurl($date);
-			$icon = $bootstrap->icon('glyphicon glyphicon-new-window');
+			$icon = $bootstrap->icon('fa fa-external-link');
 			$ajaxdata = "data-modal=$this->modal";
 			return $bootstrap->a("href=$href|class=load-into-modal btn btn-primary btn-sm|$ajaxdata", "$icon View Sales Orders");
 		}
@@ -306,7 +306,7 @@
 		public function generate_viewsalesorderdaylink($ordn, $date) {
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_viewsalesorderdayurl($ordn, $date);
-			$icon = $bootstrap->icon('glyphicon glyphicon-new-window');
+			$icon = $bootstrap->icon('fa fa-external-link');
 			$ajaxdata = "data-modal=$this->modal";
 			return $bootstrap->a("href=$href|class=modal-load btn btn-primary btn-sm|$ajaxdata", "$icon View Sales Order changes on $date");
 		}

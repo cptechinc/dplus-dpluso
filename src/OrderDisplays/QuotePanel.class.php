@@ -5,18 +5,18 @@
 	use ProcessWire\WireInput;
 	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Content\HTMLWriter;
-	
+
 	/**
 	 * Use Statements for Model Classes which are non-namespaced
 	 */
 	use Order, OrderDetail;
-	
+
 	/**
 	 * Class for dealing with list of quotes
 	 */
 	class QuotePanel extends OrderPanel implements OrderDisplayInterface, QuoteDisplayInterface, OrderPanelInterface, QuotePanelInterface {
 		use QuoteDisplayTraits;
-		
+
 		/**
 		 * Array of Quotes
 		 * @var array
@@ -87,7 +87,7 @@
 			$count = count_quotes($this->sessionID, $this->filters, $this->filterable, $debug);
 			return $debug ? $count : $this->count = $count;
 		}
-		
+
 		/**
 		 * Returns Min Date for $datetype
 		 * @param  string $datetype Date Column
@@ -97,7 +97,7 @@
 		public function get_mindate($datetype = 'quotdate', $debug = false) {
 			return get_minquotedate($this->sessionID, $custID = '', $shiptoID = '', $datetype, $this->filters, $this->filterable, $debug);
 		}
-		
+
 		/**
 		 * Returns Max Quote Total
 		 * @param  bool   $debug  Run in debug? If so, return SQL Query
@@ -106,7 +106,7 @@
 		public function get_maxquotetotal($debug = false) {
 			return get_maxquotetotal($this->sessionID, $custID = '', $shiptoID = '', $this->filters, $this->filterable, $debug);
 		}
-		
+
 		/**
 		 * Returns Min Quote Total
 		 * @param  bool   $debug  Run in debug? If so, return SQL Query
@@ -163,11 +163,11 @@
 
 		public function generate_iconlegend() {
 			$bootstrap = new HTMLWriter();
-			$content  = $bootstrap->i('class=glyphicon glyphicon-shopping-cart|title=Re-order Icon', '') . ' = Re-order <br>';
+			$content  = $bootstrap->i('class=fa fa-shopping-cart|title=Re-order Icon', '') . ' = Re-order <br>';
 			$content .= $bootstrap->i("class=material-icons|title=Documents Icon", '&#xE873;') . '&nbsp; = Documents <br>';
-			$content .= $bootstrap->i('class=glyphicon glyphicon-plane hover|title=Tracking Icon', '') . ' = Tracking <br>';
+			$content .= $bootstrap->i('class=fa fa-plane hover|title=Tracking Icon', '') . ' = Tracking <br>';
 			$content .= $bootstrap->i('class=material-icons|title=Notes Icon', '&#xE0B9;') . ' = Notes <br>';
-			$content .= $bootstrap->i('class=glyphicon glyphicon-pencil|title=Edit Order Icon', '') . ' = Edit Order <br>';
+			$content .= $bootstrap->i('class=fa fa-pencil|title=Edit Order Icon', '') . ' = Edit Order <br>';
 			$content = str_replace('"', "'", $content);
 			$attr  = "tabindex=0|role=button|class=btn btn-sm btn-info|data-toggle=popover|data-placement=bottom|data-trigger=focus";
 			$attr .= "|data-html=true|title=Icons Definition|data-content=$content";
@@ -225,7 +225,7 @@
 		public function generate_viewlinkeduseractionslink(Order $quote) {
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_viewlinkeduseractionsurl($quote);
-			$icon = $bootstrap->span('class=h3', $bootstrap->icon('glyphicon glyphicon-check'));
+			$icon = $bootstrap->span('class=h3', $bootstrap->icon('fa fa-check-square-o'));
 			return $bootstrap->a("href=$href|class=load-into-modal|data-modal=$this->modal", $icon." View Associated Actions");
 		}
 
@@ -234,14 +234,14 @@
 
 			if (DplusWire::wire('user')->hasquotelocked) {
 				if ($quote->quotnbr == DplusWire::wire('user')->lockedqnbr) {
-					$icon = $bootstrap->icon('glyphicon glyphicon-wrench');
+					$icon = $bootstrap->icon('fa fa-wrench');
 					$title = "Continue editing this Quote";
 				} else {
 					$icon = $bootstrap->icon('material-icons md-36', '&#xE897;');
 					$title = "Open Quote in Read Only Mode";
 				}
 			} else {
-				$icon = $bootstrap->icon('glyphicon glyphicon-pencil');
+				$icon = $bootstrap->icon('fa fa-pencil');
 				$title = "Edit Quote";
 			}
 

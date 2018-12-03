@@ -1,10 +1,10 @@
 <?php
 	namespace Dplus\Dpluso\Bookings;
-	
+
 	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Content\HTMLWriter;
 	use Dplus\Base\DplusDateTime;
-	
+
 	/**
 	 * Class for handling of getting and displaying booking records from the database
 	 * @author Paul Gomez paul@cptechinc.com
@@ -398,11 +398,11 @@
 		public function generate_viewsalesordersbydaylink($date) {
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_viewsalesordersbydayurl($date);
-			$icon = $bootstrap->icon('glyphicon glyphicon-new-window');
+			$icon = $bootstrap->icon('fa fa-external-link');
 			$ajaxdata = "data-modal=$this->modal";
 			return $bootstrap->a("href=$href|class=btn btn-primary btn-sm load-into-modal info-screen|$ajaxdata", "$icon View Sales Orders");
 		}
-		
+
 		/**
 		 * Returns HTML Link to view the days booked sales orders
 		 * @param  string $date Date for viewing bookings
@@ -442,11 +442,11 @@
 		public function generate_viewsalesorderdaylink($ordn, $date) {
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_viewsalesorderdayurl($ordn, $date);
-			$icon = $bootstrap->icon('glyphicon glyphicon-new-window');
+			$icon = $bootstrap->icon('fa fa-external-link');
 			$ajaxdata = "data-modal=$this->modal";
 			return $bootstrap->a("href=$href|class=modal-load btn btn-primary btn-sm|$ajaxdata", "$icon View Sales Order changes on $date");
 		}
-		
+
 		/**
 		 * Returns URL to view bookings for that month
 		 * @param  string $date Date usually in m/d/Y format
@@ -456,7 +456,7 @@
 			$firstofmonth = date('m/01/Y', strtotime($date));
 			$daysinmonth = cal_days_in_month(CAL_GREGORIAN, date('m', strtotime($date)), date('Y', strtotime($date)));
 			$lastofmonth = date("m/$daysinmonth/Y", strtotime($date));
-			
+
 			$url = new \Purl\Url($this->pageurl->getUrl());
 			$url->path = DplusWire::wire('config')->pages->ajaxload."bookings/";
 			$url->query = '';
@@ -464,7 +464,7 @@
 			$url->query->set('bookdate', "$firstofmonth|$lastofmonth");
 			return $url->getUrl();
 		}
-		
+
 		/**
 		 * Creates HTML link to view bookings for that month
 		 * @param  string $date Date usually in m/d/Y format

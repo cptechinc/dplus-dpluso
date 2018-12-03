@@ -6,12 +6,12 @@
 	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Content\HTMLWriter;
 	use Dplus\Content\FormMaker;
-	
+
 	/**
 	 * Use Statements for Model Classes which are non-namespaced
 	 */
 	use Order, OrderDetail;
-	
+
 	class SalesOrderPanel extends OrderPanel implements OrderDisplayInterface, SalesOrderDisplayInterface, OrderPanelInterface, SalesOrderPanelInterface {
 		use SalesOrderDisplayTraits;
 
@@ -108,7 +108,7 @@
 		public function get_minsalesordertotal($debug = false) {
 			return get_minsalesordertotal($custID = '', $shipID = '', $this->filters, $this->filterable, $debug);
 		}
-		
+
 		/**
 		 * REturns the Min Sales Order Date field value for $field
 		 * @param  string $field Date Column to return Min Date
@@ -147,11 +147,11 @@
 
 		public function generate_iconlegend() {
 			$bootstrap = new HTMLWriter();
-			$content = $bootstrap->i('class=glyphicon glyphicon-shopping-cart|title=Re-order Icon', '') . ' = Re-order <br>';
+			$content = $bootstrap->i('class=fa fa-shopping-cart|title=Re-order Icon', '') . ' = Re-order <br>';
 			$content .= $bootstrap->i("class=material-icons|title=Documents Icon", '&#xE873;') . '&nbsp; = Documents <br>';
-			$content .= $bootstrap->i('class=glyphicon glyphicon-plane hover|title=Tracking Icon', '') . ' = Tracking <br>';
+			$content .= $bootstrap->i('class=fa fa-plane hover|title=Tracking Icon', '') . ' = Tracking <br>';
 			$content .= $bootstrap->i('class=material-icons|title=Notes Icon', '&#xE0B9;') . ' = Notes <br>';
-			$content .= $bootstrap->i('class=glyphicon glyphicon-pencil|title=Edit Order Icon', '') . ' = Edit Order <br>'; 
+			$content .= $bootstrap->i('class=fa fa-pencil|title=Edit Order Icon', '') . ' = Edit Order <br>';
 			$content = str_replace('"', "'", $content);
 			$attr = "tabindex=0|role=button|class=btn btn-sm btn-info|data-toggle=popover|data-placement=bottom|data-trigger=focus";
 			$attr .= "|data-html=true|title=Icons Definition|data-content=$content";
@@ -194,7 +194,7 @@
 			$form->input("type=hidden|name=itemID|value=$detail->itemid");
 			$form->input("type=hidden|name=qty|value=".intval($detail->qty));
 			$form->input("type=hidden|name=desc|value=$detail->desc1");
-			$form->button("type=submit|class=btn btn-primary btn-xs", $form->bootstrap->icon('glyphicon glyphicon-shopping-cart'). $form->bootstrap->span('class=sr-only', 'Submit Reorder'));
+			$form->button("type=submit|class=btn btn-primary btn-xs", $form->bootstrap->icon('fa fa-shopping-cart'). $form->bootstrap->span('class=sr-only', 'Submit Reorder'));
 			return $form->finish();
 		}
 
@@ -230,17 +230,17 @@
 			SalesOrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-		public function generate_loadtrackinglink(Order $order) { 
+		public function generate_loadtrackinglink(Order $order) {
 			$bootstrap = new HTMLWriter();
 			if ($order->has_tracking()) {
 				$href = $this->generate_trackingrequesturl($order);
 				$content = $bootstrap->span("class=sr-only", 'View Tracking');
-				$content .= $bootstrap->icon('glyphicon glyphicon-plane hover');
+				$content .= $bootstrap->icon('fa fa-plane hover');
 				$ajaxdata = $this->generate_ajaxdataforcontento();
 				return $bootstrap->a("href=$href|class=h3 generate-load-link|title=Click to view Tracking|$ajaxdata", $content);
 			} else {
 				$content = $bootstrap->span("class=sr-only", 'No Tracking Information Available');
-				$content .= $bootstrap->icon('glyphicon glyphicon-plane hover');
+				$content .= $bootstrap->icon('fa fa-plane hover');
 				return $bootstrap->a("href=#|class=h3 text-muted|title=No Tracking Info Available", $content);
 			}
 		}
@@ -278,7 +278,7 @@
 			$icon = $bootstrap->icon('fa fa-file-text');
 			$ajaxdata = $this->generate_ajaxdataforcontento();
 			$documentsTF = ($orderdetail) ? $orderdetail->has_documents() : $order->has_documents();
-			
+
 			if ($documentsTF) {
 				return $bootstrap->a("href=$href|class=h3 generate-load-link|title=Click to view Documents|$ajaxdata", $icon);
 			} else {
@@ -304,12 +304,12 @@
 			*/
 
 			if ($order->can_edit()) {
-				$icon = $bootstrap->icon('glyphicon glyphicon-pencil');
+				$icon = $bootstrap->icon('fa fa-pencil');
 				$title = "Edit this Order";
 			} elseif ($order->is_lockedbyuser()) {
 				if (DplusWire::wire('user')->hasorderlocked) {
 					if ($order->ordernumber == DplusWire::wire('user')->lockedordn) {
-						$icon = $bootstrap->icon('glyphicon glyphicon-wrench');
+						$icon = $bootstrap->icon('fa fa-wrench');
 						$title = "Edit this Order";
 					} else {
 						$icon = $bootstrap->icon('material-icons md-36', '&#xE897;');
@@ -320,11 +320,11 @@
 					$title = "You have this order locked, but you can still view it";
 				}
 			} else {
-				$icon = $bootstrap->icon('glyphicon glyphicon-eye-open');
+				$icon = $bootstrap->icon('fa fa-eye');
 				$title = "Open in read-only mode";
 			}
 			$url = new Url($this->generate_editurl($order));
-			
+
 			if ($order->can_edit() || $order->is_lockedbyuser()) {
 				$url->query->set('edit', 'edit');
 			}
@@ -335,7 +335,7 @@
 		public function generate_viewlinkeduseractionslink(Order $order) {
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_viewlinkeduseractionsurl($order);
-			$icon = $bootstrap->span('class=h3', $bootstrap->icon('glyphicon glyphicon-check'));
+			$icon = $bootstrap->span('class=h3', $bootstrap->icon('fa fa-check-square-o'));
 			return $bootstrap->a("href=$href|class=load-into-modal|data-modal=$this->modal", $icon." View Associated Actions");
 		}
 
