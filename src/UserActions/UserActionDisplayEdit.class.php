@@ -1,8 +1,12 @@
 <?php
     namespace Dplus\Dpluso\UserActions;
     
-    use Dplus\ProcessWire\DplusWire as DplusWire;
-    use Dplus\Content\HTMLWriter as HTMLWriter;
+    use Dplus\ProcessWire\DplusWire;
+    use Dplus\Content\HTMLWriter;
+    
+    /**
+	 * Use Statements for Model Classes which are non-namespaced
+	 */
     use UserAction;
     
     class EditUserActionsDisplay extends UserActionDisplay {

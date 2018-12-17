@@ -1,6 +1,8 @@
 <?php
 	namespace Dplus\Dpluso\UserActions;
 	
+	use Purl\Url;
+	
 	class ContactActionsPanel extends CustomerActionsPanel {
 
 		/**
@@ -89,17 +91,19 @@
 		}
 
 		/**
+		 * 	// TODO rename for URL()
 		 * Returns URL to load add new action[type=$this->actiontype] form
 		 * @return string                 URL to load add new action[type=$this->actiontype] form
 		 */
 		public function generate_addactionurl() {
-			$url = new \Purl\Url(parent::generate_addactionurl());
+			$url = new Url(parent::generate_addactionurl());
 			$url->query->set('contactID', $this->contactID);
 			return $url->getUrl();
 		}
-
+		
+		// TODO rename for URL()
 		public function generate_clearfilterurl() {
-			$url = new \Purl\Url(parent::generate_clearfilterurl());
+			$url = new Url(parent::generate_clearfilterurl());
 			$url->query->set('contactID', $this->contactID);
 			return $url->getUrl();
 		}
@@ -108,6 +112,7 @@
 			SETTER FUNCTIONS
 		============================================================ */
 		/**
+		 * // TODO rename for URL()
 		 * Manipulates $this->pageurl path and query data as needed
 		 * then sets $this->paginateafter value
 		 * @return void

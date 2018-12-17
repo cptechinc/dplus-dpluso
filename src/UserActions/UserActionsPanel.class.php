@@ -1,10 +1,18 @@
 <?php
 	namespace Dplus\Dpluso\UserActions;
-
+	
+	use Purl\Url;
+	use ProcessWire\WireInput;
+	use Dplus\Content\Paginator;
 	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Content\HTMLWriter;
 	use Dplus\Content\Table;
-
+	
+	/**
+	 * Use Statements for Model Classes which are non-namespaced
+	 */
+	use UserAction;
+	
 	/**
 	 * Class for dealing with the display of arrays of UserAction
 	 * Content
@@ -51,7 +59,7 @@
 
 		/**
 		* Page URL
-		* @var \Purl\Url
+		* @var Url
 		*/
 		protected $pageurl = false;
 
@@ -196,15 +204,15 @@
 		/**
 		 * Constructor
 		 * @param string                $sessionID   Session Identifier
-		 * @param \Purl\Url              $pageurl     Object that contains URL to Page
-		 * @param \ProcessWire\WireInput $input       Input such as the $_GET array to run generate_filter
+		 * @param Url              $pageurl     Object that contains URL to Page
+		 * @param WireInput $input       Input such as the $_GET array to run generate_filter
 		 * @param bool                  $throughajax If panel was loaded through ajax
 		 * @param string                $panelID     Panel element ID
 		 */
-		public function __construct($sessionID, \Purl\Url $pageurl, \ProcessWire\WireInput $input, $throughajax = false, $panelID = '') {
+		public function __construct($sessionID, Url $pageurl, WireInput $input, $throughajax = false, $panelID = '') {
 			$this->sessionID = $sessionID;
-			$this->pageurl = new \Purl\Url($pageurl->getUrl());
-			$this->pagenbr = \Dplus\Content\Paginator::generate_pagenbr($pageurl);
+			$this->pageurl = new Url($pageurl->getUrl());
+			$this->pagenbr = Paginator::generate_pagenbr($pageurl);
 			$this->throughajax = $throughajax;
 			$this->panelID = !empty($panelID) ? $panelID : $this->panelID;
 			$this->inmodal = $this->pageurl->query->get('modal') ? true : false;
@@ -248,22 +256,24 @@
 
 		/* GENERATE URLS - URLS ARE THE HREF VALUE */
 		/**
+		 * // TODO rename for URL()
 		 * Returns URL of the panel's state
 		 * @return string URL
 		 */
 		public function generate_refreshurl() {
-			$url = new \Purl\Url($this->pageurl->getUrl());
+			$url = new Url($this->pageurl->getUrl());
 			$url->query->remove('modal');
 			$url->path = DplusWire::wire('config')->pages->useractions;
 			return $url->getUrl();
 		}
 
 		/**
+		 * // TODO rename for URL()
 		 * Returns URL to load panel without filtered search
 		 * @return string  URL to load panel without filtered search
 		 */
 		public function generate_loadurl() {
-			$url = new \Purl\Url($this->pageurl);
+			$url = new Url($this->pageurl);
 			$url->query->remove('filter');
 			$url->query->remove('modal');
 			foreach (array_keys($this->filterable) as $filtercolumns) {
@@ -273,6 +283,7 @@
 		}
 
 		/**
+		 * // TODO rename for URL()
 		 * Returns URL to load add new action[type=$this->actiontype] form
 		 * @return string URL to load add new action[type=$this->actiontype] form
 		 */
@@ -282,7 +293,7 @@
 			} else {
 				$actiontype = '';
 			}
-			$url = new \Purl\Url($this->generate_refreshurl());
+			$url = new Url($this->generate_refreshurl());
 			$url->path = DplusWire::wire('config')->pages->useractions."add/";
 			$url->query = '';
 			$url->query->set('type', $actiontype);
@@ -290,11 +301,12 @@
 		}
 
 		/**
+		 * // TODO rename for URL()
 		 * Returns URL to load the current view without any filters applied
 		 * @return string URL
 		 */
 		public function generate_clearfilterurl() {
-			$url = new \Purl\Url($this->generate_refreshurl());
+			$url = new Url($this->generate_refreshurl());
 			$view = $url->query->get('view') ? $url->query->get('view') : $this->view;
 			$url->query = '';
 			$url->query->set('view', $view);
@@ -302,11 +314,12 @@
 		}
 
 		/**
+		 * // TODO rename for URL()
 		 * Returns the URL to view the actions in a calendar view
 		 * @return string URL to calendar view
 		 */
 		public function generate_calendarviewurl() {
-			$url = new \Purl\Url($this->generate_refreshurl());
+			$url = new Url($this->generate_refreshurl());
 			$url->query->set('view', 'calendar');
 			if ($url->query->get('day')) {
 				$monthyear = date('M-Y', strtotime($url->query->get('day')));
@@ -320,6 +333,7 @@
 		}
 
 		/**
+		 * // TODO rename for URL()
 		 * Returns URL to go to a month by adding to $date's month
 		 * @param  string  $date String formatted date
 		 * @param  int     $add  Number of months to add, can be negative
@@ -329,19 +343,20 @@
 			$date = $date ? new \DateTime($date) : new \DateTime();
 			$modify = $add > 0 ? "+$add" : "$add";
 			$date->modify("$modify month");
-			$url = new \Purl\Url($this->pageurl->getUrl());
+			$url = new Url($this->pageurl->getUrl());
 			$url->query->set('month', $date->format('M-Y'));
 			return $url->getUrl();
 		}
 
 		/**
+		 * // TODO rename for URL()
 		 * Returns the URL to view the actions in a day view
 		 * @param  string $date Datetime string usually in (m/d/Y) format
 		 * @return string       URL to day view
 		 */
 		public function generate_dayviewurl($date) {
 			$date = $date ? date('m/d/Y', strtotime($date)) : date('m/d/Y');
-			$url = new \Purl\Url($this->generate_refreshurl());
+			$url = new Url($this->generate_refreshurl());
 			$url->query->set('view', 'day');
 			$url->query->set('day', $date);
 			$url->query->remove('month');
@@ -349,13 +364,14 @@
 		}
 
 		/**
+		 * // TODO rename for URL()
 		 * Returns the URL to view the a date's scheduled tasks
 		 * @param  string $date date string (usually in m/d/Y)
 		 * @return string       URL
 		 */
 		public function generate_dayviewscheduledtasksurl($date) {
 			$date = $date ? date('m/d/Y', strtotime($date)) : date('m/d/Y');
-			$url = new \Purl\Url($this->generate_dayviewurl($date));
+			$url = new Url($this->generate_dayviewurl($date));
 			$url->query->set('filter', 'filter');
 			$url->query->set('actiontype', 'task');
 			$url->query->set('duedate', $date);
@@ -365,13 +381,14 @@
 		}
 
 		/**
+		 * // TODO rename for URL()
 		 * Returns URL to view notes created that day
 		 * @param  string $date date string (usually in m/d/Y)
 		 * @return string       URL
 		 */
 		public function generate_daynotescreatedurl($date) {
 			$date = $date ? date('m/d/Y', strtotime($date)) : date('m/d/Y');
-			$url = new \Purl\Url($this->generate_dayviewurl($date));
+			$url = new Url($this->generate_dayviewurl($date));
 			$url->query->remove('duedate');
 			$url->query->remove('completed');
 			$url->query->set('filter', 'filter');
@@ -381,11 +398,12 @@
 		}
 
 		/**
+		 * // TODO rename for URL()
 		 * Returns the URL to view the panel in List View
 		 * @return string  URL to load List View
 		 */
 		public function generate_listviewurl() {
-			$url = new \Purl\Url($this->generate_refreshurl());
+			$url = new Url($this->generate_refreshurl());
 			$url->query->remove('day');
 			$url->query->remove('month');
 			$url->query->set('view', 'list');
@@ -396,6 +414,7 @@
 			SETTER FUNCTIONS
 		============================================================ */
 		/**
+		 * // TODO rename for URL()
 		 * Manipulates $this->pageurl path and query data as needed
 		 * then sets $this->paginateafter value
 		 * @return void
@@ -604,7 +623,7 @@
 		/* =============================================================
 			CLASS FUNCTIONS
 		============================================================ */
-		public function generate_filter(\ProcessWire\WireInput $input) {
+		public function generate_filter(WireInput $input) {
 			$this->generate_defaultfilter($input);
 
 			// IF NO CHOSEN TASK STATE THEN DEFAULT TO INCOMPLETES
@@ -656,6 +675,7 @@
 		============================================================ */
 		/* = GENERATE LINKS - LINKS ARE THE HTML MARKUP FOR LINKS */
 		/**
+		 * // FIXME Remove, and make link at presentation level
 		 * Returns HTML Link to refresh the panel
 		 * @return string  HTML Link
 		 */
@@ -669,6 +689,7 @@
 		}
 
 		/**
+		 * // FIXME Remove, and make link at presentation level
 		 * Returns HTML Link to Add a new action
 		 * @return string HTML Link
 		 */
@@ -684,6 +705,7 @@
 		}
 
 		/**
+		 * // FIXME Remove, and make link at presentation level
 		 * Returns HTML Link to clear the filters from day search
 		 * @return string  HTML Link
 		 */
@@ -696,6 +718,7 @@
 		}
 
 		/**
+		 * // FIXME Remove, and make link at presentation level
 		 * Returns a HTML Link to view the Printable version of this Page
 		 * @return string  HTML Link to Print Page
 		 */
@@ -706,8 +729,8 @@
 			return $bootstrap->a("href=$href|class=h3|target=_blank", $icon." View Printable");
 		}
 
-
-		public function generate_completetasklink(\UserAction $task) {
+		// FIXME Remove, and make link at presentation level
+		public function generate_completetasklink(UserAction $task) {
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_viewactionjsonurl($task);
 			$icon = $bootstrap->icon('fa fa-check-circle');
@@ -732,13 +755,14 @@
 		}
 
 		/**
+		 * // FIXME Remove, and make at presentation level
 		 * Returns the row class for the action
 		 * based on if the action is rescheduled, overdue
-		 * @param  \UserAction  $action action to be looked that
+		 * @param  UserAction  $action action to be looked that
 		 * @return string      CSS class for the action
 		 * @uses UserAction is_rescheduled() -> bg-info | is_overdue() -> bg-warning | is_completed() -> bg-success
 		 */
-		public function generate_rowclass(\UserAction $action) {
+		public function generate_rowclass(UserAction $action) {
 			if ($action->actiontype == 'task') {
 				if ($action->is_rescheduled()) {
 					return 'bg-info';

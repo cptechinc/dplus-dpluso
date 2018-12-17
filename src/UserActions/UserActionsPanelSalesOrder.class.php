@@ -1,6 +1,9 @@
 <?php
 	namespace Dplus\Dpluso\UserActions;
 	
+	use Purl\Url;
+	use ProcessWire\WireInput;
+	
 	class SalesOrderActionsPanel extends ActionsPanel {
 		/**
 		 * Panel Type
@@ -79,12 +82,12 @@
 		/**
 		 * Constructor
 		 * @param string                $sessionID   Session Identifier
-		 * @param \Purl\Url              $pageurl     Object that contains URL to Page
-		 * @param \ProcessWire\WireInput $input       Input such as the $_GET array to run generate_filter
+		 * @param Url                   $pageurl     Object that contains URL to Page
+		 * @param WireInput             $input       Input such as the $_GET array to run generate_filter
 		 * @param bool                  $throughajax If panel was loaded through ajax
 		 * @param string                $panelID     Panel element ID
 		 */
-		public function __construct($sessionID, \Purl\Url $pageurl, \ProcessWire\WireInput $input, $throughajax = false, $panelID = '') {
+		public function __construct($sessionID, Url $pageurl, WireInput $input, $throughajax = false, $panelID = '') {
 			parent::__construct($sessionID, $pageurl, $input, $throughajax, $panelID);
 			$this->input = $input;
 		}
@@ -109,17 +112,19 @@
 		}
 
 		/**
+		 * // TODO rename for URL()
 		 * Returns URL to load add new action[type=$this->actiontype] form
 		 * @return string                 URL to load add new action[type=$this->actiontype] form
 		 */
 		public function generate_addactionurl() {
-			$url = new \Purl\Url(parent::generate_addactionurl());
+			$url = new Url(parent::generate_addactionurl());
 			$url->query->set('ordn', $this->ordn);
 			return $url->getUrl();
 		}
-
+		
+		// TODO rename for URL()
 		public function generate_clearfilterurl() {
-			$url = new \Purl\Url(parent::generate_clearfilterurl());
+			$url = new Url(parent::generate_clearfilterurl());
 			$url->query->set('ordn', $this->ordn);
 			return $url->getUrl();
 		}
@@ -150,7 +155,7 @@
 		/* =============================================================
 			CLASS FUNCTIONS
 		============================================================ */
-		public function generate_filter(\ProcessWire\WireInput $input) {
+		public function generate_filter(WireInput $input) {
 			parent::generate_filter($input);
 			$this->filters['salesorderlink'] = array($this->ordn);
 		}

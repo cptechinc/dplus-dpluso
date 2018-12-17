@@ -1,4 +1,5 @@
 <?php
+	use ProcessWire\NullPage;
 	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Base\DplusDateTime;
 	
@@ -154,11 +155,30 @@
 		 * @var int
 		 */
 		protected $rescheduledlink;
-
+		
+		/**
+		 * Array of Parent Actions
+		 * @var array
+		 */
 		protected $actionlineage = array();
-		public static $dateformat = "Y-m-d H:i:s";
-		public static $datedisplayformat = 'm/d/Y g:i A';
-		public static $types = array(
+		
+		/**
+		 * Default Date Format
+		 * @var string
+		 */
+		static $dateformat = "Y-m-d H:i:s";
+		
+		/**
+		 * Default Date Display format
+		 * @var string
+		 */
+		static $datedisplayformat = 'm/d/Y g:i A';
+		
+		/**
+		 * Action Types
+		 * @var array
+		 */
+		static $types = array(
 			'task' => 'task',
 			'actions' => 'action',
 			'notes' => 'note'
@@ -356,7 +376,7 @@
 		 */
 		public function generate_actionsubtypedescription() {
 			$page = DplusWire::wire('pages')->get("/config/actions/types/$this->actiontype/$this->actionsubtype");
-			return ($page instanceof \ProcessWire\NullPage) ? '' : $page->subtypeicon.' '.$page->actionsubtypelabel;
+			return ($page instanceof NullPage) ? '' : $page->subtypeicon.' '.$page->actionsubtypelabel;
 		}
 
 		/**
