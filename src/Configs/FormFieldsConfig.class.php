@@ -1,6 +1,8 @@
 <?php
 	namespace Dplus\Dpluso\Configs;
-
+	
+	use ProcessWire\WireInput;
+	
 	/**
 	 * Used for establishing form rules for forms
 	 * like Sales Order Head or Quote Head
@@ -138,10 +140,10 @@
 
 		/**
 		 * Takes the values from the form and sets the values for the fields
-		 * @param  ProcessWire\WireInput $input Object with the input values
+		 * @param WireInput $input Object with the input values
 		 * @return void
 		 */
-        public function generate_configfrominput(ProcessWire\WireInput $input) {
+        public function generate_configfrominput(WireInput $input) {
             foreach ($this->fields['fields'] as $key => $field) {
                 $this->fields['fields'][$key]['label'] = $input->post->text("$key-label");
                 $this->fields['fields'][$key]['before-decimal'] = strlen($input->post->text("$key-before-decimal")) ? $input->post->text("$key-before-decimal") : false;
