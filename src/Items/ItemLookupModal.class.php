@@ -2,6 +2,7 @@
 	namespace Dplus\Dpluso\Items;
 	
 	use Dplus\ProcessWire\DplusWire;
+	use Purl\Url;
 	
 	/**
 	 * ItemLookupModal provides functions, and holds data for the item lookup form and 
@@ -103,7 +104,7 @@
 		 * @return string URL
 		 */
 		public function generate_resultsurl() {
-			$url = new \Purl\Url(DplusWire::wire('config')->pages->ajax.'load/products/item-search-results/cart/');
+			$url = new Url(DplusWire::wire('config')->pages->ajax.'load/products/item-search-results/cart/');
 			$url->query->set('custID', $this->custID)->set('shipID', $this->shipID);
 			return $url->getUrl();
 		}
@@ -113,7 +114,7 @@
 		 * @return string URL
 		 */
 		public function generate_nonstockformurl() {
-			$url = new \Purl\Url(DplusWire::wire('config')->pages->ajax.'load/products/non-stock/form/cart/');
+			$url = new Url(DplusWire::wire('config')->pages->ajax.'load/products/non-stock/form/cart/');
 			$url->query->set('custID', $this->custID)->set('shipID', $this->shipID);
 			return $url->getUrl();
 		}
@@ -123,7 +124,7 @@
 		 * @return string URL
 		 */
 		public function generate_addmultipleurl() {
-			$url = new \Purl\Url(DplusWire::wire('config')->pages->ajax.'load/add-detail/cart/');
+			$url = new Url(DplusWire::wire('config')->pages->ajax.'load/add-detail/cart/');
 			$url->query->set('custID', $this->custID)->set('shipID', $this->shipID);
 			return $url->getUrl();
 		}
@@ -161,32 +162,35 @@
 			CLASS FUNCTIONS 
 		============================================================= */
 		/**
+		 *  TODO rename for URL()
 		 * Return the URL where the results are going to be loaded from
 		 * @return string URL
 		 */
 		public function generate_resultsurl() {
-			$url = new \Purl\Url(DplusWire::wire('config')->pages->ajax.'load/products/item-search-results/order/');
+			$url = new Url(DplusWire::wire('config')->pages->ajax.'load/products/item-search-results/order/');
 			$url->query->setData(array('ordn' => $this->ordn,'custID' => $this->custID, 'shipID' => $this->shipID));
 			$url->query->set('ordn', $this->ordn)->set('custID', $this->custID)->set('shipID', $this->shipID);
 			return $url->getUrl();
 		}
 		
 		/**
+		 *  TODO rename for URL()
 		 * Return the URL where the nonstock form will be loaded from
 		 * @return string URL
 		 */
 		public function generate_nonstockformurl() {
-			$url = new \Purl\Url(DplusWire::wire('config')->pages->ajax.'load/products/non-stock/form/order/');
+			$url = new Url(DplusWire::wire('config')->pages->ajax.'load/products/non-stock/form/order/');
 			$url->query->set('ordn', $this->ordn)->set('custID', $this->custID)->set('shipID', $this->shipID);
 			return $url->getUrl();
 		}
 		
 		/**
+		 *  TODO rename for URL()
 		 * Return the URL where the add multiple item form will be loaded from
 		 * @return string URL
 		 */
 		public function generate_addmultipleurl() {
-			$url = new \Purl\Url(DplusWire::wire('config')->pages->ajax.'load/add-detail/order/');
+			$url = new Url(DplusWire::wire('config')->pages->ajax.'load/add-detail/order/');
 			$url->query->set('ordn', $this->ordn)->set('custID', $this->custID)->set('shipID', $this->shipID);
 			return $url->getUrl();
 		}
@@ -230,11 +234,12 @@
 			CLASS FUNCTIONS
 		============================================================ */
 		/**
+		 *  TODO rename for URL()
 		 * Return the URL where the results are going to be loaded from
 		 * @return string URL
 		 */
 		public function generate_resultsurl() {
-			$url = new \Purl\Url(DplusWire::wire('config')->pages->ajax.'load/products/item-search-results/quote/');
+			$url = new Url(DplusWire::wire('config')->pages->ajax.'load/products/item-search-results/quote/');
 			$url->query->set('qnbr', $this->qnbr)->set('custID', $this->custID)->set('shipID', $this->shipID);
 			
 			if ($this->to_order) {
@@ -244,11 +249,12 @@
 		}
 		
 		/**
+		 *  TODO rename for URL()
 		 * Returns the URL where the nonstock form can be loaded
 		 * @return string URL
 		 */
 		public function generate_nonstockformurl() {
-			$url = new \Purl\Url(DplusWire::wire('config')->pages->ajax.'load/products/non-stock/form/quote/');
+			$url = new Url(DplusWire::wire('config')->pages->ajax.'load/products/non-stock/form/quote/');
 			$url->query->set('qnbr', $this->qnbr)->set('custID', $this->custID)->set('shipID', $this->shipID);
 			if ($this->to_order) {
 				$url->query->set('order', 'true');
@@ -257,11 +263,12 @@
 		}
 		
 		/**
+		 *  TODO rename for URL()
 		 * Returns the URL where the add multiple items form can be loaded
 		 * @return string URL
 		 */
 		public function generate_addmultipleurl() {
-			$url = new \Purl\Url(DplusWire::wire('config')->pages->ajax.'load/add-detail/quote/');
+			$url = new Url(DplusWire::wire('config')->pages->ajax.'load/add-detail/quote/');
 			$url->query->set('qnbr', $this->qnbr)->set('custID', $this->custID)->set('shipID', $this->shipID);
 			if ($this->to_order) {
 				$url->query->set('order', 'true');
