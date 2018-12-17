@@ -3,6 +3,7 @@
     
     use Dplus\ProcessWire\DplusWire;
     use Dplus\Content\TablePageSorter;
+    use Purl\Url;
     
     /**
      * Class for dealing with the Customer Index database table
@@ -69,12 +70,12 @@
         
         /**
          * Constructs CustIndex and instantiates tablesorter
-         * @param \Purl\Url $url       Page URL 
+         * @param Url $url       Page URL 
          * @param string   $loadinto  HTML element to load into for AJAX
          * @param string   $focus     HTML element to focus on for AJAX
          */
-        public function __construct(\Purl\Url $url, $loadinto, $focus) {
-            $this->pageurl = new \Purl\Url($url->getUrl());
+        public function __construct(Url $url, $loadinto, $focus) {
+            $this->pageurl = new Url($url->getUrl());
             $this->loadinto = $this->focus = $loadinto;
 			$this->ajaxdata = "data-loadinto='$this->loadinto' data-focus='$this->focus'";
             $this->tablesorter = new TablePageSorter($this->pageurl->query->get('orderby'));
@@ -94,7 +95,7 @@
 		 * @return string         URL with the column sortby with the correct rule
 		 */
 		public function generate_tablesortbyurl($column) {
-			$url = new \Purl\Url($this->pageurl->getUrl());
+			$url = new Url($this->pageurl->getUrl());
 			$url->query->set("orderby", "$column-".$this->tablesorter->generate_columnsortingrule($column));
 			return $url->getUrl();
 		}

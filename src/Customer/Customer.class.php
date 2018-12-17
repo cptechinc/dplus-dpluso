@@ -1,6 +1,8 @@
 <?php
     use Dplus\ProcessWire\DplusWire;
     
+    use Purl\Url;
+    
 	/**
 	 * Class for dealing with Customers
 	 * Derived from the custindex Table
@@ -144,11 +146,12 @@
 		}
 
 		/**
+		 * // TODO rename for URL()
 		 * Return URL to the add Contact form
 		 * @return string  Add Contact URL
 		 */
 		public function generate_addcontacturl() {
-			$url = new \Purl\Url(DplusWire::wire('config')->pages->contact.'add/');
+			$url = new Url(DplusWire::wire('config')->pages->contact.'add/');
             $url->query->set('custID', $this->custid);
 
             if ($this->has_shipto()) {

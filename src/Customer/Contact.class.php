@@ -1,4 +1,5 @@
 <?php
+    use Purl\Url;
     use Dplus\ProcessWire\DplusWire;
     
 	/**
@@ -10,64 +11,187 @@
 		use Dplus\Base\CreateClassArrayTraits;
 		use Dplus\Base\ThrowErrorTrait;
 		use Dplus\Base\MagicMethodTraits;
-
-		public $recno;
-		public $date;
-		public $time;
-		public $splogin1;
-		public $splogin2;
-		public $splogin3;
-		public $custid;
-		public $shiptoid;
-		public $name;
-		public $addr1;
-		public $addr2;
-		public $city;
-		public $state;
-		public $zip;
-		public $phone;
-		public $cellphone;
-		public $contact;
-		public $source;
-		public $extension;
-		public $email;
-		public $typecode;
-		public $faxnbr;
-		public $title;
+        
+        /**
+         * DB Record Number
+         * @var int
+         */
+		protected $recno;
+        
+        /**
+         * Date Updated
+         * @var int YYYYMMDD
+         */
+		protected $date;
+        
+        /**
+         * Time Updated
+         * @var int HHMMSSSS
+         */
+		protected $time;
+        
+        /**
+         * Assigned Sales Person 1 Login
+         * @var string
+         */
+		protected $splogin1;
+        
+        /**
+         * Assigned Sales Person 1 Login
+         * @var string
+         */
+		protected $splogin2;
+        
+        /**
+         * Assigned Sales Person 3 Login
+         * @var string
+         */
+		protected $splogin3;
+        
+        /**
+         * Customer ID
+         * @var string
+         */
+		protected $custid;
+        
+        /**
+         * Customer Shipto ID
+         * @var string
+         */
+		protected $shiptoid;
+        
+        /**
+         * Customer (Shipto) name
+         * @var string
+         */
+		protected $name;
+        
+        /**
+         * Address Line 1
+         * @var string
+         */
+		protected $addr1;
+        
+        /**
+         * Address Line 2
+         * @var string
+         */
+		protected $addr2;
+        
+        /**
+         * City
+         * @var string
+         */
+		protected $city;
+        
+        /**
+         * State
+         * @var string
+         */
+		protected $state;
+        
+        /**
+         * Zipcode
+         * @var string
+         */
+		protected $zip;
+        
+        /**
+         * Phone
+         * @var string
+         */
+		protected $phone;
+        
+        /**
+         * Cell Phone
+         * @var string
+         */
+		protected $cellphone;
+        
+        /**
+         * Contact Name
+         * @var string
+         */
+		protected $contact;
+        
+        /**
+         * Contact Source
+         * @var string C Customer | Customer Contact | CS Customer Shipto
+         */
+		protected $source;
+        
+        /**
+         * Phone Extension
+         * @var string
+         */
+		protected $extension;
+        
+        /**
+         * Email Address
+         * @var string
+         */
+		protected $email;
+        
+        /**
+         * Customer Type Code
+         * @var string
+         */
+		protected $typecode;
+        
+        /**
+         * Fax Number
+         * @var string
+         */
+		protected $faxnbr;
+        
+        /**
+         * Contact title
+         * @var string
+         */
+		protected $title;
 
 		/**
 		 * Contact for Accounts Receivable [Billto only]
 		 * @var string Y | N
 		 */
-		public $arcontact;
+		protected $arcontact;
 
 		/**
 		 * Contact for Dunning [Billto only]
 		 * @var string Y | N
 		 */
-		public $dunningcontact;
+		protected $dunningcontact;
 
 		/**
 		 * Contact for Buying
 		 * NOTE each Customer and Customer Shipto may have one [P]rimary buyer
 		 * @var string P | Y | N
 		 */
-		public $buyingcontact;
+		protected $buyingcontact;
 
 		/**
 		 * Contact for Certificates
 		 * @var string Y | N
 		 */
-		public $certcontact;
+		protected $certcontact;
 
 		/**
 		 * Contact for Acknowledgments [Billto only]
 		 * @var string Y | N
 		 */
-		public $ackcontact;
-
-		public $dummy;
-        public $fieldaliases = array(
+		protected $ackcontact;
+        
+        /**
+         * Dummy field
+         * @var string X
+         */
+		protected $dummy;
+        
+        /**
+         * Property Aliases
+         * @var array
+         */
+        protected $fieldaliases = array(
             'custID' => 'custid',
             'shipID' => 'shiptoid',
         );
@@ -219,10 +343,10 @@
          * @return bool          Does the user have the right permissions to edit this contact
          */
         public function can_edit($loginID = '') {
-            $loginID = (!empty($loginID)) ? $loginID : Dplus\ProcessWire\DplusWire::wire('user')->loginid;
+            $loginID = (!empty($loginID)) ? $loginID : DplusWire::wire('user')->loginid;
     		$user = LogmUser::load($loginID);
 
-            if ($user->get_dplusrole() == Dplus\ProcessWire\DplusWire::wire('config')->roles['sales-rep']) {
+            if ($user->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep']) {
                 return ($this->is_ackcontact() || $this->is_certcontact() || $this->is_buyingcontact()) ? true : false;
             } else {
                 return true;
@@ -245,6 +369,7 @@
 			CLASS FUNCTIONS
 		============================================================ */
 		/**
+		 * // TODO rename for URL()
 		 * Generates the URL to the customer page which currently
 		 * goes to load the CI Page.
 		 * @return string Customer Page URL
@@ -254,6 +379,7 @@
         }
 
 		/**
+		 * // TODO rename for URL()
 		 * Generates the customer URL but also defines the Shiptoid in the URL
 		 * @return string Customer Shipto Page URL
 		 */
@@ -262,11 +388,12 @@
         }
 
 		/**
+		 * // TODO rename for URL()
 		 * Generates URL to the contact page
 		 * @return string Contact Page URL
 		 */
         public function generate_contacturl() {
-            $url = new \Purl\Url(DplusWire::wire('config')->pages->contact);
+            $url = new Url(DplusWire::wire('config')->pages->contact);
             $url->query->set('custID', $this->custid);
 
             if ($this->has_shipto()) {
@@ -277,16 +404,18 @@
         }
 
         /**
+         * // TODO rename for URL()
 		 * Generates URL to the edit contact page
 		 * @return string Contact Page URL
 		 */
         public function generate_contactediturl() {
-            $url = new \Purl\Url($this->generate_contacturl());
+            $url = new Url($this->generate_contacturl());
             $url->path->add('edit');
             return $url->getUrl();
         }
 
 		/**
+		 * // TODO rename for URL()
 		 * Generates the load customer URL to get to the CI PAGE
 		 * @return string CI PAGE URL
 		 */
@@ -302,6 +431,7 @@
 		}
 
 		/**
+		 * // TODO rename for URL()
 		 * URL to redirect page to set the customer for the cart,
 		 * redirects to the cart
 		 * @return string
@@ -318,14 +448,16 @@
         }
 
 		/**
+		 * // TODO rename for URL()
 		 * URL to the customer redirect page, will be used by other functions to extend on
 		 * @return string Customer redirect URL
 		 */
         public function generate_redirurl() {
-            return new \Purl\Url(DplusWire::wire('config')->pages->customer."redir/");
+            return new Url(DplusWire::wire('config')->pages->customer."redir/");
         }
 
         /**
+         * // TODO rename for URL()
          * Outputs the javascript function name with parameter
          * @param  string $function which II function
          * @return string Function name with parameter for the call
@@ -358,6 +490,7 @@
 		}
 
 		/**
+		 * // TODO rename for URL()
 		 * Takes the method type and makes a proper URL depending on the method
 		 * @param  string $method two main groups : phone / email
 		 * @return string         url with with the protocol defined
