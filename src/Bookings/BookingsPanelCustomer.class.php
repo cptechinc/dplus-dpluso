@@ -1,9 +1,15 @@
 <?php
 	namespace Dplus\Dpluso\Bookings;
-
+	
+	use Purl\Url;
+	use ProcessWire\WireInput;
 	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Base\DplusDateTime;
 	use Dplus\Content\HTMLWriter;
+	
+	/**
+	 * Use Statements for Model Classes which are non-namespaced
+	 */
 	use Customer;
 
 	/**
@@ -130,16 +136,18 @@
 			CLASS FUNCTIONS
 		============================================================ */
 		/**
+		 * // TODO rename for URL()
 		 * Returns the URL to bookings panel's normal state
 		 * @return string URL
 		 */
 		public function generate_refreshurl() {
-			$url = new \Purl\Url($this->pageurl->getURL());
+			$url = new Url($this->pageurl->getURL());
 			$url->query = '';
 			return $url->getURL();
 		}
 
 		/**
+		 * // FIXME Remove, and make link at presentation level
 		 * Returns the HTML link for refreshing bookings
 		 * @return string HTML link
 		 * @uses
@@ -153,6 +161,7 @@
 		}
 
 		/**
+		 * // FIXME Remove, and make link at presentation level
 		 * Returns the HTML link for refreshing bookings
 		 * @return string HTML link
 		 * @uses
@@ -168,9 +177,9 @@
 		/**
 		 * Looks through the $input->get for properties that have the same name
 		 * as filterable properties, then we populate $this->filter with the key and value
-		 * @param  \ProcessWire\WireInput $input Use the get property to get at the $_GET[] variables
+		 * @param  WireInput $input Use the get property to get at the $_GET[] variables
 		 */
-		public function generate_filter(\ProcessWire\WireInput $input) {
+		public function generate_filter(WireInput $input) {
 			if (!$input->get->filter) {
 				$this->filters = array(
 					'bookdate' => array(date('m/d/Y', strtotime('-1 year')), date('m/d/Y'))
@@ -202,11 +211,11 @@
 		/**
 		 * Defines the filter for default
 		 * Goes back one year
-		 * @param  \ProcessWire\WireInput $input Use the get property to get at the $_GET[] variables
+		 * @param  WireInput $input Use the get property to get at the $_GET[] variables
 		 * @param  string                $interval Allows to defined interval
 		 * @return void
 		 */
-		protected function generate_defaultfilter(\ProcessWire\WireInput $input, $interval = '') {
+		protected function generate_defaultfilter(WireInput $input, $interval = '') {
 			if (!empty($inteval)) {
 				$this->set_interval($interval);
 			}
@@ -252,7 +261,7 @@
 		 * @return string       URL to view the date's booked orders
 		 */
 		public function generate_viewsalesordersbydayurl($date) {
-			$url = new \Purl\Url($this->pageurl->getUrl());
+			$url = new Url($this->pageurl->getUrl());
 			$url->path = DplusWire::wire('config')->pages->ajaxload."bookings/sales-orders/";
 			$url->query = '';
 			$url->query->set('date', $date);
@@ -264,6 +273,7 @@
 		}
 
 		/**
+		 * // FIXME Remove, and make link at presentation level
 		 * Returns HTML Link to view the days booked sales orders
 		 * @param  string $date Date for viewing bookings
 		 * @return string       HTML Link to view booked sales orders
@@ -278,13 +288,14 @@
 		}
 
 		/**
+		 * // TODO rename for URL()
 		 * Returns URL to view the bookingsfor a sales order on a particular date
 		 * @param  string $ordn Sales Order #
 		 * @param  string $date Date
 		 * @return string       URL to view bookings for that order # and date
 		 */
 		public function generate_viewsalesorderdayurl($ordn, $date) {
-			$url = new \Purl\Url($this->pageurl->getUrl());
+			$url = new Url($this->pageurl->getUrl());
 			$url->path = DplusWire::wire('config')->pages->ajaxload."bookings/sales-order/";
 			$url->query = '';
 			$url->query->set('ordn', $ordn);
@@ -297,6 +308,7 @@
 		}
 
 		/**
+		 * // FIXME Remove, and make link at presentation level
 		 * Returns HTML Link to view the bookings bookingsfor a sales order on a particular date
 		 * @param  string $ordn Sales Order #
 		 * @param  string $date Date
