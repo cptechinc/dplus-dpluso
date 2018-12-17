@@ -1,271 +1,208 @@
-<?php 
-	namespace Dplus\Dpluso\Items;
+<?php
+	namespace Dplus\Dpluso\General;
 	
-	use Dplus\ProcessWire\DplusWire;
+	use Purl\Url;
+	use ProcessWire\WireInput;
+	use Dplus\Content\HTMLWriter;
+	use Dplus\Base\QueryBuilder;
 	
 	/**
-	 * ItemLookupModal provides functions, and holds data for the item lookup form and 
-	 * generates the specific data needed when the results need to be for a worksheet, sales order, or quote. 
+	 * Class for dealing with the Signin Log
 	 */
-	class ItemLookupModal {
-		use \Dplus\Base\ThrowErrorTrait;
+    class SigninLog {
+        use \Dplus\Base\ThrowErrorTrait;
 		use \Dplus\Base\MagicMethodTraits;
+        use \Dplus\Base\AttributeParser;
+		use \Dplus\Base\Filterable;
 		
+        /**
+		 * Array of logins
+		 * @var array
+		 */
+		protected $logs = array();
 		/**
-		 * Type
-		 * Used for description
+		 * Ajax Data 
 		 * @var string
 		 */
-		protected $type = 'worksheet';
+        protected $ajaxdata;
 		
 		/**
-		 * Customer to lookup items for
-		 * @var string
+		 * Array of Filters (keys) and their values as values
+		 * @var array
 		 */
-		protected $custID;
+        protected $filters;
 		
 		/**
-		 * Customer Shipto to lookup items for
-		 * @var string
+		 * Array of key->array of filterable columns
+		 * @var array
 		 */
-		protected $shipID;
+        protected $filterable = array(
+            'user' => array(
+				'querytype' => 'between',
+				'datatype' => 'char',
+				'label' => 'User'
+			),
+			'date' => array(
+				'querytype' => 'between',
+				'datatype' => 'mysql-date',
+				'label' => 'Date'
+			)
+        );
 		
-		/* =============================================================
-			GETTER FUNCTIONS 
-		============================================================ */
 		/**
-		* If a property is not accessible then try to give them the property through
-		* a already defined method or to give them the property value
-		* @param  string $property property name
-		* @return 
-		*     1. Value returned in value call
-		*     2. Returns the value of the property_exists
-		*     3. Throw Error
-		*/
-		public function __get($property) {
-			$method = "get_{$property}";
-			if (method_exists($this, $method)) {
-				return $this->$method();
-			} elseif (property_exists($this, $property)) {
-				return $this->$property;
+		 * Constructor
+		 * @param string  $sessionID Session Identifier
+		 * @param Url     $pageurl   Page URL
+		 * @param string  $loadinto  HTML ID of element to load ajax data
+		 * @param string  $focus     HTML ID of element to load ajax data
+		 */
+        public function __construct($sessionID, Url $pageurl, $loadinto, $focus) {
+			$this->pageurl = new Url($pageurl->getUrl());
+            $this->ajaxdata = "data-focus='$focus' data-loadinto='$loadinto'";
+		}
+
+        /**
+		 * Returns the number of signins that will be found with the filters applied
+		 * @param  string $day  Day to find Signins for
+		 * @param  bool   $debug Whether or Not the Count will be returned
+		 * @return int           Number of Signins | SQL Query
+		 */
+        public function count_day_signins($day, $debug = false) {
+            $count = count_daysignins($day, $debug);
+			return $debug ? $count : $this->count = $count;
+        }
+
+        /**
+		 * Returns the Signins into the property $logs
+		 * @param  string $day  Day to find Signins for
+		 * @param  bool   $debug Whether to run query to return quotes
+		 * @return array         Signins | SQL Query
+		 * @uses
+		 */
+        public function get_daysignins($day, $debug = false) {
+			$logs = get_daysignins($day, $debug);
+			return $debug ? $logs : $this->logs = $logs;
+        }
+
+        /**
+         * Returns the log_signin Records that match the filter from the Database
+         * @param  bool   $debug Run in debug? If so, return SQL Query
+         * @return array         log_signin records
+         */
+        public function get_signinlog($debug = false) {
+            $logs = get_logsignins($this->filters, $this->filterable, $debug);
+			return $debug ? $logs : $this->logs = $logs;
+        }
+
+        /**
+         * Logs the Session Sign in, if not already created
+         * @param  string $sessionID User Session ID
+         * @param  string $userID    User ID
+         * @return void
+         */
+        public static function log_signin($sessionID, $userID) {
+            if (!self::has_loggedsignin($sessionID)) {
+                self::insert_logsignin($sessionID, $userID);
+            }
+        }
+
+        /**
+         * Inserts a signin record into the log_signin table
+         * @param  string $sessionID User Session ID
+         * @param  string $userID    User ID
+         * @param  bool   $debug     Run in debug? If so return SQL Query
+         * @return string            SQL Query after Execution
+         */
+        public static function insert_logsignin($sessionID, $userID, $debug = false) {
+            return insert_logsignin($sessionID, $userID, $debug);
+        }
+
+        /**
+         * Returns if this session has a log_signin record attached
+         * @param  string $sessionID User Session ID
+         * @param  bool   $debug     Run in debug? If so return SQL Query
+         * @return bool              Does sessionID have log_signin record?
+         */
+        public static function has_loggedsignin($sessionID, $debug = false) {
+            return has_loggedsignin($sessionID, $debug);
+        }
+
+        /**
+		 * Looks through the $input->get for properties that have the same name
+		 * as filterable properties, then we populate $this->filter with the key and value
+		 * @param  WireInput $input Use the get property to get at the $_GET[] variables
+		 */
+        public function generate_filter(WireInput $input) {
+            if (!$input->get->filter) {
+				$this->filters = false;
 			} else {
-				$this->error("This property ($property) does not exist");
-				return false;
+				$this->filters = array();
+				foreach ($this->filterable as $filter => $type) {
+					if (!empty($input->get->$filter)) {
+						if (!is_array($input->get->$filter)) {
+							$value = $input->get->text($filter);
+							$this->filters[$filter] = explode('|', $value);
+						} else {
+							$this->filters[$filter] = $input->get->$filter;
+						}
+					} elseif (is_array($input->get->$filter)) {
+						if (strlen($input->get->$filter[0])) {
+							$this->filters[$filter] = $input->get->$filter;
+						}
+					}
+				}
+			}
+
+			if (isset($this->filters['date'])) {
+				if (empty($this->filters['date'][0])) {
+					$this->filters['date'][0] = date('m/d/Y');
+				}
+
+				if (empty($this->filters['date'][1])) {
+					$this->filters['date'][1] = date('m/d/Y');
+				}
 			}
 		}
-		
+
 		/**
-		 * Return the type of Item Lookup Modal
-		 * @return string worksheet|order|quote
+		 * // REVIEW: 
+		 * Returns a descrption of the filters being applied to the orderpanel
+		 * @return string Description of the filters
 		 */
-		public function get_type() {
-			return $this->type;
-		}
-		
-		/* =============================================================
-			SETTER FUNCTIONS
-		============================================================ */
-		/**
-		 * Set the customer and Shipto Properties
-		 * @param string $custID Customer ID
-		 * @param string $shipID Customer Shipto ID
-		 */
-		public function set_customer($custID, $shipID) {
-			$this->custID = $custID;
-			$this->shipID = $shipID;
+		public function generate_filterdescription() {
+			if (empty($this->filters)) return '';
+			$desc = 'Searching '.$this->generate_paneltypedescription().' with';
+
+			foreach ($this->filters as $filter => $value) {
+				$desc .= " " . QueryBuilder::generate_filterdescription($filter, $value, $this->filterable);
+			}
+			return $desc;
 		}
 		
 		/**
-		 * This creates a Lookup Modal Sales Order and replaces $this with it
-		 * @param string $ordn Sales Order #
+		 * // TODO rename for URL()
+		 * Returns URL to load Page
+		 * @return string URL to load Page
 		 */
-		public function set_ordn($ordn) {
-			$lookup = new ItemLookupModalOrder($ordn);
-			$lookup->set_customer($this->custID, $this->shipID);
-			return $lookup;
-		}
-		
-		/**
-		 * This creates a Lookup Modal Quote and replaces $this with it
-		 * @param string $qnbr Quote #
-		 */
-		public function set_qnbr($qnbr) {
-			$lookup = new ItemLookupModalQuote($qnbr);
-			$lookup->set_customer($this->custID, $this->shipID);
-			return $lookup;
-		}
-		
-		/* =============================================================
-			CLASS FUNCTIONS 
-		============================================================ */
-		/**
-		 * Return the URL where the results are going to be loaded from
-		 * @return string URL
-		 */
-		public function generate_resultsurl() {
-			$url = new \Purl\Url(DplusWire::wire('config')->pages->ajax.'load/products/item-search-results/cart/');
-			$url->query->set('custID', $this->custID)->set('shipID', $this->shipID);
-			return $url->getUrl();
-		}
-		
-		/**
-		 * Return the URL where the nonstock form will be loaded from
-		 * @return string URL
-		 */
-		public function generate_nonstockformurl() {
-			$url = new \Purl\Url(DplusWire::wire('config')->pages->ajax.'load/products/non-stock/form/cart/');
-			$url->query->set('custID', $this->custID)->set('shipID', $this->shipID);
-			return $url->getUrl();
-		}
-		
-		/**
-		 * Return the URL where the add multiple item form will be loaded from
-		 * @return string URL
-		 */
-		public function generate_addmultipleurl() {
-			$url = new \Purl\Url(DplusWire::wire('config')->pages->ajax.'load/add-detail/cart/');
-			$url->query->set('custID', $this->custID)->set('shipID', $this->shipID);
-			return $url->getUrl();
-		}
-	}
-	
-	/**
-	 * Item Lookup modal for Sales Orders
-	 */
-	class ItemLookupModalOrder extends ItemLookupModal  {
-		/**
-		 * Type of Look up modal
-		 * Used for description
-		 * @var string
-		 */
-		protected $type = 'order';
-		
-		/**
-		 * Order Number
-		 * @var string
-		 */
-		protected $ordn;
-		
-		/* =============================================================
-			CONSTRUCTOR FUNCTIONS 
-		============================================================ */
-		/**
-		 * Constructor for Item Lookup for Sales Orders
-		 * @param string $ordn Sales Order #
-		 */
-		public function __construct($ordn) {
-			$this->ordn = $ordn;
-		}
-		
-		/* =============================================================
-			CLASS FUNCTIONS 
-		============================================================= */
-		/**
-		 * Return the URL where the results are going to be loaded from
-		 * @return string URL
-		 */
-		public function generate_resultsurl() {
-			$url = new \Purl\Url(DplusWire::wire('config')->pages->ajax.'load/products/item-search-results/order/');
-			$url->query->setData(array('ordn' => $this->ordn,'custID' => $this->custID, 'shipID' => $this->shipID));
-			$url->query->set('ordn', $this->ordn)->set('custID', $this->custID)->set('shipID', $this->shipID);
-			return $url->getUrl();
-		}
-		
-		/**
-		 * Return the URL where the nonstock form will be loaded from
-		 * @return string URL
-		 */
-		public function generate_nonstockformurl() {
-			$url = new \Purl\Url(DplusWire::wire('config')->pages->ajax.'load/products/non-stock/form/order/');
-			$url->query->set('ordn', $this->ordn)->set('custID', $this->custID)->set('shipID', $this->shipID);
-			return $url->getUrl();
-		}
-		
-		/**
-		 * Return the URL where the add multiple item form will be loaded from
-		 * @return string URL
-		 */
-		public function generate_addmultipleurl() {
-			$url = new \Purl\Url(DplusWire::wire('config')->pages->ajax.'load/add-detail/order/');
-			$url->query->set('ordn', $this->ordn)->set('custID', $this->custID)->set('shipID', $this->shipID);
-			return $url->getUrl();
-		}
-	}
-	
-	/**
-	 * Item Lookup modal for Quotes
-	 */
-	class ItemLookupModalQuote extends ItemLookupModal {
-		/**
-		 * Type of Look up modal
-		 * Used for description
-		 * @var string
-		 */
-		protected $type = 'quote';
-		
-		/**
-		 * Quote Number
-		 * @var string
-		 */
-		protected $qnbr;
-		
-		/**
-		 * Is this Quote to Order?
-		 * @var bool
-		 */
-		protected $to_order  = false;
-		
-		/* =============================================================
-			CONSTRUCTOR FUNCTIONS
-		============================================================= */
-		/**
-		 * Primary Constructor
-		 * @param string $qnbr Quote Nbr
-		 */
-		public function __construct($qnbr) {
-			$this->qnbr = $qnbr;
-		}
-		
-		/* =============================================================
-			CLASS FUNCTIONS
-		============================================================ */
-		/**
-		 * Return the URL where the results are going to be loaded from
-		 * @return string URL
-		 */
-		public function generate_resultsurl() {
-			$url = new \Purl\Url(DplusWire::wire('config')->pages->ajax.'load/products/item-search-results/quote/');
-			$url->query->set('qnbr', $this->qnbr)->set('custID', $this->custID)->set('shipID', $this->shipID);
-			
-			if ($this->to_order) {
-				$url->query->set('order', 'true');
+        public function generate_loadurl() {
+			$url = new Url($this->pageurl);
+			$url->query->remove('filter');
+			foreach (array_keys($this->filterable) as $filtercolumns) {
+				$url->query->remove($filtercolumns);
 			}
 			return $url->getUrl();
 		}
 		
 		/**
-		 * Returns the URL where the nonstock form can be loaded
-		 * @return string URL
+		 * // FIXME Remove, and make link at presentation level
+		 * Returns HTML Link to remove search filters
+		 * @return string HTML Link to remove search filters
 		 */
-		public function generate_nonstockformurl() {
-			$url = new \Purl\Url(DplusWire::wire('config')->pages->ajax.'load/products/non-stock/form/quote/');
-			$url->query->set('qnbr', $this->qnbr)->set('custID', $this->custID)->set('shipID', $this->shipID);
-			if ($this->to_order) {
-				$url->query->set('order', 'true');
-			}
-			return $url->getUrl();
+		public function generate_clearsearchlink() {
+			$bootstrap = new HTMLWriter();
+			$href = $this->generate_loadurl();
+			$icon = $bootstrap->icon('fa fa-search-minus');
+            $ajaxdata = $this->generate_ajaxdataforcontento();
+			return $bootstrap->a("href=$href|class=load-link btn btn-warning btn-block|$ajaxdata", "Clear Search $icon");
 		}
-		
-		/**
-		 * Returns the URL where the add multiple items form can be loaded
-		 * @return string URL
-		 */
-		public function generate_addmultipleurl() {
-			$url = new \Purl\Url(DplusWire::wire('config')->pages->ajax.'load/add-detail/quote/');
-			$url->query->set('qnbr', $this->qnbr)->set('custID', $this->custID)->set('shipID', $this->shipID);
-			if ($this->to_order) {
-				$url->query->set('order', 'true');
-			}
-			return $url->getUrl();
-		}
-	}
+    }
