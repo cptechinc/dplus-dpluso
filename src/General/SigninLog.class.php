@@ -1,17 +1,41 @@
 <?php
 	namespace Dplus\Dpluso\General;
 	
+	use Purl\Url;
+	use ProcessWire\WireInput;
+	use Dplus\Content\HTMLWriter;
+	use Dplus\Base\QueryBuilder;
+	
+	/**
+	 * Class for dealing with the Signin Log
+	 */
     class SigninLog {
         use \Dplus\Base\ThrowErrorTrait;
 		use \Dplus\Base\MagicMethodTraits;
         use \Dplus\Base\AttributeParser;
+		use \Dplus\Base\Filterable;
+		
         /**
 		 * Array of logins
 		 * @var array
 		 */
 		protected $logs = array();
+		/**
+		 * Ajax Data 
+		 * @var string
+		 */
         protected $ajaxdata;
+		
+		/**
+		 * Array of Filters (keys) and their values as values
+		 * @var array
+		 */
         protected $filters;
+		
+		/**
+		 * Array of key->array of filterable columns
+		 * @var array
+		 */
         protected $filterable = array(
             'user' => array(
 				'querytype' => 'between',
@@ -24,14 +48,22 @@
 				'label' => 'Date'
 			)
         );
-
-        public function __construct($sessionID, \Purl\Url $pageurl, $loadinto, $focus) {
-			$this->pageurl = new Purl\Url($pageurl->getUrl());
+		
+		/**
+		 * Constructor
+		 * @param string  $sessionID Session Identifier
+		 * @param Url     $pageurl   Page URL
+		 * @param string  $loadinto  HTML ID of element to load ajax data
+		 * @param string  $focus     HTML ID of element to load ajax data
+		 */
+        public function __construct($sessionID, Url $pageurl, $loadinto, $focus) {
+			$this->pageurl = new Url($pageurl->getUrl());
             $this->ajaxdata = "data-focus='$focus' data-loadinto='$loadinto'";
 		}
 
         /**
 		 * Returns the number of signins that will be found with the filters applied
+		 * @param  string $day  Day to find Signins for
 		 * @param  bool   $debug Whether or Not the Count will be returned
 		 * @return int           Number of Signins | SQL Query
 		 */
@@ -42,6 +74,7 @@
 
         /**
 		 * Returns the Signins into the property $logs
+		 * @param  string $day  Day to find Signins for
 		 * @param  bool   $debug Whether to run query to return quotes
 		 * @return array         Signins | SQL Query
 		 * @uses
@@ -97,9 +130,9 @@
         /**
 		 * Looks through the $input->get for properties that have the same name
 		 * as filterable properties, then we populate $this->filter with the key and value
-		 * @param  ProcessWire\WireInput $input Use the get property to get at the $_GET[] variables
+		 * @param  WireInput $input Use the get property to get at the $_GET[] variables
 		 */
-        public function generate_filter(ProcessWire\WireInput $input) {
+        public function generate_filter(WireInput $input) {
             if (!$input->get->filter) {
 				$this->filters = false;
 			} else {
@@ -131,34 +164,8 @@
 			}
 		}
 
-        /**
-		 * Grab the value of the filter at index
-		 * Goes through the $this->filters array, looks at index $filtername
-		 * grabs the value at index provided
-		 * @param  string $key        Key in filters
-		 * @param  int    $index      Which index to look at for value
-		 * @return mixed              value of key index
-		 */
-		public function get_filtervalue($key, $index = 0) {
-			if (empty($this->filters)) return '';
-			if (isset($this->filters[$key])) {
-				return (isset($this->filters[$key][$index])) ? $this->filters[$key][$index] : '';
-			}
-			return '';
-		}
-
 		/**
-		 * Checks if $this->filters has value of $value
-		 * @param  string $key        string
-		 * @param  mixed $value       value to look for
-		 * @return bool               whether or not if value is in the filters array at the key $key
-		 */
-		public function has_filtervalue($key, $value) {
-			if (empty($this->filters)) return false;
-			return (isset($this->filters[$key])) ? in_array($value, $this->filters[$key]) : false;
-		}
-
-		/**
+		 * // REVIEW: 
 		 * Returns a descrption of the filters being applied to the orderpanel
 		 * @return string Description of the filters
 		 */
@@ -171,18 +178,28 @@
 			}
 			return $desc;
 		}
-
+		
+		/**
+		 * // TODO rename for URL()
+		 * Returns URL to load Page
+		 * @return string URL to load Page
+		 */
         public function generate_loadurl() {
-			$url = new \Purl\Url($this->pageurl);
+			$url = new Url($this->pageurl);
 			$url->query->remove('filter');
 			foreach (array_keys($this->filterable) as $filtercolumns) {
 				$url->query->remove($filtercolumns);
 			}
 			return $url->getUrl();
 		}
-
+		
+		/**
+		 * // FIXME Remove, and make link at presentation level
+		 * Returns HTML Link to remove search filters
+		 * @return string HTML Link to remove search filters
+		 */
 		public function generate_clearsearchlink() {
-			$bootstrap = new Dplus\Content\HTMLWriter();
+			$bootstrap = new HTMLWriter();
 			$href = $this->generate_loadurl();
 			$icon = $bootstrap->icon('fa fa-search-minus');
             $ajaxdata = $this->generate_ajaxdataforcontento();
