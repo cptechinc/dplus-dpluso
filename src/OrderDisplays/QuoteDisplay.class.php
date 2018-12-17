@@ -1,6 +1,7 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
-
+	
+	use Purl\Url;
 	use Dplus\Content\HTMLWriter;
 
 	/**
@@ -26,11 +27,11 @@
 		/**
 		 * Primary Constructor
 		 * @param string   $sessionID Session Identifier
-		 * @param \Purl\Url $pageurl   URL to current page
+		 * @param Url      $pageurl   URL to current page
 		 * @param string   $modal     ID of modal to use for AJAX
 		 * @param string   $qnbr      Quote Number
 		 */
-		public function __construct($sessionID, \Purl\Url $pageurl, $modal, $qnbr) {
+		public function __construct($sessionID, Url $pageurl, $modal, $qnbr) {
 			parent::__construct($sessionID, $pageurl, $modal);
 			$this->qnbr = $qnbr;
 		}
@@ -52,22 +53,26 @@
 			OrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
+		// TODO rename for URL()
 		public function generate_documentsrequesturl(Order $quote, OrderDetail $quotedetail = null) {
 			return $this->generate_documentsrequesturltrait($quote, $quotedetail);
 		}
-
+		
+		// FIXME Remove, and make link at presentation level
 		public function generate_editlink(Order $quote) {
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_editurl($quote);
 			$icon = $bootstrap->icon('material-icons', '&#xE150;');
 			return $bootstrap->a("href=$href|class=btn btn-block btn-warning", $icon. " Edit Quote");
 		}
-
+		
+		// TODO rename for URL()
 		public function generate_loaddetailsurl(Order $quote) {
-			$url = new \Purl\Url($this->generate_loaddetailsurltrait($quote));
+			$url = new Url($this->generate_loaddetailsurltrait($quote));
 			return $url->getUrl();
 		}
-
+		
+		// FIXME Remove, and make link at presentation level
 		public function generate_detailvieweditlink(Order $quote, OrderDetail $detail) {
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_detailviewediturl($quote, $detail);

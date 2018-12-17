@@ -11,6 +11,7 @@
 	 */
 	interface OrderDisplayInterface {
 		/**
+		 * // TODO rename for URL()
 		 * Returns URL to load the Customer Page
 		 * @param  Order  $order SalesOrder | Quote
 		 * @return string        Load Customer Page URL
@@ -18,6 +19,7 @@
 		public function generate_customerurl(Order $order);
 		
 		/**
+		 * // TODO rename for URL()
 		 * Returns URL to load the Customer Shipto Page
 		 * @param  Order  $order SalesOrder | Quote
 		 * @return string        Load Customer Shipto Page URL
@@ -25,6 +27,7 @@
 		public function generate_customershiptourl(Order $order);
 		
 		/**
+		 * // FIXME Remove, and make link at presentation level
 		 * Returns HTNL Link to load Dplus Notes
 		 * @param  Order  $order   SalesOrder | Quote
 		 * @param  string $linenbr Line Number
@@ -33,6 +36,7 @@
 		public function generate_loaddplusnoteslink(Order $order, $linenbr = '0');
 		
 		/**
+		 * // TODO rename for URL()
 		 * Returns URL to request Dplus Notes
 		 * @param  Order  $order   SalesOrder | Quote
 		 * @param  string $linenbr Line Number
@@ -41,6 +45,7 @@
 		public function generate_dplusnotesrequesturl(Order $order, $linenbr);
 		
 		/**
+		 * // FIXME Remove, and make link at presentation level
 		 * Returns HTML link that loads documents for Order
 		 * @param  Order       $order  SalesOrder | Quote
 		 * @param  OrderDetail         $detail Detail to load documents for SalesOrderDetail | QuoteDetail
@@ -50,6 +55,7 @@
 		public function generate_loaddocumentslink(Order $order, OrderDetail $detail = null);
 		
 		/**
+		 * // TODO rename for URL()
 		 * Returns URL to request Order Documents
 		 * @param  Order        $order  Order
 		 * @param  OrderDetail  $detail Detail to load documents for
@@ -58,6 +64,7 @@
 		public function generate_documentsrequesturl(Order $order, OrderDetail $detail = null);
 		
 		/**
+		 * // FIXME Remove, and make link at presentation level
 		 * Returns HTML link to edit order page
 		 * @param  Order  $order SalesOrder | Quote
 		 * @return string        HTML link to edit order page
@@ -65,6 +72,7 @@
 		public function generate_editlink(Order $order);
 		
 		/**
+		 * // TODO rename for URL()
 		 * Returns URL to edit order page
 		 * @param  Order  $order SalesOrder | Quote
 		 * @return string        URL to edit order page
@@ -72,6 +80,7 @@
 		public function generate_editurl(Order $order);
 		
 		/**
+		 * // FIXME Remove, and make link at presentation level
 		 * Returns HTML link to view print page for order
 		 * @param  Order  $order SalesOrder | Quote
 		 * @return string        HTML link to view print page
@@ -79,6 +88,7 @@
 		public function generate_viewprintlink(Order $order);
 		
 		/**
+		 * // TODO rename for URL()
 		 * Returns URL to view print page for order
 		 * @param  Order  $order SalesOrder | Quote
 		 * @return string        URL to view print page
@@ -86,6 +96,7 @@
 		public function generate_viewprinturl(Order $order);
 		
 		/**
+		 * // TODO rename for URL()
 		 * Returns URL to view print page for order
 		 * USED by PDFMaker
 		 * @param  Order  $order SalesOrder | Quote
@@ -94,14 +105,15 @@
 		public function generate_viewprintpageurl(Order $order);
 		
 		/**
+		 * // TODO rename for URL()
 		 * Returns URL to send email of this print page
-		 * 
 		 * @param  Order  $order SalesOrder | Quote
 		 * @return string        URL to email Order
 		 */
 		public function generate_sendemailurl(Order $order);
 		
 		/**
+		 * // FIXME Remove, and make link at presentation level
 		 * Returns HTML Link to view linked user actions
 		 * @param  Order  $order SalesOrder | Quote
 		 * @return string        HTML Link to view linked user actions
@@ -109,6 +121,7 @@
 		public function generate_viewlinkeduseractionslink(Order $order);
 		
 		/**
+		 * // TODO rename for URL()
 		 * Returns URL to load linked UserActions
 		 * @param  Order  $order SalesOrder | Quote
 		 * @return string        URL to load linked UserActions
@@ -117,6 +130,7 @@
 		
 		// FUNCTIONS FOR DETAIL LINES 
 		/**
+		 * // TODO rename for URL()
 		 * Returns URL to load detail lines for order
 		 * @param  Order  $order SalesOrder | Quote
 		 * @return string        URL to load detail lines for order
@@ -124,6 +138,7 @@
 		public function generate_loaddetailsurl(Order $order);
 		
 		/**
+		 * // FIXME Remove, and make link at presentation level
 		 * Returns HTML link to view/edit OrderDetail
 		 * @param  Order       $order  SalesOrder | Quote
 		 * @param  OrderDetail $detail SalesOrderDetail | QuoteDetail
@@ -132,6 +147,7 @@
 		public function generate_detailvieweditlink(Order $order, OrderDetail $detail);
 		
 		/**
+		 * // TODO rename for URL()
 		 * Returns the URL to load the edit/view detail URL
 		 * Checks if we are editing order to show edit functions
 		 * @param  Order       $order  SalesOrder | Quote

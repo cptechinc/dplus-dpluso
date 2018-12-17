@@ -1,6 +1,7 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
-
+	
+	use Purl\Url;
 	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Content\HTMLWriter;
 
@@ -13,7 +14,7 @@
 	class EditSalesOrderDisplay extends SalesOrderDisplay {
 		use SalesOrderDisplayTraits;
 
-		public function __construct($sessionID, \Purl\Url $pageurl, $modal, $ordn) {
+		public function __construct($sessionID, Url $pageurl, $modal, $ordn) {
 			parent::__construct($sessionID, $pageurl, $modal, $ordn);
 		}
 
@@ -38,15 +39,33 @@
 		public function get_creditcard($debug = false) {
 			return get_orderhedcreditcard($this->sessionID, $this->ordn, $debug);
 		}
-
+		
+		/**
+		 * Returns if the credit card html should have a class of hidden
+		 * // DEPRECATE 
+		 * @param  Order  $order Sales Order
+		 * @return string
+		 */
 		public function showhide_creditcard(Order $order) {
 			return ($order->paymenttype == 'cc') ? '' : 'hidden';
 		}
-
+		
+		/**
+		 * Returns if the international phone html should have a class of hidden
+		 * // DEPRECATE 
+		 * @param  Order  $order Sales Order
+		 * @return string
+		 */
 		public function showhide_phoneintl(Order $order) {
 			return $order->is_phoneintl() ? '' : 'hidden';
 		}
-
+		
+		/**
+		 * Returns if the deomestic phone html should have a class of hidden
+		 * // DEPRECATE 
+		 * @param  Order  $order Sales Order
+		 * @return string
+		 */
 		public function showhide_phonedomestic(Order $order) {
 			return $order->is_phoneintl() ? 'hidden' : '';
 		}
@@ -54,33 +73,60 @@
 		/* =============================================================
 			CLASS FUNCTIONS
 		============================================================ */
+		/**
+		 * Returns URL to unlock Sales Order
+		 * @param  Order  $order Sales Order
+		 * @return string        Unlock Sales Order URL
+		 */
 		public function generate_unlockurl(Order $order) {
 			$url = $this->generate_ordersredirurl();
 			$url->query->set('action', 'unlock-order');
 			$url->query->set('ordn', $order->ordernumber);
 			return $url->getUrl();
 		}
-
+		
+		/**
+		 * Returns URL to Sales Order confirmation page
+		 * @param  Order  $order Sales Order
+		 * @return string        Sales Order confirmation page URL
+		 */
 		public function generate_confirmationurl(Order $order) {
-			$url = new \Purl\Url(DplusWire::wire('config')->pages->confirmorder);
+			$url = new Url(DplusWire::wire('config')->pages->confirmorder);
 			$url->query->set('ordn', $order->ordernumber);
 			return $url->getUrl();
 		}
-
+		
+		/**
+		 * Returns HTML Link to discard changes
+		 * @param  Order  $order Sales Order
+		 * @return string        HTML Link to discard changes
+		 */
 		public function generate_discardchangeslink(Order $order) {
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_unlockurl($order);
 			$icon = $bootstrap->icon('fa fa-times');
 			return $bootstrap->a("href=$href|class=btn btn-block btn-warning", $icon. " Discard Changes, Unlock Order");
 		}
-
+		
+		/**
+		 * Returns HTML Link to save and unlock
+		 * // FIXME Remove, and make link at presentation level
+		 * @param  Order  $order Sales Order
+		 * @return string        HTML Link to discard changes
+		 */
 		public function generate_saveunlocklink(Order $order) {
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_unlockurl($order);
 			$icon = $bootstrap->icon('fa fa-unlock');
 			return $bootstrap->a("href=$href|class=btn btn-block btn-emerald save-unlock-order|data-form=#orderhead-form", $icon. " Save and Exit");
 		}
-
+		/**
+		 * 
+		 * Returns HTML Link to order confirmation page
+		 * // FIXME Remove, and make link at presentation level
+		 * @param  Order  $order Sales Order
+		 * @return string        HTML Link to discard changes
+		 */
 		public function generate_confirmationlink(Order $order) {
 			$href = $this->generate_confirmationurl($order);
 			$bootstrap = new HTMLWriter();
@@ -89,7 +135,7 @@
 			return $bootstrap->a("href=$href|class=btn btn-block btn-success", $icon. " Finished with Order");
 		}
 
-		// TODO REMOVE
+		// FIXME Remove, and make link at presentation level
 		public function generate_detailvieweditlink(Order $order, OrderDetail $detail) {
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_detailviewediturl($order, $detail);
@@ -104,6 +150,7 @@
 
 		/**
 		 * Returns URL to delete detail line
+		 * // TODO rename for URL()
 		 * @param  Order       $order  Order
 		 * @param  OrderDetail $detail OrderDetail
 		 * @return string              HTML Link to delete detail line
@@ -130,18 +177,6 @@
 			return $bootstrap->a("href=$href|class=btn btn-sm btn-danger|title=Delete Item", $icon);
 		}
 
-		public function generate_readonlyalert() {
-			$bootstrap = new HTMLWriter();
-			$msg = $bootstrap->b('', 'Attention!') . ' This order will open in read-only mode, you will not be able to save changes.';
-			return $bootstrap->alertpanel('warning', $msg);
-		}
-
-		public function generate_erroralert($order) {
-			$bootstrap = new HTMLWriter();
-			$msg = $bootstrap->b('', 'Error!') .' '. $order->errormsg;
-			return $bootstrap->alertpanel('danger', $msg, false);
-		}
-
 		/* =============================================================
 			OrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
@@ -150,6 +185,7 @@
 		/**
 		 * Overrides SalesOrderDisplayTraits
 		 * Makes a button link to request dplus notes
+		 * // FIXME Remove, and make link at presentation level
 		 * @param  Order  $order
 		 * @param  string $linenbr 0 for header, anything else is detail line #
 		 * @return string		  html for button link

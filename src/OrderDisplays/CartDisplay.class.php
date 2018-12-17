@@ -1,6 +1,7 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
-
+	
+	use Purl\Url;
 	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Content\HTMLWriter;
 
@@ -52,6 +53,7 @@
 		}
 
 		/**
+		 * // FIXME Remove, and make link at presentation level
 		 * Returns the link for loading cart header notes
 		 * @param  int    $linenbr Line #
 		 * @return string          HTML link
@@ -68,6 +70,7 @@
 		}
 
 		/**
+		 * // FIXME Remove, and make link at presentation level
 		 * Generates dplus link depending on the Line #
 		 * @param  Order  $cart    CartQuote
 		 * @param  string $linenbr Line #
@@ -79,6 +82,7 @@
 		}
 
 		/**
+		 * // TODO rename for URL()
 		 * Returns URL for dplus notes for that Line #
 		 * @param  Order  $cart    CartQuote
 		 * @param  int    $linenbr Line #
@@ -86,7 +90,7 @@
 		 * @uses
 		 */
 		public function generate_dplusnotesrequesturl(Order $cart, $linenbr) {
-			$url = new \Purl\Url($this->pageurl->getUrl());
+			$url = new Url($this->pageurl->getUrl());
 			$url->path = DplusWire::wire('config')->pages->notes."redir/";
 			$url->query->setData(array('action' => 'get-cart-notes', 'linenbr' => $linenbr));
 			return $url->getUrl();
@@ -94,25 +98,28 @@
 
 		/**
 		 * Is not implemented yet
-		 * @param  Order       $cart   CartQuote
-		 * @param  OrderDetail $detail CartDetail
-		 * @return void        Isn't implemented yet
+		 * // FIXME Remove, and make link at presentation level
+		 * @param  Order $cart   CartQuote
+		 * @param  mixed $detail CartDetail
+		 * @return void          Isn't implemented yet
 		 */
 		public function generate_loaddocumentslink(Order $cart, OrderDetail $detail = null) {
 			// TODO
 		}
 
 		/**
+		 * // TODO rename for URL()
 		 * Is not implemented yet
-		 * @param  Order       $cart   CartQuote
+		 * @param  Order $cart   CartQuote
 		 * @param  mixed $detail CartDetail
-		 * @return void        Isn't implemented yet
+		 * @return void          Isn't implemented yet
 		 */
 		public function generate_documentsrequesturl(Order $cart, OrderDetail $detail = null) {
 			// TODO
 		}
 
 		/**
+		 * // FIXME Remove, and make link at presentation level
 		 * Returns HTML link to edit line
 		 * @param  Order       $cart   CartQuote
 		 * @param  OrderDetail $detail CartDetail
@@ -126,19 +133,21 @@
 		}
 
 		/**
+		 * // TODO rename for URL()
 		 * Returns URL to load edit detail
 		 * @param  Order       $cart   CartQuote
 		 * @param  OrderDetail $detail CartDetail
 		 * @return string              URL to load edit detail
 		 */
 		public function generate_detailviewediturl(Order $cart, OrderDetail $detail) {
-			$url = new \Purl\Url($this->pageurl->getUrl());
+			$url = new Url($this->pageurl->getUrl());
 			$url->path = DplusWire::wire('config')->pages->ajax."load/edit-detail/cart/";
 			$url->query->setData(array('line' => $detail->linenbr));
 			return $url->getUrl();
 		}
 
 		/**
+		 * // TODO rename for URL()
 		 * Returns URL to remove detail
 		 * @param  Order       $cart   CartQuote
 		 * @param  OrderDetail $detail CartDetail
@@ -146,7 +155,7 @@
 		 * @uses
 		 */
 		public function generate_detaildeleteurl(Order $cart, OrderDetail $detail) {
-			$url = new \Purl\Url($this->pageurl->getUrl());
+			$url = new Url($this->pageurl->getUrl());
 			$url->path = DplusWire::wire('config')->pages->cart."redir/";
 			$url->query->setData(array('action' => 'remove-line', 'line' => $detail->linenbr));
 			return $url->getUrl();

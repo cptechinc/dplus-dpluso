@@ -128,13 +128,15 @@
 			OrderPanelInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
+		// TODO rename for URL()
 		public function setup_pageurl() {
 			$this->pageurl->path = DplusWire::wire('config')->pages->ajax."load/sales-history/";
 			$this->pageurl->query->remove('display');
 			$this->pageurl->query->remove('ajax');
 			$this->paginationinsertafter = 'sales-history';
 		}
-
+		
+		// TODO rename for URL()
 		public function generate_loadurl() {
 			$url = new Url($this->pageurl);
 			$url->query->remove('filter');
@@ -143,7 +145,7 @@
 			}
 			return $url->getUrl();
 		}
-
+		// TODO rename for URL()
 		public function generate_closedetailsurl() {
 			$url = new Url($this->pageurl->getUrl());
 			$url->query->setData(array('ordn' => false, 'show' => false));
@@ -215,6 +217,7 @@
 			SalesOrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
+		// TODO rename for URL()
 		public function generate_trackingrequesturl(Order $order) {
 			$url = new Url($this->generate_trackingrequesturltrait($order));
 			$url->query->set('page', $this->pagenbr);
@@ -227,6 +230,7 @@
 			OrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
+		// TODO rename for URL()
 		public function generate_documentsrequesturl(Order $order, OrderDetail $orderdetail = null) {
 			$url = new Url($this->generate_documentsrequesturltrait($order, $orderdetail));
 			$url->query->set('page', $this->pagenbr);

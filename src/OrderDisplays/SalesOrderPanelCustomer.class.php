@@ -62,13 +62,15 @@
 			OrderPanelInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
+		// TODO rename for URL()
 		public function generate_loadurl() {
 			$url = new Url(parent::generate_loadurl());
 			$url->query->set('action', 'load-cust-orders');
 			$url->query->set('custID', $this->custID);
 			return $url->getUrl();
 		}
-
+		
+		// TODO rename for URL()
 		public function generate_loaddetailsurl(Order $order) {
 			$url = new Url(parent::generate_loaddetailsurl($order));
 			$url->query->set('custID', $order->custid);
@@ -145,6 +147,7 @@
 			SalesOrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
+		// TODO rename for URL()
 		public function generate_trackingrequesturl(Order $order) {
 			$url = new Url(parent::generate_trackingrequesturl($order));
 			$url->query->set('custID', $this->custID);
@@ -155,6 +158,7 @@
 			OrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
+		// TODO rename for URL()
 		public function generate_documentsrequesturl(Order $order, OrderDetail $orderdetail = null) {
 			$url = new Url(parent::generate_documentsrequesturl($order, $orderdetail));
 			$url->query->set('custID', $this->custID);

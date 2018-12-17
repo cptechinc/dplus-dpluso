@@ -1,6 +1,7 @@
 <?php 
 	namespace Dplus\Dpluso\OrderDisplays;
 	
+	use Purl\Url;
 	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Content\HTMLWriter;
 	
@@ -15,10 +16,10 @@
 	abstract class OrderDisplay {
 		use \Dplus\Base\ThrowErrorTrait;
 		use \Dplus\Base\MagicMethodTraits;
-		
+		use \Dplus\Base\AttributeParser;
 		/**
 		 * URL object that contains the Path to the page
-		 * @var \Purl\Url
+		 * @var Url
 		 */
 		protected $pageurl;
 		
@@ -37,12 +38,12 @@
 		/**
 		 * Base Constructor
 		 * @param string  $sessionID  Session Identifier
-		 * @param \Purl\Url $pageurl   URL object to get URL
-		 * @param mixed    $modal     ID of modal to use or false
+		 * @param Url     $pageurl   URL object to get URL
+		 * @param mixed   $modal     ID of modal to use or false
 		 */
-		public function __construct($sessionID, \Purl\Url $pageurl, $modal = false) {
+		public function __construct($sessionID, Url $pageurl, $modal = false) {
 			$this->sessionID = $sessionID;
-			$this->pageurl = new \Purl\Url($pageurl->getUrl());
+			$this->pageurl = new Url($pageurl->getUrl());
 			$this->modal = $modal;
 		}
 		
@@ -50,6 +51,7 @@
 			Helper Functions
 		============================================================ */
 		/**
+		 * // FIXME Remove, and make link at presentation level
 		 * Returns HTML Link to load the customer shipto page
 		 * @param  Order  $order Order to get the customerID and shiptoID to load
 		 * @return string        HTML Link
@@ -62,12 +64,13 @@
 		}
 		
 		/**
+		 * // TODO rename for URL()
 		 * Returns URL to the customer redirect page
 		 * @return string URL to Customer Redirect
 		 * @uses
 		 */
 		public function generate_customerredirurl() {
-			$url = new \Purl\Url(DplusWire::wire('config')->pages->orders);
+			$url = new Url(DplusWire::wire('config')->pages->orders);
 			$url->path = DplusWire::wire('config')->pages->customer."redir/";
 			return $url;
 		}
@@ -76,6 +79,7 @@
 			OrderDisplay Interface Functions
 		============================================================ */
 		/**
+		 * // TODO rename for URL()
 		 * Returns the URL to the load customer page 
 		 * @param  Order  $order Order to get the customer ID to load
 		 * @return string        URL to load Customer Page from
@@ -87,12 +91,13 @@
 		}
 		
 		/**
+		 * // TODO rename for URL()
 		 * Returns the URL to the load customer shipto page 
 		 * @param  Order  $order Order to get the customerID and shiptoID to load
-		 * @return [type]        URL to load Customer shipto Page from
+		 * @return string        URL to load Customer shipto Page from
 		 */
 		public function generate_customershiptourl(Order $order) {
-			$url = new \Purl\Url($this->generate_customerurl($order));
+			$url = new Url($this->generate_customerurl($order));
 			if (!empty($order->shiptoid)) $url->query->set('shipID', $order->shiptoid);
 			return $url->getUrl();
 		}

@@ -123,13 +123,15 @@
 			OrderPanelInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
+		// TODO rename for URL()
 		public function setup_pageurl() {
 			$this->pageurl->path = DplusWire::wire('config')->pages->ajax."load/sales-orders/";
 			$this->pageurl->query->remove('display');
 			$this->pageurl->query->remove('ajax');
 			$this->paginationinsertafter = 'sales-orders';
 		}
-
+		
+		// TODO rename for URL()
 		public function generate_loadurl() {
 			$url = new Url($this->pageurl);
 			$url->query->remove('filter');
@@ -138,7 +140,8 @@
 			}
 			return $url->getUrl();
 		}
-
+		
+		// TODO rename for URL()
 		public function generate_closedetailsurl() {
 			$url = new Url($this->pageurl->getUrl());
 			$url->query->setData(array('ordn' => false, 'show' => false));
@@ -157,7 +160,8 @@
 			$attr .= "|data-html=true|title=Icons Definition|data-content=$content";
 			return $bootstrap->a( $attr, 'Icon Definitions');
 		}
-
+		
+		// TODO rename for URL()
 		public function generate_loaddetailsurl(Order $order) {
 			$pageurl = new Url($this->pageurl->getUrl());
 			$pageurl->query->set('ordn', $order->ordernumber);
@@ -230,6 +234,7 @@
 			SalesOrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
+		// FIXME Remove, and make link at presentation level
 		public function generate_loadtrackinglink(Order $order) {
 			$bootstrap = new HTMLWriter();
 			if ($order->has_tracking()) {
@@ -244,7 +249,8 @@
 				return $bootstrap->a("href=#|class=h3 text-muted|title=No Tracking Info Available", $content);
 			}
 		}
-
+		
+		// TODO rename for URL()
 		public function generate_trackingrequesturl(Order $order) {
 			$url = new Url($this->generate_trackingrequesturltrait($order));
 			$url->query->set('page', $this->pagenbr);
@@ -256,6 +262,7 @@
 			OrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
+		// FIXME Remove, and make link at presentation level
 		public function generate_loaddplusnoteslink(Order $order, $linenbr = '0') {
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_dplusnotesrequesturl($order, $linenbr);
@@ -271,7 +278,8 @@
 			$link = $bootstrap->a("href=$href|class=load-notes $addclass|title=$title|data-modal=$this->modal", $content);
 			return $link;
 		}
-
+		
+		// FIXME Remove, and make link at presentation level
 		public function generate_loaddocumentslink(Order $order, OrderDetail $orderdetail = null) {
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_documentsrequesturl($order, $orderdetail);
@@ -285,14 +293,16 @@
 				return $bootstrap->a("href=#|class=h3 text-muted|title=No Documents Available", $icon);
 			}
 		}
-
+		
+		// TODO rename for URL()
 		public function generate_documentsrequesturl(Order $order, OrderDetail $orderdetail = null) {
 			$url = new Url($this->generate_documentsrequesturltrait($order, $orderdetail));
 			$url->query->set('page', $this->pagenbr);
 			$url->query->set('orderby', $this->tablesorter->orderbystring);
 			return $url->getUrl();
 		}
-
+		
+		// FIXME Remove, and make link at presentation level
 		public function generate_editlink(Order $order) {
 			$bootstrap = new HTMLWriter();
 			/*
@@ -331,14 +341,16 @@
 			$href = $url->getUrl();
 			return $bootstrap->a("href=$href|class=edit-order h3|title=$title", $icon);
 		}
-
+		
+		// FIXME Remove, and make link at presentation level
 		public function generate_viewlinkeduseractionslink(Order $order) {
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_viewlinkeduseractionsurl($order);
 			$icon = $bootstrap->span('class=h3', $bootstrap->icon('fa fa-check-square-o'));
 			return $bootstrap->a("href=$href|class=load-into-modal|data-modal=$this->modal", $icon." View Associated Actions");
 		}
-
+		
+		// FIXME Remove, and make link at presentation level
 		public function generate_detailvieweditlink(Order $order, OrderDetail $detail) {
 			$bootstrap = new HTMLWriter();
 			$href = $this->generate_detailviewediturl($order, $detail);

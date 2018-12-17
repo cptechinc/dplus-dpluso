@@ -7,6 +7,7 @@
 	use Dplus\Base\QueryBuilder;
 	use Dplus\Content\TablePageSorter;
 	use Dplus\Content\HTMLWriter;
+	use Dplus\Content\Paginator;
 	
 	/**
 	 * Use Statements for Model Classes which are non-namespaced
@@ -117,10 +118,10 @@
 		/**
 		 * Constructor
 		 * @param string  $sessionID  Session Identifier
-		 * @param Url $pageurl   Page URL Object
+		 * @param Url     $pageurl   Page URL Object
 		 * @param string  $modal      ID of Modal Element
 		 * @param string  $loadinto   ID of element to AJAX Load into
-		 * @param bool  $ajax         Use Ajax
+		 * @param bool    $ajax         Use Ajax
 		 * @uses
 		 */
 		public function __construct($sessionID, Url $pageurl, $modal, $loadinto, $ajax) {
@@ -142,12 +143,17 @@
 		}
 
 		/**
+		 * // TODO rename for URL()
 		 * Setup the Page URL then add the necessary components in the path and querystring
 		 * @return void
 		 * @uses parent::setup_pageurl()
 		 */
 		abstract public function setup_pageurl();
 		
+		/**
+		 * Sets the User Property for the Order Panel
+		 * @param string $userID User Login ID
+		 */
 		public function set_user($userID) {
 			$this->userID = $userID;
 		}
@@ -182,6 +188,7 @@
 			OrderPanelInterface Functions
 		============================================================ */
 		/**
+		 * // TODO rename for URL()
 		 * Returns URL with the sort parameters removed
 		 * @return string URL to load
 		 */
@@ -190,8 +197,20 @@
 			$url->query->remove("orderby");
 			return $url->getUrl();
 		}
+		
+		/**
+		 * Returns URL for searching
+		 * // NOTE It removes pagination to display the first page of results
+		 * @return string URL to load
+		 */
+		public function generate_searchURL() {
+			$url = new Url($this->pageurl->getUrl());
+			$url = Paginator::paginate_purl($url, 1, $this->paginationinsertafter);
+			return $url->getUrl();
+		}
 
 		/**
+		 * // TODO rename for URL()
 		 * Returns the sortby column URL
 		 * @param  string $column column to sortby
 		 * @return string         URL with the column sortby with the correct rule

@@ -1,6 +1,7 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
-
+	
+	use Purl\Url;
 	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Content\HTMLWriter;
 
@@ -8,7 +9,7 @@
 	 * Use Statements for Model Classes which are non-namespaced
 	 */
 	use Order, OrderDetail;
-
+	
 	/**
 	 * Traits that will be shared by Sales Order Displays like Displays or Panels
 	 */
@@ -44,7 +45,7 @@
 		 * @return string          URL to request Dplus Notes
 		 */
 		public function generate_dplusnotesrequesturl(Order $order, $linenbr) {
-			$url = new \Purl\Url($this->pageurl->getUrl());
+			$url = new Url($this->pageurl->getUrl());
 			$url->path = DplusWire::wire('config')->pages->notes."redir/";
 			$url->query->setData(array('action' => 'get-order-notes', 'ordn' => $order->ordernumber, 'linenbr' => $linenbr));
 			return $url->getUrl();
@@ -174,7 +175,7 @@
 		 * @return string        URL to view print page
 		 */
 		public function generate_viewprintpageurl(Order $order) {
-			$url = new \Purl\Url($this->pageurl->getUrl());
+			$url = new Url($this->pageurl->getUrl());
 			$url->path = DplusWire::wire('config')->pages->print."order/";
 			$url->query->set('ordn', $order->ordernumber);
 			$url->query->set('view', 'pdf');
@@ -183,12 +184,11 @@
 
 		/**
 		 * Returns URL to send email of this print page
-		 *
 		 * @param  Order  $order SalesOrder
 		 * @return string        URL to email Order
 		 */
 		public function generate_sendemailurl(Order $order) {
-			$url = new \Purl\Url(DplusWire::wire('config')->pages->email."sales-order/");
+			$url = new Url(DplusWire::wire('config')->pages->email."sales-order/");
 			$url->query->set('ordn', $order->ordernumber);
 			$url->query->set('referenceID', $this->sessionID);
 			return $url->getUrl();
@@ -212,7 +212,7 @@
 		 * @return string        URL to load linked UserActions
 		 */
 		public function generate_viewlinkeduseractionsurl(Order $order) {
-			$url = new \Purl\Url($this->pageurl->getUrl());
+			$url = new Url($this->pageurl->getUrl());
 			$url->path = DplusWire::wire('config')->pages->useractions;
 			$url->query->setData(array('ordn' => $order->ordernumber));
 			return $url->getUrl();
@@ -238,7 +238,7 @@
 		 * @return string              URL view detail
 		 */
 		public function generate_viewdetailurl(Order $order, OrderDetail $detail) {
-			$url = new \Purl\Url($this->pageurl->getUrl());
+			$url = new Url($this->pageurl->getUrl());
 			$url->path = DplusWire::wire('config')->pages->ajax."load/view-detail/order/";
 			$url->query->setData(array('ordn' => $order->ordernumber, 'line' => $detail->linenbr));
 			return $url->getUrl();
@@ -276,7 +276,7 @@
 		 * @uses $order->can_edit()
 		 */
 		public function generate_detailviewediturl(Order $order, OrderDetail $detail) {
-			$url = new \Purl\Url(DplusWire::wire('config')->pages->ajaxload.'edit-detail/order/');
+			$url = new Url(DplusWire::wire('config')->pages->ajaxload.'edit-detail/order/');
 			$url->query->setData(array('ordn' => $order->ordernumber, 'line' => $detail->linenbr));
 			return $url->getUrl();
 		}
@@ -326,10 +326,10 @@
 
 		/**
 		 * Makes the URL to the orders redirect page,
-		 * @return \Purl\Url URL to REDIRECT page
+		 * @return Url URL to REDIRECT page
 		 */
 		public function generate_ordersredirurl() {
-			$url = new \Purl\Url(DplusWire::wire('config')->pages->orders);
+			$url = new Url(DplusWire::wire('config')->pages->orders);
 			$url->path = DplusWire::wire('config')->pages->orders."redir/";
 			return $url;
 		}

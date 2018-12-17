@@ -1,6 +1,7 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
-
+	
+	use Purl\Url;
 	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Content\HTMLWriter;
 
@@ -19,6 +20,7 @@
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
 		/**
+		 * // FIXME Remove, and make link at presentation level
 		 * Generates an HTML link for loading the dplus notes
 		 * @param  Order  $quote   Quote to load Dplus notes from
 		 * @param  string $linenbr Line Number to load the notes for
@@ -38,19 +40,21 @@
 		}
 
 		/**
+		 * // TODO rename for URL()
 		 * Returns URL load the dplus notes from
 		 * @param  Order  $quote    to use Quotenbr
 		 * @param  int    $linenbr  Line Number
 		 * @return string           URL to load Dplus Notes
 		 */
 		public function generate_dplusnotesrequesturl(Order $quote, $linenbr) {
-			$url = new \Purl\Url($this->pageurl->getUrl());
+			$url = new Url($this->pageurl->getUrl());
 			$url->path = DplusWire::wire('config')->pages->notes."redir/";
 			$url->query->setData(array('action' => 'get-quote-notes', 'qnbr' => $quote->quotnbr, 'linenbr' => $linenbr));
 			return $url->getUrl();
 		}
 
 		/**
+		 * // FIXME Remove, and make link at presentation level
 		 * Returns HTML link to load documents from
 		 * @param  Order  $quote            Quote
 		 * @param  OrderDetail $quotedetail Decides if to load detail line notes
@@ -65,8 +69,9 @@
 		}
 
 		/**
+		 * // FIXME Remove, and make link at presentation level
 		 * Returns HTML link to load header documents from
-		 * @param  Order  $quote            Quote
+		 * @param  Order       $quote       Quote
 		 * @param  OrderDetail $quotedetail Decides if to load detail line notes
 		 * @return string                   HTML link
 		 */
@@ -84,8 +89,9 @@
 		}
 
 		/**
+		 * // FIXME Remove, and make link at presentation level
 		 * Returns HTML link to load detail documents from
-		 * @param  Order  $quote            Quote
+		 * @param  Order       $quote            Quote
 		 * @param  OrderDetail $quotedetail Decides if to load detail line notes
 		 * @return string                   HTML link
 		 */
@@ -104,6 +110,7 @@
 
 
 		/**
+		 * // TODO rename for URL()
 		 * Sets up a common url function for getting documents request url, classes that have this trait
 		 * will define generate_documentsrequesturl(Order $quote)
 		 * Not used as of 10/25/2017
@@ -120,6 +127,7 @@
 		}
 
 		/**
+		 * // TODO rename for URL()
 		 * Returns with the URL to edit the Quote
 		 * @param  Order  $quote Used for Quotenbr
 		 * @return string        URL to edit quote
@@ -131,6 +139,7 @@
 		}
 
 		/**
+		 * // FIXME Remove, and make link at presentation level
 		 * Returns link to Order the quote
 		 * @param  Order  $quote Used to get Quote Nbr
 		 * @return string HTML link for ordering quote
@@ -146,18 +155,20 @@
 		}
 
 		/**
+		 * // TODO rename for URL()
 		 * Returns URL to push quote to Order
 		 * @param  Order  $quote Quotenbr
 		 * @return string URL to Order Quote
 		 */
 		public function generate_orderquoteurl(Order $quote) {
-			$url = $url = new \Purl\Url($this->pageurl->getUrl());
+			$url = $url = new Url($this->pageurl->getUrl());
 			$url->path = DplusWire::wire('config')->pages->orderquote;
 			$url->query->setData(array('qnbr' => $quote->quotnbr));
 			return $url->getUrl();
 		}
 
 		/**
+		 * // FIXME Remove, and make link at presentation level
 		 * Returns HTML Link to view the print version of this quote
 		 * @param  Order  $quote
 		 * @return string HTML link to view print version
@@ -171,25 +182,27 @@
 		}
 
 		/**
+		 * // TODO rename for URL()
 		 * Returns URL to view the print version
 		 * @param  Order  $quote Uses Quotenbr
 		 * @return string        Print Link URL
 		 * @uses                 $this->generate_loaddetailsurl($quote)
 		 */
 		public function generate_viewprinturl(Order $quote) {
-			$url = new \Purl\Url($this->generate_loaddetailsurl($quote));
+			$url = new Url($this->generate_loaddetailsurl($quote));
 			$url->query->set('print', 'true');
 			return $url->getUrl();
 		}
 
 		/**
+		 * // TODO rename for URL()
 		 * Returns URL to view the print page version
 		 * @param  Order  $quote Uses Quotenbr
 		 * @return string        Print Link URL
 		 * @uses                 $this->generate_loaddetailsurl($quote)
 		 */
 		public function generate_viewprintpageurl(Order $quote) {
-			$url = new \Purl\Url($this->pageurl->getUrl());
+			$url = new Url($this->pageurl->getUrl());
 			$url->path = DplusWire::wire('config')->pages->print."quote/";
 			$url->query->set('qnbr', $quote->quotnbr);
 			$url->query->set('view', 'pdf');
@@ -197,19 +210,21 @@
 		}
 
 		/**
+		 * // TODO rename for URL()
 		 * Returns URL to send email
 		 * @param  Order  $quote Uses Quotenbr
 		 * @return string        Print Link URL
 		 * @uses                 $this->generate_loaddetailsurl($quote)
 		 */
 		public function generate_sendemailurl(Order $quote) {
-			$url = new \Purl\Url(DplusWire::wire('config')->pages->email."quote/");
+			$url = new Url(DplusWire::wire('config')->pages->email."quote/");
 			$url->query->set('qnbr', $quote->quotnbr);
 			$url->query->set('referenceID', $this->sessionID);
 			return $url->getUrl();
 		}
 
 		/**
+		 * // FIXME Remove, and make link at presentation level
 		 * Returns HTML link to view linked user actions link
 		 * @param  Order  $quote for quotenbr
 		 * @return string        HTML link for viewing linked user actions
@@ -222,18 +237,20 @@
 		}
 
 		/**
+		 * // TODO rename for URL()
 		 * Returns URL to load linked user actions
 		 * @param  Order  $quote For quotelink
 		 * @return string        URL to load linked useractions
 		 */
 		public function generate_viewlinkeduseractionsurl(Order $quote) {
-			$url = new \Purl\Url($this->pageurl->getUrl());
+			$url = new Url($this->pageurl->getUrl());
 			$url->path = DplusWire::wire('config')->pages->actions."all/load/list/quote/";
 			$url->query->setData(array('qnbr' => $quote->quotnbr));
 			return $url->getUrl();
 		}
 
 		/**
+		 * // FIXME Remove, and make link at presentation level
 		 * Returns HTML link to load the quote detail
 		 * @param  Order       $quote  For QuoteNbr
 		 * @param  OrderDetail $detail Gets quote attributes
@@ -247,23 +264,25 @@
 		}
 
 		/**
+		 * // TODO rename for URL()
 		 * Returns the URL to view the detail
 		 * @param  Order       $quote  For quotenbr
 		 * @param  OrderDetail $detail For Linenbr
 		 * @return string              View Detail URL
 		 */
 		public function generate_viewdetailurl(Order $quote, OrderDetail $detail) {
-			$url = new \Purl\Url($this->pageurl->getUrl());
+			$url = new Url($this->pageurl->getUrl());
 			$url->path = DplusWire::wire('config')->pages->ajax."load/view-detail/quote/";
 			$url->query->setData(array('qnbr' => $quote->quotnbr, 'line' => $detail->linenbr));
 			return $url->getUrl();
 		}
 
 		/**
+		 * // TODO rename for URL()
 		 * Return String URL to orders redir to request order details
 		 * This is here for the use of getting the Print link
-		 * @param  Order  $quote [description]
-		 * @return string		[description]
+		 * @param  Order  $quote Quote
+		 * @return string
 		 */
 		public function generate_loaddetailsurltrait(Order $quote) {
 			$url = $this->generate_quotesredirurl();
@@ -272,13 +291,14 @@
 		}
 
 		/**
+		 * // TODO rename for URL()
 		 * Returns the URL to view / edit the detail
 		 * @param  Order       $quote  for Quote Number
 		 * @param  OrderDetail $detail for detail line Number
 		 * @return string              URL to edit / view detail
 		 */
 		public function generate_detailviewediturl(Order $quote, OrderDetail $detail) {
-			$url = new \Purl\Url(DplusWire::wire('config')->pages->ajaxload.'edit-detail/quote/');
+			$url = new Url(DplusWire::wire('config')->pages->ajaxload.'edit-detail/quote/');
 			$url->query->setData(array('qnbr' => $quote->quotnbr, 'line' => $detail->linenbr));
 			return $url->getUrl();
 		}
@@ -297,11 +317,12 @@
 			URL Helper Functions
 		============================================================ */
 		/**
+		 * // TODO rename for URL()
 		 * Makes the URL to the orders redirect page,
-		 * @return \Purl\Url URL to REDIRECT page
+		 * @return Url URL to REDIRECT page
 		 */
 		public function generate_quotesredirurl() {
-			$url = new \Purl\Url(DplusWire::wire('config')->pages->quotes);
+			$url = new Url(DplusWire::wire('config')->pages->quotes);
 			$url->path = DplusWire::wire('config')->pages->quotes."redir/";
 			return $url;
 		}

@@ -36,6 +36,7 @@
 		}
 		
 		/**
+		 * // TODO rename for URL()
 		 * Setup the Page URL then add the necessary components in the path and querystring
 		 * @return void
 		 * @uses parent::setup_pageurl()

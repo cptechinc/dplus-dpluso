@@ -66,7 +66,8 @@
 			$this->pageurl = $this->pageurl = new Url($pageurl->getUrl());
 			$this->setup_pageurl();
 		}
-
+		
+		// TODO rename for URL()
 		public function setup_pageurl() {
 			$this->pageurl->path = DplusWire::wire('config')->pages->ajax."load/quotes/";
 			$this->pageurl->query->remove('display');
@@ -145,6 +146,7 @@
 			OrderPanelInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
+		// TODO rename for URL()
 		public function generate_closedetailsurl() {
 			$url = new Url($this->pageurl->getUrl());
 			$url->query->setData(array('qnbr' => false, 'show' => false));
@@ -173,14 +175,16 @@
 			$attr .= "|data-html=true|title=Icons Definition|data-content=$content";
 			return $bootstrap->a($attr, 'Icon Definitions');
 		}
-
+		
+		// TODO rename for URL()
 		public function generate_loadurl() {
 			$url = new Url($this->pageurl->getUrl());
 			$url->path = DplusWire::wire('config')->pages->quotes.'redir/';
 			$url->query->setData(array('action' => 'load-quotes'));
 			return $url->getUrl();
 		}
-
+		
+		// TODO rename for URL()
 		public function generate_loaddetailsurl(Order $quote) {
 			$url = new Url($this->generate_loaddetailsurltrait($quote));
 			$url->query->set('page', $this->pagenbr);

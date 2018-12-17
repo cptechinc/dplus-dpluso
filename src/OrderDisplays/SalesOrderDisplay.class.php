@@ -3,6 +3,8 @@
 
 	use Dplus\Content\HTMLWriter;
 
+	// DEPRECATE
+
 	/**
 	 * Use Statements for Model Classes which are non-namespaced
 	 */
@@ -10,8 +12,17 @@
 
 	class SalesOrderDisplay extends OrderDisplay implements OrderDisplayInterface, SalesOrderDisplayInterface {
 		use SalesOrderDisplayTraits;
-
+		
+		/**
+		 * Sales Order Number
+		 * @var string
+		 */
 		protected $ordn;
+		
+		/**
+		 * Sales Order Number
+		 * @var string
+		 */
 		protected $order;
 
 		public function __construct($sessionID, \Purl\Url $pageurl, $modal, $ordn) {

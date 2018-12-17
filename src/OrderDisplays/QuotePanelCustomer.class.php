@@ -1,6 +1,7 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
 	
+	use Purl\Url;
 	use Dplus\ProcessWire\DplusWire;
 	
 	/**
@@ -60,7 +61,7 @@
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
 		public function generate_loadurl() { 
-			$url = new \Purl\Url(parent::generate_loadurl());
+			$url = new Url(parent::generate_loadurl());
 			$url->query->set('action', 'load-cust-quotes');
 			$url->query->set('custID', $this->custID);
 			if (!empty($this->shipID)) {
@@ -70,7 +71,7 @@
 		}
 		
 		public function generate_loaddetailsurl(Order $quote) {
-			$url = new \Purl\Url(parent::generate_loaddetailsurl($quote));
+			$url = new Url(parent::generate_loaddetailsurl($quote));
 			$url->query->set('custID', $quote->custid);
 			if (!empty($this->shipID)) {
 				$url->query->set('shipID', $this->shipID);
@@ -112,7 +113,7 @@
 		}
 		
 		public function generate_documentsrequesturl(Order $quote, OrderDetail $quotedetail = null) {
-			$url = new \Purl\Url(parent::generate_documentsrequesturl($quote, $quotedetail));
+			$url = new Url(parent::generate_documentsrequesturl($quote, $quotedetail));
 			$url->query->set('custID', $this->custID);
 			return $url->getUrl();
 		}

@@ -11,6 +11,7 @@
 	 */
 	interface OrderPanelInterface {
 		/**
+		 * // TODO rename for URL()
 		 * Returns a Manipulated Purl\Url object that is the base URL for that page
 		 */
 		public function setup_pageurl();
@@ -30,18 +31,21 @@
 		public function generate_iconlegend();
 		
 		/**
+		 * // TODO rename for URL()
 		 * Returns URL to request the orders to be loaded
 		 * @return string URLto request the orders to be loaded
 		 */
 		public function generate_loadurl();
 		
 		/**
+		 * // TODO rename for URL()
 		 * Returns URL to remove the sort on the panel
 		 * @return string URL to remove the sort on the panel
 		 */
 		public function generate_clearsorturl(); // OrderPanel
 		
 		/**
+		 * // TODO rename for URL()
 		 * Returns URL that sorts the list by column
 		 * @param  string $column Column to sor by
 		 * @return string         URL that sorts the list by column
@@ -49,12 +53,14 @@
 		public function generate_tablesortbyurl($column); // OrderPanel
 		
 		/**
+		 * // TODO rename for URL()
 		 * Returns URL that closes the detail view for that listing
 		 * @return string URL that closes the detail view for that listing
 		 */
 		public function generate_closedetailsurl();
 		
 		/**
+		 * // TODO rename for URL()
 		 * Returns URL to request order details
 		 * @param  Order  $order SalesOrder | Quote
 		 * @return string        URL to request order details

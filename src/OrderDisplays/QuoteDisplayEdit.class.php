@@ -1,27 +1,26 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
-
+	
+	use Purl\Url;
 	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Content\HTMLWriter;
 
 	/**
 	 * Use Statements for Model Classes which are non-namespaced
 	 */
-	use Order, OrderDetail;
+	use Order, OrderDetail, Quote;
 
 	class EditQuoteDisplay extends QuoteDisplay {
 		use QuoteDisplayTraits;
-
-		public $canedit;
-
+		
 		/**
 		 * Primary Constructor
 		 * @param string   $sessionID Session Identifier
-		 * @param \Purl\Url $pageurl   URL to Page
+		 * @param Url      $pageurl   URL to Page
 		 * @param string   $modal     Modal to use for AJAX
-		 * @param string   $qnbr       Quote #
+		 * @param string   $qnbr      Quote #
 		 */
-		public function __construct($sessionID, \Purl\Url $pageurl, $modal, $qnbr) {
+		public function __construct($sessionID, Url $pageurl, $modal, $qnbr) {
 			parent::__construct($sessionID, $pageurl, $modal, $qnbr);
 		}
 
@@ -46,7 +45,7 @@
 		 * @return string        HTML link to send Quote to Order
 		 */
 		public function generate_sendtoorderurl(Order $quote) {
-			$url = new \Purl\Url(DplusWire::wire('config')->pages->orderquote);
+			$url = new Url(DplusWire::wire('config')->pages->orderquote);
 			$url->query->set('qnbr', $quote->quotnbr);
 			return $url->getUrl();
 		}
@@ -69,7 +68,7 @@
 		 * @return string        URL for Quote confirmation page
 		 */
 		public function generate_confirmationurl(Order $quote) {
-			$url = new \Purl\Url(DplusWire::wire('config')->pages->confirmquote);
+			$url = new Url(DplusWire::wire('config')->pages->confirmquote);
 			$url->query->set('qnbr', $quote->quotnbr);
 			return $url->getUrl();
 		}
@@ -147,7 +146,7 @@
 		 * @param  Quote  $quote Quote
 		 * @return string        HTML bootstrap alert for an error
 		 */
-		public function generate_erroralert($quote) {
+		public function generate_erroralert(Quote $quote) {
 			$bootstrap = new HTMLWriter();
 			$msg = $bootstrap->b('', 'Error!') . $quote->errormsg;
 			return $bootstrap->alertpanel('danger', $msg, false);
