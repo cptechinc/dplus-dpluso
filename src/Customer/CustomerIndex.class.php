@@ -94,7 +94,7 @@
 		 * @param  string $column column to sortby
 		 * @return string         URL with the column sortby with the correct rule
 		 */
-		public function generate_tablesortbyurl($column) {
+		public function generate_sortbyURL($column) {
 			$url = new Url($this->pageurl->getUrl());
 			$url->query->set("orderby", "$column-".$this->tablesorter->generate_columnsortingrule($column));
 			return $url->getUrl();

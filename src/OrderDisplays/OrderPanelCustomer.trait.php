@@ -32,17 +32,16 @@
 		public function set_customer($custID, $shipID) {
 			$this->custID = $custID;
 			$this->shipID = $shipID;
-			$this->setup_pageurl();
+			$this->setup_pageURL();
 		}
 		
 		/**
-		 * // TODO rename for URL()
 		 * Setup the Page URL then add the necessary components in the path and querystring
 		 * @return void
-		 * @uses parent::setup_pageurl()
+		 * @uses parent::setup_pageURL()
 		 */
-		public function setup_pageurl() {
-			parent::setup_pageurl();
+		public function setup_pageURL() {
+			parent::setup_pageURL();
 			$this->pageurl->path->add('customer');
 			$this->pageurl->path->add($this->custID);
 			$this->paginationinsertafter = $this->custID;

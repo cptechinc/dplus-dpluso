@@ -112,13 +112,12 @@
 			SETTER FUNCTIONS
 		============================================================ */
 		/**
-		 * // TODO rename for URL()
 		 * Manipulates $this->pageurl path and query data as needed
 		 * then sets $this->paginateafter value
 		 * @return void
 		 */
-		public function setup_pageurl() {
-			parent::setup_pageurl();
+		public function setup_pageURL() {
+			parent::setup_pageURL();
 			$this->pageurl->query->set('contactID', $this->contactID);
 		}
 
@@ -132,7 +131,7 @@
 			$this->set_customer($custID, $shiptoID);
 			$this->contactID = $contactID;
 			$this->generate_filter($this->input);
-			$this->setup_pageurl();
+			$this->setup_pageURL();
 		}
 
 		/* =============================================================

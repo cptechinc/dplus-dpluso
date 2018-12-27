@@ -14,29 +14,6 @@
 	 * Traits that will be shared by Sales Order Displays like Displays or Panels
 	 */
 	trait SalesOrderDisplayTraits {
-		/* =============================================================
-			OrderDisplayInterface Functions
-			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
-		============================================================ */
-		/**
-		 * Returns HTNL Link to load Dplus Notes
-		 * @param  Order  $order   SalesOrder
-		 * @param  string $linenbr Line Number
-		 * @return string          HTML link to view Dplus Notes
-		 */
-		public function generate_loaddplusnoteslink(Order $order, $linenbr = '0') {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_dplusnotesrequesturl($order, $linenbr);
-
-			if ($order->can_edit()) {
-				$title = ($order->has_notes()) ? "View and Create Order Notes" : "Create Order Notes";
-			} else {
-				$title = ($order->has_notes()) ? "View Order Notes" : "View Order Notes";
-			}
-			$content = $bootstrap->icon('material-icons', '&#xE0B9;') . ' ' . $title;
-			$link = $bootstrap->a("href=$href|class=btn btn-default load-notes|title=$title|data-modal=$this->modal", $content);
-			return $link;
-		}
 
 		/**
 		 * Returns URL to request Dplus Notes
@@ -44,7 +21,7 @@
 		 * @param  string $linenbr Line Number
 		 * @return string          URL to request Dplus Notes
 		 */
-		public function generate_dplusnotesrequesturl(Order $order, $linenbr) {
+		public function generate_dplusnotesrequestURL(Order $order, $linenbr) {
 			$url = new Url($this->pageurl->getUrl());
 			$url->path = DplusWire::wire('config')->pages->notes."redir/";
 			$url->query->setData(array('action' => 'get-order-notes', 'ordn' => $order->ordernumber, 'linenbr' => $linenbr));
@@ -252,7 +229,7 @@
 		 * @param  Order  $order
 		 * @return string
 		 */
-		public function generate_loaddetailsurltrait(Order $order) {
+		public function generate_loaddetailsURLtrait(Order $order) {
 			$url = $this->generate_ordersredirurl();
 			$url->query->setData(array('action' => 'get-order-details', 'ordn' => $order->ordernumber));
 			return $url->getUrl();
@@ -263,8 +240,8 @@
 		 * @param  Order  $order SalesOrder
 		 * @return string        URL to load detail lines for Sales Order
 		 */
-		public function generate_loaddetailsurl(Order $order) {
-			return $this->generate_loaddetailsurltrait($order);
+		public function generate_loaddetailsURL(Order $order) {
+			return $this->generate_loaddetailsURLtrait($order);
 		}
 
 		/**

@@ -146,9 +146,9 @@
 		 * // TODO rename for URL()
 		 * Setup the Page URL then add the necessary components in the path and querystring
 		 * @return void
-		 * @uses parent::setup_pageurl()
+		 * @uses parent::setup_pageURL()
 		 */
-		abstract public function setup_pageurl();
+		abstract public function setup_pageURL();
 		
 		/**
 		 * Sets the User Property for the Order Panel
@@ -188,11 +188,10 @@
 			OrderPanelInterface Functions
 		============================================================ */
 		/**
-		 * // TODO rename for URL()
 		 * Returns URL with the sort parameters removed
 		 * @return string URL to load
 		 */
-		public function generate_clearsorturl() {
+		public function generate_clearsortURL() {
 			$url = new Url($this->pageurl->getUrl());
 			$url->query->remove("orderby");
 			return $url->getUrl();
@@ -215,7 +214,7 @@
 		 * @param  string $column column to sortby
 		 * @return string         URL with the column sortby with the correct rule
 		 */
-		public function generate_tablesortbyurl($column) {
+		public function generate_sortbyURL($column) {
 			$url = new Url($this->pageurl->getUrl());
 			$url->query->set("orderby", "$column-".$this->tablesorter->generate_columnsortingrule($column));
 			return $url->getUrl();

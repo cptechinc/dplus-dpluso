@@ -37,51 +37,6 @@
 		}
 
 		/**
-		 * Returns the link for loading cart detail notes
-		 * @param  int     $linenbr Line #
-		 * @return string           HTML link
-		 */
-		public function generate_loaddplusnoteslinkdetail($linenbr) {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_dplusnotesrequesturl($this->cart, $linenbr);
-			$detail = CartDetail::load($this->sessionID, $linenbr);
-			$title = ($detail->has_notes()) ? "View and Create Quote Notes" : "Create Quote Notes";
-			$addclass = ($detail->has_notes()) ? '' : 'text-muted';
-			$content = $bootstrap->icon('material-icons md-36', '&#xE0B9;');
-			$link = $bootstrap->a( "href=$href|class=load-notes $addclass|title=$title|data-modal=$this->modal", $content);
-			return $link;
-		}
-
-		/**
-		 * // FIXME Remove, and make link at presentation level
-		 * Returns the link for loading cart header notes
-		 * @param  int    $linenbr Line #
-		 * @return string          HTML link
-		 */
-		public function generate_loaddplusnoteslinkheader($linenbr = '0') {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_dplusnotesrequesturl($this->cart, $linenbr);
-			$has_notes = has_dplusnote($this->sessionID, $this->sessionID, '0', Qnote::get_qnotetype('cart')) == 'Y' ? true : false;
-			$title = ($has_notes) ? "View and Create Quote Notes" : "Create Quote Notes";
-			$addclass = ($has_notes) ? '' : 'text-muted';
-			$content = $bootstrap->icon('material-icons md-36', '&#xE0B9;');
-			$link = $bootstrap->a("href=$href|class=load-notes $addclass|title=$title|data-modal=$this->modal", $content);
-			return $link;
-		}
-
-		/**
-		 * // FIXME Remove, and make link at presentation level
-		 * Generates dplus link depending on the Line #
-		 * @param  Order  $cart    CartQuote
-		 * @param  string $linenbr Line #
-		 * @return string          HTML Link
-		 * @uses
-		 */
-		public function generate_loaddplusnoteslink(Order $cart, $linenbr = '0') {
-			return intval($linenbr) ? $this->generate_loaddplusnoteslinkdetail($linenbr) : $this->generate_loaddplusnoteslinkheader($linenbr);
-		}
-
-		/**
 		 * // TODO rename for URL()
 		 * Returns URL for dplus notes for that Line #
 		 * @param  Order  $cart    CartQuote
@@ -89,7 +44,7 @@
 		 * @return string          URL to load Dplus Notes
 		 * @uses
 		 */
-		public function generate_dplusnotesrequesturl(Order $cart, $linenbr) {
+		public function generate_dplusnotesrequestURL(Order $cart, $linenbr) {
 			$url = new Url($this->pageurl->getUrl());
 			$url->path = DplusWire::wire('config')->pages->notes."redir/";
 			$url->query->setData(array('action' => 'get-cart-notes', 'linenbr' => $linenbr));

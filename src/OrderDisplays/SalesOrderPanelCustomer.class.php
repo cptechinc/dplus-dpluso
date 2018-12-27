@@ -70,9 +70,8 @@
 			return $url->getUrl();
 		}
 		
-		// TODO rename for URL()
-		public function generate_loaddetailsurl(Order $order) {
-			$url = new Url(parent::generate_loaddetailsurl($order));
+		public function generate_loaddetailsURL(Order $order) {
+			$url = new Url(parent::generate_loaddetailsURL($order));
 			$url->query->set('custID', $order->custid);
 			return $url->getUrl();
 		}

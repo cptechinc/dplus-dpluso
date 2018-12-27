@@ -221,7 +221,7 @@
 			$this->ajaxdata = "data-loadinto='$this->loadinto' data-focus='$this->focus'";
 			$this->collapse = $throughajax ? '' : 'collapse';
 			$this->generate_filter($input);
-			$this->setup_pageurl();
+			$this->setup_pageURL();
 			$this->count_actions();
 		}
 
@@ -419,7 +419,7 @@
 		 * then sets $this->paginateafter value
 		 * @return void
 		 */
-		public function setup_pageurl() {
+		public function setup_pageURL() {
 			$this->paginateafter = $this->paginateafter;
 		}
 

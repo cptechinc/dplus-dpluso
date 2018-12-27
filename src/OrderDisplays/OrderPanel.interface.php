@@ -11,10 +11,9 @@
 	 */
 	interface OrderPanelInterface {
 		/**
-		 * // TODO rename for URL()
 		 * Returns a Manipulated Purl\Url object that is the base URL for that page
 		 */
-		public function setup_pageurl();
+		public function setup_pageURL();
 		
 		/**
 		 * Returns HTML popover
@@ -38,34 +37,30 @@
 		public function generate_loadurl();
 		
 		/**
-		 * // TODO rename for URL()
 		 * Returns URL to remove the sort on the panel
 		 * @return string URL to remove the sort on the panel
 		 */
-		public function generate_clearsorturl(); // OrderPanel
+		public function generate_clearsortURL(); // OrderPanel
 		
 		/**
-		 * // TODO rename for URL()
 		 * Returns URL that sorts the list by column
 		 * @param  string $column Column to sor by
 		 * @return string         URL that sorts the list by column
 		 */
-		public function generate_tablesortbyurl($column); // OrderPanel
+		public function generate_sortbyURL($column); // OrderPanel
 		
 		/**
-		 * // TODO rename for URL()
 		 * Returns URL that closes the detail view for that listing
 		 * @return string URL that closes the detail view for that listing
 		 */
-		public function generate_closedetailsurl();
+		public function generate_closedetailsURL();
 		
 		/**
-		 * // TODO rename for URL()
 		 * Returns URL to request order details
 		 * @param  Order  $order SalesOrder | Quote
 		 * @return string        URL to request order details
 		 */
-		public function generate_loaddetailsurl(Order $order);
+		public function generate_loaddetailsURL(Order $order);
 		
 		/**
 		 * Returns description of the last time this was loaded from Dplus

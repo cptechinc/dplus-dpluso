@@ -70,8 +70,8 @@
 			return $url->getUrl();
 		}
 		
-		public function generate_loaddetailsurl(Order $quote) {
-			$url = new Url(parent::generate_loaddetailsurl($quote));
+		public function generate_loaddetailsURL(Order $quote) {
+			$url = new Url(parent::generate_loaddetailsURL($quote));
 			$url->query->set('custID', $quote->custid);
 			if (!empty($this->shipID)) {
 				$url->query->set('shipID', $this->shipID);

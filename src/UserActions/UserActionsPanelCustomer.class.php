@@ -156,12 +156,11 @@
 			SETTER FUNCTIONS
 		============================================================ */
 		/**
-		 * // TODO rename for URL()
 		 * Manipulates $this->pageurl path and query data as needed
 		 * then sets $this->paginateafter value
 		 * @return void
 		 */
-		public function setup_pageurl() {
+		public function setup_pageURL() {
 			$this->paginateafter = $this->paginateafter;
 			$this->pageurl->query->set('custID', $this->custID);
 			if (!(empty($this->shiptoID))) {
@@ -178,7 +177,7 @@
 			$this->custID = $custID;
 			$this->shiptoID = $shiptoID;
 			$this->generate_filter($this->input);
-			$this->setup_pageurl();
+			$this->setup_pageURL();
 		}
 
 		/* =============================================================

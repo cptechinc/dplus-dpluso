@@ -95,9 +95,8 @@
 			OrderPanelInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-		// TODO rename for URL()
-		public function generate_loaddetailsurl(Order $order) {
-			$url = new Url(parent::generate_loaddetailsurl($order));
+		public function generate_loaddetailsURL(Order $order) {
+			$url = new Url(parent::generate_loaddetailsURL($order));
 			$url->query->set('custID', $this->custID);
 			if (!empty($this->shipID)) {
 				$url->query->set('shipID', $this->shipID);

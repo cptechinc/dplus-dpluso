@@ -50,54 +50,29 @@
 		/* =============================================================
 			Helper Functions
 		============================================================ */
-		/**
-		 * // FIXME Remove, and make link at presentation level
-		 * Returns HTML Link to load the customer shipto page
-		 * @param  Order  $order Order to get the customerID and shiptoID to load
-		 * @return string        HTML Link
-		 */
-		public function generate_customershiptolink(Order $order) {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_customershiptourl($order);
-			$icon = $bootstrap->icon('fa fa-user');
-			return $bootstrap->a("href=$href|class=btn btn-block btn-primary", $icon. " Go to Customer Page");   
-		}
-		
-		/**
-		 * // TODO rename for URL()
-		 * Returns URL to the customer redirect page
-		 * @return string URL to Customer Redirect
-		 * @uses
-		 */
-		public function generate_customerredirurl() {
-			$url = new Url(DplusWire::wire('config')->pages->orders);
-			$url->path = DplusWire::wire('config')->pages->customer."redir/";
-			return $url;
-		}
+	
 		
 		/* =============================================================
 			OrderDisplay Interface Functions
 		============================================================ */
 		/**
-		 * // TODO rename for URL()
 		 * Returns the URL to the load customer page 
 		 * @param  Order  $order Order to get the customer ID to load
 		 * @return string        URL to load Customer Page from
 		 */
-		public function generate_customerurl(Order $order) {
-			$url = $this->generate_customerredirurl();
+		public function generate_customerURL(Order $order) {
+			$url = new Url(DplusWire::wire('config')->pages->customer."redir/");
 			$url->query->setData(array('action' => 'ci-customer', 'custID' => $order->custid));
 			return $url->getUrl();
 		}
 		
 		/**
-		 * // TODO rename for URL()
 		 * Returns the URL to the load customer shipto page 
 		 * @param  Order  $order Order to get the customerID and shiptoID to load
 		 * @return string        URL to load Customer shipto Page from
 		 */
-		public function generate_customershiptourl(Order $order) {
-			$url = new Url($this->generate_customerurl($order));
+		public function generate_customershiptoURL(Order $order) {
+			$url = new Url($this->generate_customerURL($order));
 			if (!empty($order->shiptoid)) $url->query->set('shipID', $order->shiptoid);
 			return $url->getUrl();
 		}

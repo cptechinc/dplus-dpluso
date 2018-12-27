@@ -113,7 +113,7 @@
 		 */
 		public function generate_ciloadurl(UserAction $action) {
 			$customer = Customer::load($action->customerlink, $action->shiptolink);
-			return $customer->generate_customerurl();
+			return $customer->generate_customerURL();
 		}
 
 		/**
@@ -123,9 +123,9 @@
 		 * @param  UserAction $action Uses customerlink to generate Customer object
 		 * @return string             URL to load the customer page
 		 */
-		public function generate_customerurl(UserAction $action) {
+		public function generate_customerURL(UserAction $action) {
 			$customer = Customer::load($action->customerlink);
-			return $customer ? $customer->generate_customerurl() : '';
+			return $customer ? $customer->generate_customerURL() : '';
 		}
 
 		/**
@@ -137,7 +137,7 @@
 		 */
 		public function generate_shiptourl(UserAction $action) {
 			$customer = Customer::load($action->customerlink, $action->shiptolink);
-			return $customer ? $customer->generate_customerurl() : '';
+			return $customer ? $customer->generate_customerURL() : '';
 		}
 
 		/**
@@ -213,7 +213,7 @@
 		 */
         public function generate_customerpagelink(UserAction $action) {
             $bootstrap = new HTMLWriter();
-            $href = $this->generate_customerurl($action);
+            $href = $this->generate_customerURL($action);
             $icon = $bootstrap->icon('fa fa-share-square-o');
             return $bootstrap->a("href=$href", $icon." Go to Customer Page");
         }
@@ -226,7 +226,7 @@
 		 */
         public function generate_shiptopagelink(UserAction $action) {
             $bootstrap = new HTMLWriter();
-            $href = $this->generate_customerurl($action);
+            $href = $this->generate_customerURL($action);
             $icon = $bootstrap->icon('fa fa-share-square-o');
             return $bootstrap->a("href=$href", $icon." Go to Shipto Page");
         }

@@ -64,11 +64,10 @@
 		public function __construct($sessionID, Url $pageurl, $modal, $loadinto, $ajax) {
 			parent::__construct($sessionID, $pageurl, $modal, $loadinto, $ajax);
 			$this->pageurl = $this->pageurl = new Url($pageurl->getUrl());
-			$this->setup_pageurl();
+			$this->setup_pageURL();
 		}
 		
-		// TODO rename for URL()
-		public function setup_pageurl() {
+		public function setup_pageURL() {
 			$this->pageurl->path = DplusWire::wire('config')->pages->ajax."load/quotes/";
 			$this->pageurl->query->remove('display');
 			$this->pageurl->query->remove('ajax');
@@ -146,8 +145,7 @@
 			OrderPanelInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-		// TODO rename for URL()
-		public function generate_closedetailsurl() {
+		public function generate_closedetailsURL() {
 			$url = new Url($this->pageurl->getUrl());
 			$url->query->setData(array('qnbr' => false, 'show' => false));
 			return $url->getUrl();
@@ -184,9 +182,9 @@
 			return $url->getUrl();
 		}
 		
-		// TODO rename for URL()
-		public function generate_loaddetailsurl(Order $quote) {
-			$url = new Url($this->generate_loaddetailsurltrait($quote));
+		
+		public function generate_loaddetailsURL(Order $quote) {
+			$url = new Url($this->generate_loaddetailsURLtrait($quote));
 			$url->query->set('page', $this->pagenbr);
 			$url->query->set('orderby', $this->tablesorter->orderbystring);
 
@@ -197,26 +195,6 @@
 				}
 			}
 			return $url->getUrl();
-		}
-
-		/* =============================================================
-			OrderDisplayInterface Functions
-			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
-		============================================================ */
-		public function generate_loaddplusnoteslink(Order $quote, $linenbr = '0') {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_dplusnotesrequesturl($quote, $linenbr);
-
-			if ($quote->can_edit()) {
-				$title = ($quote->has_notes()) ? "View and Create Quote Notes" : "Create Quote Notes";
-				$addclass = ($quote->has_notes()) ? '' : 'text-muted';
-			} else {
-				$title = ($quote->has_notes()) ? "View Quote Notes" : "View Quote Notes";
-				$addclass = ($quote->has_notes()) ? '' : 'text-muted';
-			}
-			$content = $bootstrap->icon('material-icons md-36', '&#xE0B9;');
-			$link = $bootstrap->a("href=$href|class=load-notes $addclass|title=$title|data-modal=$this->modal", $content);
-			return $link;
 		}
 
 		public function generate_documentsrequesturl(Order $quote, OrderDetail $quotedetail = null) {

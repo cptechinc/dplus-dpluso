@@ -138,8 +138,8 @@
 		 * then sets $this->paginateafter value
 		 * @return void
 		 */
-		public function setup_pageurl() {
-			parent::setup_pageurl();
+		public function setup_pageURL() {
+			parent::setup_pageURL();
 			$this->pageurl->query->set('qnbr', $this->qnbr);
 		}
 
@@ -150,7 +150,7 @@
 		public function set_qnbr($qnbr) {
 			$this->qnbr = $qnbr;
 			$this->generate_filter($this->input);
-			$this->setup_pageurl();
+			$this->setup_pageURL();
 		}
 
 		/* =============================================================

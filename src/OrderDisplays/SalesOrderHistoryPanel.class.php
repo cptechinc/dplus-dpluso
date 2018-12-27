@@ -72,7 +72,7 @@
 		public function __construct($sessionID, Url $pageurl, $modal, $loadinto, $ajax) {
 			parent::__construct($sessionID, $pageurl, $modal, $loadinto, $ajax);
 			$this->pageurl = new Url($pageurl->getUrl());
-			$this->setup_pageurl();
+			$this->setup_pageURL();
 		}
 
 		/* =============================================================
@@ -115,7 +115,7 @@
 		}
 
 		/**
-		 * REturns the Min Sales Order Date field value for $field
+		 * Returns the Min Sales Order Date field value for $field
 		 * @param  string $field Date Column to return Min Date
 		 * @param  bool   $debug Run in debug? If so, return SQL Query
 		 * @return string        Min $field Date
@@ -128,8 +128,7 @@
 			OrderPanelInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-		// TODO rename for URL()
-		public function setup_pageurl() {
+		public function setup_pageURL() {
 			$this->pageurl->path = DplusWire::wire('config')->pages->ajax."load/sales-history/";
 			$this->pageurl->query->remove('display');
 			$this->pageurl->query->remove('ajax');
@@ -145,8 +144,8 @@
 			}
 			return $url->getUrl();
 		}
-		// TODO rename for URL()
-		public function generate_closedetailsurl() {
+		
+		public function generate_closedetailsURL() {
 			$url = new Url($this->pageurl->getUrl());
 			$url->query->setData(array('ordn' => false, 'show' => false));
 			return $url->getUrl();

@@ -107,7 +107,7 @@
 			$this->pageurl = new Url($pageurl->getUrl());
 			$this->modal = $modal;
 			$this->ajaxdata = $this->parse_ajaxdata($ajaxdata);
-			$this->setup_pageurl();
+			$this->setup_pageURL();
 		}
 
 		/* =============================================================
@@ -212,11 +212,10 @@
 			SETTER FUNCTIONS
 		============================================================ */
 		/**
-		 * // TODO rename for URL()
 		 * Used when constructed, this sets the PageURL path to point at the bookings ajax URL
 		 * @return void
 		 */
-		public function setup_pageurl() {
+		public function setup_pageURL() {
 			$this->pageurl->path = DplusWire::wire('config')->pages->ajaxload."bookings/";
 		}
 		/**

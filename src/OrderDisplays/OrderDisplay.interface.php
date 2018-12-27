@@ -11,29 +11,18 @@
 	 */
 	interface OrderDisplayInterface {
 		/**
-		 * // TODO rename for URL()
 		 * Returns URL to load the Customer Page
 		 * @param  Order  $order SalesOrder | Quote
 		 * @return string        Load Customer Page URL
 		 */
-		public function generate_customerurl(Order $order);
+		public function generate_customerURL(Order $order);
 		
 		/**
-		 * // TODO rename for URL()
 		 * Returns URL to load the Customer Shipto Page
 		 * @param  Order  $order SalesOrder | Quote
 		 * @return string        Load Customer Shipto Page URL
 		 */
-		public function generate_customershiptourl(Order $order);
-		
-		/**
-		 * // FIXME Remove, and make link at presentation level
-		 * Returns HTNL Link to load Dplus Notes
-		 * @param  Order  $order   SalesOrder | Quote
-		 * @param  string $linenbr Line Number
-		 * @return string          HTML link to view Dplus Notes
-		 */
-		public function generate_loaddplusnoteslink(Order $order, $linenbr = '0');
+		public function generate_customershiptoURL(Order $order);
 		
 		/**
 		 * // TODO rename for URL()
@@ -42,7 +31,7 @@
 		 * @param  string $linenbr Line Number
 		 * @return string          URL to request Dplus Notes
 		 */
-		public function generate_dplusnotesrequesturl(Order $order, $linenbr);
+		public function generate_dplusnotesrequestURL(Order $order, $linenbr);
 		
 		/**
 		 * // FIXME Remove, and make link at presentation level
@@ -130,12 +119,11 @@
 		
 		// FUNCTIONS FOR DETAIL LINES 
 		/**
-		 * // TODO rename for URL()
 		 * Returns URL to load detail lines for order
 		 * @param  Order  $order SalesOrder | Quote
 		 * @return string        URL to load detail lines for order
 		 */
-		public function generate_loaddetailsurl(Order $order);
+		public function generate_loaddetailsURL(Order $order);
 		
 		/**
 		 * // FIXME Remove, and make link at presentation level

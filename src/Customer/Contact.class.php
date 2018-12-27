@@ -369,12 +369,11 @@
 			CLASS FUNCTIONS
 		============================================================ */
 		/**
-		 * // TODO rename for URL()
 		 * Generates the URL to the customer page which currently
 		 * goes to load the CI Page.
 		 * @return string Customer Page URL
 		 */
-        public function generate_customerurl() {
+        public function generate_customerURL() {
             return $this->generate_ciloadurl();
         }
 
@@ -384,7 +383,7 @@
 		 * @return string Customer Shipto Page URL
 		 */
         public function generate_shiptourl() {
-            return $this->generate_customerurl() . "&shipID=".urlencode($this->shiptoid);
+            return $this->generate_customerURL() . "&shipID=".urlencode($this->shiptoid);
         }
 
 		/**

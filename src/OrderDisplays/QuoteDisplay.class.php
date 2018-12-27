@@ -66,9 +66,8 @@
 			return $bootstrap->a("href=$href|class=btn btn-block btn-warning", $icon. " Edit Quote");
 		}
 		
-		// TODO rename for URL()
-		public function generate_loaddetailsurl(Order $quote) {
-			$url = new Url($this->generate_loaddetailsurltrait($quote));
+		public function generate_loaddetailsURL(Order $quote) {
+			$url = new Url($this->generate_loaddetailsURLtrait($quote));
 			return $url->getUrl();
 		}
 		

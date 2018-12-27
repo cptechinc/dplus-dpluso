@@ -68,7 +68,7 @@
 		public function __construct($sessionID, Url $pageurl, $modal, $loadinto, $ajax) {
 			parent::__construct($sessionID, $pageurl, $modal, $loadinto, $ajax);
 			$this->pageurl = new Url($pageurl->getUrl());
-			$this->setup_pageurl();
+			$this->setup_pageURL();
 		}
 
 		/* =============================================================
@@ -124,7 +124,7 @@
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
 		// TODO rename for URL()
-		public function setup_pageurl() {
+		public function setup_pageURL() {
 			$this->pageurl->path = DplusWire::wire('config')->pages->ajax."load/sales-orders/";
 			$this->pageurl->query->remove('display');
 			$this->pageurl->query->remove('ajax');
@@ -141,8 +141,8 @@
 			return $url->getUrl();
 		}
 		
-		// TODO rename for URL()
-		public function generate_closedetailsurl() {
+		
+		public function generate_closedetailsURL() {
 			$url = new Url($this->pageurl->getUrl());
 			$url->query->setData(array('ordn' => false, 'show' => false));
 			return $url->getUrl();
@@ -162,10 +162,10 @@
 		}
 		
 		// TODO rename for URL()
-		public function generate_loaddetailsurl(Order $order) {
+		public function generate_loaddetailsURL(Order $order) {
 			$pageurl = new Url($this->pageurl->getUrl());
 			$pageurl->query->set('ordn', $order->ordernumber);
-			$url = new Url($this->generate_loaddetailsurltrait($order));
+			$url = new Url($this->generate_loaddetailsURLtrait($order));
 			$url->query->set('page', $pageurl->getUrl());
 			return $url->getUrl();
 		}
@@ -262,22 +262,7 @@
 			OrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-		// FIXME Remove, and make link at presentation level
-		public function generate_loaddplusnoteslink(Order $order, $linenbr = '0') {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_dplusnotesrequesturl($order, $linenbr);
-
-			if ($order->can_edit()) {
-				$title = ($order->has_notes()) ? "View and Create Order Notes" : "Create Order Notes";
-				$addclass = ($order->has_notes()) ? '' : 'text-muted';
-			} else {
-				$title = ($order->has_notes()) ? "View Order Notes" : "View Order Notes";
-				$addclass = ($order->has_notes()) ? '' : 'text-muted';
-			}
-			$content = $bootstrap->icon('material-icons md-36', '&#xE0B9;');
-			$link = $bootstrap->a("href=$href|class=load-notes $addclass|title=$title|data-modal=$this->modal", $content);
-			return $link;
-		}
+		
 		
 		// FIXME Remove, and make link at presentation level
 		public function generate_loaddocumentslink(Order $order, OrderDetail $orderdetail = null) {

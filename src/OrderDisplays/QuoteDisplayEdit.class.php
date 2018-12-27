@@ -151,27 +151,4 @@
 			$msg = $bootstrap->b('', 'Error!') . $quote->errormsg;
 			return $bootstrap->alertpanel('danger', $msg, false);
 		}
-
-		/* =============================================================
-			OrderDisplay Interface Functions
-		============================================================ */
-		public function generate_loaddplusnoteslink(Order $quote, $linenbr = '0') {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_dplusnotesrequesturl($quote, $linenbr);
-
-			if ($quote->can_edit()) {
-				$title = ($quote->has_notes()) ? "View and Create Quote Notes" : "Create Quote Notes";
-			} else {
-				$title = ($quote->has_notes()) ? "View Quote Notes" : "View Quote Notes";
-			}
-
-			if (intval($linenbr) > 0) {
-				$content = $bootstrap->icon('material-icons md-36', '&#xE0B9;');
-				$link = $bootstrap->a("href=$href|class=load-notes|title=$title|data-modal=$this->modal", $content);
-			} else {
-				$content = $bootstrap->icon('material-icons', '&#xE0B9;') . ' ' . $title;
-				$link = $bootstrap->a("href=$href|class=btn btn-default load-notes|title=$title|data-modal=$this->modal", $content);
-			}
-			return $link;
-		}
 	}

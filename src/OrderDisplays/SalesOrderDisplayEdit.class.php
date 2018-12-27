@@ -181,32 +181,4 @@
 			OrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-
-		/**
-		 * Overrides SalesOrderDisplayTraits
-		 * Makes a button link to request dplus notes
-		 * // FIXME Remove, and make link at presentation level
-		 * @param  Order  $order
-		 * @param  string $linenbr 0 for header, anything else is detail line #
-		 * @return string		  html for button link
-		 */
-		public function generate_loaddplusnoteslink(Order $order, $linenbr = '0') {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_dplusnotesrequesturl($order, $linenbr);
-
-			if ($order->can_edit()) {
-				$title = ($order->has_notes()) ? "View and Create Order Notes" : "Create Order Notes";
-			} else {
-				$title = ($order->has_notes()) ? "View Order Notes" : "View Order Notes";
-			}
-
-			if (intval($linenbr) > 0) {
-				$content = $bootstrap->icon('material-icons md-36', '&#xE0B9;');
-				$link = $bootstrap->a("href=$href|class=load-notes|title=$title|data-modal=$this->modal", $content);
-			} else {
-				$content = $bootstrap->icon('material-icons', '&#xE0B9;') . ' ' . $title;
-				$link = $bootstrap->a("href=$href|class=btn btn-default load-notes|title=$title|data-modal=$this->modal", $content);
-			}
-			return $link;
-		}
 	}

@@ -137,8 +137,8 @@
 		 * then sets $this->paginateafter value
 		 * @return void
 		 */
-		public function setup_pageurl() {
-			parent::setup_pageurl();
+		public function setup_pageURL() {
+			parent::setup_pageURL();
 			$this->pageurl->query->set('ordn', $this->ordn);
 		}
 
@@ -149,7 +149,7 @@
 		public function set_ordn($ordn) {
 			$this->ordn = $ordn;
 			$this->generate_filter($this->input);
-			$this->setup_pageurl();
+			$this->setup_pageURL();
 		}
 
 		/* =============================================================
