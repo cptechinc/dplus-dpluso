@@ -197,8 +197,8 @@
 			return $url->getUrl();
 		}
 
-		public function generate_documentsrequesturl(Order $quote, OrderDetail $quotedetail = null) {
-			$url = new Url($this->generate_documentsrequesturltrait($quote, $quotedetail));
+		public function generate_documentsrequestURL(Order $quote, OrderDetail $quotedetail = null) {
+			$url = new Url($this->generate_documentsrequestURLtrait($quote, $quotedetail));
 			$url->query->set('page', $this->pagenbr);
 			$url->query->set('orderby', $this->tablesorter->orderbystring);
 			return $url->getUrl();
@@ -209,39 +209,6 @@
 			$href = $this->generate_viewlinkeduseractionsurl($quote);
 			$icon = $bootstrap->span('class=h3', $bootstrap->icon('fa fa-check-square-o'));
 			return $bootstrap->a("href=$href|class=load-into-modal|data-modal=$this->modal", $icon." View Associated Actions");
-		}
-
-		public function generate_editlink(Order $quote) {
-			$bootstrap = new HTMLWriter();
-
-			if (DplusWire::wire('user')->hasquotelocked) {
-				if ($quote->quotnbr == DplusWire::wire('user')->lockedqnbr) {
-					$icon = $bootstrap->icon('fa fa-wrench');
-					$title = "Continue editing this Quote";
-				} else {
-					$icon = $bootstrap->icon('material-icons md-36', '&#xE897;');
-					$title = "Open Quote in Read Only Mode";
-				}
-			} else {
-				$icon = $bootstrap->icon('fa fa-pencil');
-				$title = "Edit Quote";
-			}
-
-			$href = $this->generate_editurl($quote);
-			return $bootstrap->a("href=$href|class=edit-order h3|title=$title", $icon);
-		}
-
-		public function generate_loaddocumentslink(Order $quote, OrderDetail $quotedetail = null) {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_documentsrequesturl($quote, $quotedetail);
-			$icon = $bootstrap->icon('material-icons md-36', '&#xE873;');
-			$ajaxdata = $this->generate_ajaxdataforcontento();
-
-			if ($quote->has_documents()) {
-				return $bootstrap->a("href=$href|class=generate-load-link|title=Click to view Documents|$ajaxdata", $icon);
-			} else {
-				return $bootstrap->a("href=#|class=text-muted|title=No Documents Available", $icon);
-			}
 		}
 
 		public function generate_detailvieweditlink(Order $quote, OrderDetail $detail) {

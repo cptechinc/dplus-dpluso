@@ -29,69 +29,13 @@
 		}
 
 		/**
-		 * Returns HTML link that loads documents for Order
-		 * @param  Order       $order   SalesOrder
-		 * @param  OrderDetail $detail  Detail to load documents for SalesOrderDetail
-		 * @return string               HTML link to view documents
-		 * @uses
-		 */
-		public function generate_loaddocumentslink(Order $order, OrderDetail $orderdetail = null) {
-			if ($orderdetail) {
-				return $this->generate_loaddetaildocumentslink($order, $orderdetail);
-			} else {
-				return $this->generate_loadheaderdocumentslink($order, $orderdetail);
-			}
-		}
-
-		/**
-		 * Returns HTML link that loads documents for Order header
-		 * @param  Order       $order   SalesOrder
-		 * @param  OrderDetail $detail  Detail to load documents for SalesOrderDetail
-		 * @return string               HTML link to view documents
-		 * @uses
-		 */
-		public function generate_loadheaderdocumentslink(Order $order, OrderDetail $orderdetail = null) {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_documentsrequesturl($order, $orderdetail);
-			$icon = $bootstrap->icon('fa fa-file-text');
-			$ajaxdata = "data-loadinto=.docs|data-focus=.docs|data-click=#documents-link";
-
-			if ($order->has_documents()) {
-				return $bootstrap->a("href=$href|class=btn btn-primary load-sales-docs|role=button|title=Click to view Documents|$ajaxdata", $icon. ' Show Documents');
-			} else {
-				return $bootstrap->a("href=#|class=btn btn-default|title=No Documents Available", $icon. ' 0 Documents Found');
-			}
-		}
-
-		/**
-		 * Returns HTML link that loads documents for Sales Order Details
-		 * @param  Order       $order   SalesOrder
-		 * @param  OrderDetail $detail  Detail to load documents for SalesOrderDetail
-		 * @return string               HTML link to view documents
-		 * @uses
-		 */
-		public function generate_loaddetaildocumentslink(Order $order, OrderDetail $orderdetail = null) {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_documentsrequesturl($order, $orderdetail);
-			$icon = $bootstrap->icon('fa fa-file-text');
-			$ajaxdata = "data-loadinto=.docs|data-focus=.docs|data-click=#documents-link";
-			$documentsTF = ($orderdetail) ? $orderdetail->has_documents() : $order->has_documents();
-
-			if ($documentsTF) {
-				return $bootstrap->a("href=$href|class=h3 load-sales-docs|role=button|title=Click to view Documents|$ajaxdata", $icon);
-			} else {
-				return $bootstrap->a("href=#|class=h3 text-muted|title=No Documents Available", $icon);
-			}
-		}
-
-		/**
 		 * Sets up a common url function for getting documents request url, classes that have this trait
-		 * will define generate_documentsrequesturltr(Order $order)
+		 * will define generate_documentsrequestURLtr(Order $order)
 		 * @param  Order       $order        SalesOrder
 		 * @param  OrderDetail $orderdetail  SalesOrderDetail
 		 * @return string		             URL to the order redirect to make the get order documents request
 		 */
-		public function generate_documentsrequesturltrait(Order $order, OrderDetail $orderdetail = null) {
+		public function generate_documentsrequestURLtrait(Order $order, OrderDetail $orderdetail = null) {
 			$url = $this->generate_ordersredirurl();
 			$url->query->setData(array('action' => 'get-order-documents', 'ordn' => $order->ordernumber));
 			if ($orderdetail) {
@@ -105,7 +49,7 @@
 		 * @param  Order  $order SalesOrder
 		 * @return string        URL to edit order page
 		 */
-		public function generate_editurl(Order $order) {
+		public function generate_editURL(Order $order) {
 			$url = $this->generate_ordersredirurl();
 			$url->query->setData(array('action' => 'get-order-edit','ordn' => $order->ordernumber));
 			return $url->getUrl();

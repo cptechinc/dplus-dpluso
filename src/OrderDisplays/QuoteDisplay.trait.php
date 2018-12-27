@@ -34,70 +34,14 @@
 		}
 
 		/**
-		 * // FIXME Remove, and make link at presentation level
-		 * Returns HTML link to load documents from
-		 * @param  Order  $quote            Quote
-		 * @param  OrderDetail $quotedetail Decides if to load detail line notes
-		 * @return string                   HTML link
-		 */
-		public function generate_loaddocumentslink(Order $quote, OrderDetail $quotedetail = null) {
-			if ($quotedetail) {
-				return $this->generate_loaddetaildocumentslink($quote, $quotedetail);
-			} else {
-				return $this->generate_loadheaderdocumentslink($quote, $quotedetail);
-			}
-		}
-
-		/**
-		 * // FIXME Remove, and make link at presentation level
-		 * Returns HTML link to load header documents from
-		 * @param  Order       $quote       Quote
-		 * @param  OrderDetail $quotedetail Decides if to load detail line notes
-		 * @return string                   HTML link
-		 */
-		public function generate_loadheaderdocumentslink(Order $quote, OrderDetail $quotedetail = null) {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_documentsrequesturl($quote, $quotedetail);
-			$icon = $bootstrap->icon('fa fa-file-text');
-			$ajaxdata = "data-loadinto=.docs|data-focus=.docs|data-click=#documents-link";
-
-			if ($quote->has_documents()) {
-				return $bootstrap->a("href=$href|class=btn btn-primary load-sales-docs|role=button|title=Click to view Documents|$ajaxdata", $icon. ' Show Documents');
-			} else {
-				return $bootstrap->a("href=#|class=btn btn-default|title=No Documents Available", $icon. ' 0 Documents Found');
-			}
-		}
-
-		/**
-		 * // FIXME Remove, and make link at presentation level
-		 * Returns HTML link to load detail documents from
-		 * @param  Order       $quote            Quote
-		 * @param  OrderDetail $quotedetail Decides if to load detail line notes
-		 * @return string                   HTML link
-		 */
-		public function generate_loaddetaildocumentslink(Order $quote, OrderDetail $quotedetail = null) {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_documentsrequesturl($quote, $quotedetail);
-			$icon = $bootstrap->icon('fa fa-file-text');
-			$ajaxdata = "data-loadinto=.docs|data-focus=.docs|data-click=#documents-link";
-
-			if ($quotedetail->has_documents()) {
-				return $bootstrap->a("href=$href|class=h3 load-sales-docs|role=button|title=Click to view Documents|$ajaxdata", $icon);
-			} else {
-				return $bootstrap->a("href=#|class=h3 text-muted|title=No Documents Available", $icon);
-			}
-		}
-
-
-		/**
 		 * // TODO rename for URL()
 		 * Sets up a common url function for getting documents request url, classes that have this trait
-		 * will define generate_documentsrequesturl(Order $quote)
+		 * will define generate_documentsrequestURL(Order $quote)
 		 * Not used as of 10/25/2017
 		 * @param  Order  $quote [description]
 		 * @return string		URL to the order redirect to make the get order documents request
 		 */
-		public function generate_documentsrequesturltrait(Order $quote, OrderDetail $quotedetail = null) {
+		public function generate_documentsrequestURLtrait(Order $quote, OrderDetail $quotedetail = null) {
 			$url = $this->generate_quotesredirurl();
 			$url->query->setData(array('action' => 'get-quote-documents', 'qnbr' => $quote->quotnbr));
 			if ($quotedetail) {
@@ -112,7 +56,7 @@
 		 * @param  Order  $quote Used for Quotenbr
 		 * @return string        URL to edit quote
 		 */
-		public function generate_editurl(Order $quote) {
+		public function generate_editURL(Order $quote) {
 			$url = $this->generate_quotesredirurl();
 			$url->query->setData(array('action' => 'edit-quote', 'qnbr' => $quote->quotnbr));
 			return $url->getUrl();

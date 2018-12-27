@@ -53,17 +53,8 @@
 			OrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-		// TODO rename for URL()
-		public function generate_documentsrequesturl(Order $quote, OrderDetail $quotedetail = null) {
-			return $this->generate_documentsrequesturltrait($quote, $quotedetail);
-		}
-		
-		// FIXME Remove, and make link at presentation level
-		public function generate_editlink(Order $quote) {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_editurl($quote);
-			$icon = $bootstrap->icon('material-icons', '&#xE150;');
-			return $bootstrap->a("href=$href|class=btn btn-block btn-warning", $icon. " Edit Quote");
+		public function generate_documentsrequestURL(Order $quote, OrderDetail $quotedetail = null) {
+			return $this->generate_documentsrequestURLtrait($quote, $quotedetail);
 		}
 		
 		public function generate_loaddetailsURL(Order $quote) {

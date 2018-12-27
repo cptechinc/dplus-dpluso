@@ -260,72 +260,15 @@
 
 		/* =============================================================
 			OrderDisplayInterface Functions
-			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
+			URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-		
-		
-		// FIXME Remove, and make link at presentation level
-		public function generate_loaddocumentslink(Order $order, OrderDetail $orderdetail = null) {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_documentsrequesturl($order, $orderdetail);
-			$icon = $bootstrap->icon('fa fa-file-text');
-			$ajaxdata = $this->generate_ajaxdataforcontento();
-			$documentsTF = ($orderdetail) ? $orderdetail->has_documents() : $order->has_documents();
-
-			if ($documentsTF) {
-				return $bootstrap->a("href=$href|class=h3 generate-load-link|title=Click to view Documents|$ajaxdata", $icon);
-			} else {
-				return $bootstrap->a("href=#|class=h3 text-muted|title=No Documents Available", $icon);
-			}
-		}
-		
-		// TODO rename for URL()
-		public function generate_documentsrequesturl(Order $order, OrderDetail $orderdetail = null) {
-			$url = new Url($this->generate_documentsrequesturltrait($order, $orderdetail));
+		public function generate_documentsrequestURL(Order $order, OrderDetail $orderdetail = null) {
+			$url = new Url($this->generate_documentsrequestURLtrait($order, $orderdetail));
 			$url->query->set('page', $this->pagenbr);
 			$url->query->set('orderby', $this->tablesorter->orderbystring);
 			return $url->getUrl();
 		}
 		
-		// FIXME Remove, and make link at presentation level
-		public function generate_editlink(Order $order) {
-			$bootstrap = new HTMLWriter();
-			/*
-				ORDER LOCK LOGIC
-				-------------------------------------
-				N = PICKED, INVOICED, ETC CANNOT EDIT
-				Y = CAN EDIT
-				L = YOU'VE LOCKED THIS ORDER
-			*/
-
-			if ($order->can_edit()) {
-				$icon = $bootstrap->icon('fa fa-pencil');
-				$title = "Edit this Order";
-			} elseif ($order->is_lockedbyuser()) {
-				if (DplusWire::wire('user')->hasorderlocked) {
-					if ($order->ordernumber == DplusWire::wire('user')->lockedordn) {
-						$icon = $bootstrap->icon('fa fa-wrench');
-						$title = "Edit this Order";
-					} else {
-						$icon = $bootstrap->icon('material-icons md-36', '&#xE897;');
-						$title = "You have this order locked, but you can still view it";
-					}
-				} else {
-					$icon = $bootstrap->icon('material-icons md-36', '&#xE897;');
-					$title = "You have this order locked, but you can still view it";
-				}
-			} else {
-				$icon = $bootstrap->icon('fa fa-eye');
-				$title = "Open in read-only mode";
-			}
-			$url = new Url($this->generate_editurl($order));
-
-			if ($order->can_edit() || $order->is_lockedbyuser()) {
-				$url->query->set('edit', 'edit');
-			}
-			$href = $url->getUrl();
-			return $bootstrap->a("href=$href|class=edit-order h3|title=$title", $icon);
-		}
 		
 		// FIXME Remove, and make link at presentation level
 		public function generate_viewlinkeduseractionslink(Order $order) {

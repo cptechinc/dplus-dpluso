@@ -157,9 +157,8 @@
 			OrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-		// TODO rename for URL()
-		public function generate_documentsrequesturl(Order $order, OrderDetail $orderdetail = null) {
-			$url = new Url(parent::generate_documentsrequesturl($order, $orderdetail));
+		public function generate_documentsrequestURL(Order $order, OrderDetail $orderdetail = null) {
+			$url = new Url(parent::generate_documentsrequestURL($order, $orderdetail));
 			$url->query->set('custID', $this->custID);
 			return $url->getUrl();
 		}

@@ -52,24 +52,13 @@
 		}
 
 		/**
-		 * Is not implemented yet
-		 * // FIXME Remove, and make link at presentation level
-		 * @param  Order $cart   CartQuote
-		 * @param  mixed $detail CartDetail
-		 * @return void          Isn't implemented yet
-		 */
-		public function generate_loaddocumentslink(Order $cart, OrderDetail $detail = null) {
-			// TODO
-		}
-
-		/**
 		 * // TODO rename for URL()
 		 * Is not implemented yet
 		 * @param  Order $cart   CartQuote
 		 * @param  mixed $detail CartDetail
 		 * @return void          Isn't implemented yet
 		 */
-		public function generate_documentsrequesturl(Order $cart, OrderDetail $detail = null) {
+		public function generate_documentsrequestURL(Order $cart, OrderDetail $detail = null) {
 			// TODO
 		}
 

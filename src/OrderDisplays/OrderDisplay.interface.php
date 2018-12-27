@@ -25,7 +25,6 @@
 		public function generate_customershiptoURL(Order $order);
 		
 		/**
-		 * // TODO rename for URL()
 		 * Returns URL to request Dplus Notes
 		 * @param  Order  $order   SalesOrder | Quote
 		 * @param  string $linenbr Line Number
@@ -34,39 +33,20 @@
 		public function generate_dplusnotesrequestURL(Order $order, $linenbr);
 		
 		/**
-		 * // FIXME Remove, and make link at presentation level
-		 * Returns HTML link that loads documents for Order
-		 * @param  Order       $order  SalesOrder | Quote
-		 * @param  OrderDetail         $detail Detail to load documents for SalesOrderDetail | QuoteDetail
-		 * @return string              HTML link to view documents
-		 * @uses
-		 */
-		public function generate_loaddocumentslink(Order $order, OrderDetail $detail = null);
-		
-		/**
-		 * // TODO rename for URL()
 		 * Returns URL to request Order Documents
 		 * @param  Order        $order  Order
 		 * @param  OrderDetail  $detail Detail to load documents for
 		 * @return string               Request Order Documents URL
 		 */
-		public function generate_documentsrequesturl(Order $order, OrderDetail $detail = null);
+		public function generate_documentsrequestURL(Order $order, OrderDetail $detail = null);
+		
 		
 		/**
-		 * // FIXME Remove, and make link at presentation level
-		 * Returns HTML link to edit order page
-		 * @param  Order  $order SalesOrder | Quote
-		 * @return string        HTML link to edit order page
-		 */
-		public function generate_editlink(Order $order);
-		
-		/**
-		 * // TODO rename for URL()
 		 * Returns URL to edit order page
 		 * @param  Order  $order SalesOrder | Quote
 		 * @return string        URL to edit order page
 		 */
-		public function generate_editurl(Order $order);
+		public function generate_editURL(Order $order);
 		
 		/**
 		 * // FIXME Remove, and make link at presentation level

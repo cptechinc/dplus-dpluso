@@ -229,9 +229,8 @@
 			OrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-		// TODO rename for URL()
-		public function generate_documentsrequesturl(Order $order, OrderDetail $orderdetail = null) {
-			$url = new Url($this->generate_documentsrequesturltrait($order, $orderdetail));
+		public function generate_documentsrequestURL(Order $order, OrderDetail $orderdetail = null) {
+			$url = new Url($this->generate_documentsrequestURLtrait($order, $orderdetail));
 			$url->query->set('page', $this->pagenbr);
 			$url->query->set('orderby', $this->tablesorter->orderbystring);
 			$url->query->set('type', 'history');
