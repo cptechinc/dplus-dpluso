@@ -183,7 +183,7 @@
 		}
 		
 		
-		public function generate_loaddetailsURL(Order $quote) {
+		public function generate_request_detailsURL(Order $quote) {
 			$url = new Url($this->generate_loaddetailsURLtrait($quote));
 			$url->query->set('page', $this->pagenbr);
 			$url->query->set('orderby', $this->tablesorter->orderbystring);
@@ -197,24 +197,15 @@
 			return $url->getUrl();
 		}
 
-		public function generate_documentsrequestURL(Order $quote, OrderDetail $quotedetail = null) {
-			$url = new Url($this->generate_documentsrequestURLtrait($quote, $quotedetail));
+		public function generate_request_dplusnotesURL(Order $quote, $linenbr = 0) {
+			$url = new Url($this->generate_request_dplusnotesURLtrait($quote, $linenbr));
 			$url->query->set('page', $this->pagenbr);
 			$url->query->set('orderby', $this->tablesorter->orderbystring);
 			return $url->getUrl();
 		}
-
-		public function generate_viewlinkeduseractionslink(Order $quote) {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_viewlinkeduseractionsurl($quote);
-			$icon = $bootstrap->span('class=h3', $bootstrap->icon('fa fa-check-square-o'));
-			return $bootstrap->a("href=$href|class=load-into-modal|data-modal=$this->modal", $icon." View Associated Actions");
-		}
-
-		public function generate_detailvieweditlink(Order $quote, OrderDetail $detail) {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_detailviewediturl($quote, $detail);
-			return $bootstrap->a("href=$href|class=update-line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$quote->custid|aria-label=View Detail Line", $detail->itemid);
+		
+		public function generate_request_documentsURL(Order $quote, OrderDetail $quotedetail = null) {
+			return '';
 		}
 
 		public function generate_lastloadeddescription() {

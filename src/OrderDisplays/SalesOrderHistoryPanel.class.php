@@ -229,7 +229,7 @@
 			OrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-		public function generate_documentsrequestURL(Order $order, OrderDetail $orderdetail = null) {
+		public function generate_request_documentsURL(Order $order, OrderDetail $orderdetail = null) {
 			$url = new Url($this->generate_documentsrequestURLtrait($order, $orderdetail));
 			$url->query->set('page', $this->pagenbr);
 			$url->query->set('orderby', $this->tablesorter->orderbystring);

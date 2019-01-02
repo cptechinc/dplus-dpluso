@@ -53,20 +53,16 @@
 			OrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-		public function generate_documentsrequestURL(Order $quote, OrderDetail $quotedetail = null) {
+		public function generate_request_documentsURL(Order $quote, OrderDetail $quotedetail = null) {
 			return $this->generate_documentsrequestURLtrait($quote, $quotedetail);
 		}
 		
-		public function generate_loaddetailsURL(Order $quote) {
-			$url = new Url($this->generate_loaddetailsURLtrait($quote));
-			return $url->getUrl();
+		public function generate_request_dplusnotesURL(Order $quote, $linenbr = 0) {
+			return $this->generate_request_dplusnotesURLtrait($quote, $linenbr);
 		}
 		
-		// FIXME Remove, and make link at presentation level
-		public function generate_detailvieweditlink(Order $quote, OrderDetail $detail) {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_detailviewediturl($quote, $detail);
-			$icon = $bootstrap->span('class=h3', $bootstrap->icon('fa fa-eye'));
-			return $bootstrap->a("href=$href|class=update-line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$quote->custid|aria-label=View Detail Line", $icon);
+		public function generate_request_detailsURL(Order $quote) {
+			$url = new Url($this->generate_loaddetailsURLtrait($quote));
+			return $url->getUrl();
 		}
 	}

@@ -27,28 +27,6 @@
 		/* =============================================================
 			Class Functions
 		============================================================ */
-		/**
-		 * Returns HTML link to send Quote to Order
-		 * @param  Order  $quote Quote
-		 * @return string        HTML link to send Quote to Order
-		 */
-		public function generate_sendtoorderlink(Order $quote) {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_sendtoorderurl($quote);
-			$icon = $bootstrap->icon('fa fa-paper-plane-o');
-			return $bootstrap->a("href=$href|class=btn btn-block btn-default", "$icon Send To Order");
-		}
-
-		/**
-		 * Returns URL to send Quote to Order
-		 * @param  Order  $quote Quote
-		 * @return string        HTML link to send Quote to Order
-		 */
-		public function generate_sendtoorderurl(Order $quote) {
-			$url = new Url(DplusWire::wire('config')->pages->orderquote);
-			$url->query->set('qnbr', $quote->quotnbr);
-			return $url->getUrl();
-		}
 
 		/**
 		 * Returns URL to unlock Quote
@@ -67,7 +45,7 @@
 		 * @param  Order  $quote Quote
 		 * @return string        URL for Quote confirmation page
 		 */
-		public function generate_confirmationurl(Order $quote) {
+		public function generate_confirmationURL(Order $quote) {
 			$url = new Url(DplusWire::wire('config')->pages->confirmquote);
 			$url->query->set('qnbr', $quote->quotnbr);
 			return $url->getUrl();
@@ -83,37 +61,6 @@
 			$href = $this->generate_unlockurl($quote);
 			$icon = $bootstrap->icon('fa fa-times');
 			return $bootstrap->a("href=$href|class=btn btn-block btn-warning", $icon. " Discard Changes, Unlock Quote");
-		}
-
-		/**
-		 * Returns HTML button to save and unlock Quote
-		 * @param  Order  $quote Quote
-		 * @return string        HTML button to save and unlock Quote
-		 */
-		public function generate_saveunlockbutton(Order $quote) {
-			$bootstrap = new HTMLWriter();
-			$icon = $bootstrap->icon('fa fa-unlock');
-			return $bootstrap->button("class=btn btn-block btn-emerald save-unlock-quotehead|data-form=#quotehead-form", "$icon Save and Exit");
-		}
-
-		/**
-		 * Returns HTML link to unlock quote and return to confirmation page
-		 * @param  Order  $quote Quote
-		 * @return string        HTML link to unlock quote and return to confirmation page
-		 */
-		public function generate_confirmationlink(Order $quote) {
-			$href = $this->generate_confirmationurl($quote);
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_unlockurl($quote);
-			$icon = $bootstrap->icon('fa fa-unlock');
-			return $bootstrap->a("href=$href|class=btn btn-block btn-success", $icon. " Finished with quote");
-		}
-
-		public function generate_detailvieweditlink(Order $quote, OrderDetail $detail) {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_detailviewediturl($quote, $detail);
-			$icon = $bootstrap->button('class=btn btn-sm btn-warning', $bootstrap->icon('fa fa-pencil'));
-			return $bootstrap->a("href=$href|class=update-line|title=Edit Item|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$quote->custid|aria-label=View Detail Line", $icon);
 		}
 
 		/**

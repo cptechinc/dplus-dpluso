@@ -21,7 +21,7 @@
 		 * @param  string $linenbr Line Number
 		 * @return string          URL to request Dplus Notes
 		 */
-		public function generate_dplusnotesrequestURL(Order $order, $linenbr) {
+		public function generate_request_dplusnotesURL(Order $order, $linenbr) {
 			$url = new Url($this->pageurl->getUrl());
 			$url->path = DplusWire::wire('config')->pages->notes."redir/";
 			$url->query->setData(array('action' => 'get-order-notes', 'ordn' => $order->ordernumber, 'linenbr' => $linenbr));
@@ -67,23 +67,11 @@
 		}
 
 		/**
-		 * Returns HTML link to view print page for Sales Order
-		 * @param  Order  $order SalesOrder
-		 * @return string        HTML link to view print page
-		 */
-		public function generate_viewprintlink(Order $order) {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_viewprinturl($order);
-			$icon = $bootstrap->span('class=h3', $bootstrap->icon('fa fa-print'));
-			return $bootstrap->a("href=$href|target=_blank", $icon." View Printable Order");
-		}
-
-		/**
 		 * Returns URL to view print page for Sales Order
 		 * @param  Order  $order SalesOrder
 		 * @return string        URL to view print page
 		 */
-		public function generate_viewprinturl(Order $order) {
+		public function generate_printURL(Order $order) {
 			$url = $this->generate_ordersredirurl();
 			$url->query->setData(array('action' => 'get-order-print','ordn' => $order->ordernumber));
 			return $url->getUrl();
@@ -91,11 +79,11 @@
 
 		/**
 		 * Returns URL to view print page for order
-		 * NOTE USED by PDFMaker
+		 * NOTE USED for PDFMaker
 		 * @param  Order  $order SalesOrder
 		 * @return string        URL to view print page
 		 */
-		public function generate_viewprintpageurl(Order $order) {
+		public function generate_printpageURL(Order $order) {
 			$url = new Url($this->pageurl->getUrl());
 			$url->path = DplusWire::wire('config')->pages->print."order/";
 			$url->query->set('ordn', $order->ordernumber);
@@ -108,7 +96,7 @@
 		 * @param  Order  $order SalesOrder
 		 * @return string        URL to email Order
 		 */
-		public function generate_sendemailurl(Order $order) {
+		public function generate_sendemailURL(Order $order) {
 			$url = new Url(DplusWire::wire('config')->pages->email."sales-order/");
 			$url->query->set('ordn', $order->ordernumber);
 			$url->query->set('referenceID', $this->sessionID);
@@ -116,40 +104,15 @@
 		}
 
 		/**
-		 * Returns HTML Link to view linked user actions
-		 * @param  Order  $order SalesOrder | Quote
-		 * @return string        HTML Link to view linked user actions
-		 */
-		public function generate_viewlinkeduseractionslink(Order $order) {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_viewlinkeduseractionsurl($order);
-			$icon = $bootstrap->span('class=h3', $bootstrap->icon('fa fa-check-square-o'));
-			return $bootstrap->a("href=$href|target=_blank", $icon." View Associated Actions");
-		}
-
-		/**
 		 * Returns URL to load linked UserActions
 		 * @param  Order  $order SalesOrder | Quote
 		 * @return string        URL to load linked UserActions
 		 */
-		public function generate_viewlinkeduseractionsurl(Order $order) {
+		public function generate_linkeduseractionsURL(Order $order) {
 			$url = new Url($this->pageurl->getUrl());
 			$url->path = DplusWire::wire('config')->pages->useractions;
 			$url->query->setData(array('ordn' => $order->ordernumber));
 			return $url->getUrl();
-		}
-
-		/**
-		 * Returns HTML link to view SalesOrderDetail
-		 * @param  Order       $order  SalesOrder
-		 * @param  OrderDetail $detail SalesOrderDetail
-		 * @return string              HTML Link
-		 */
-		public function generate_viewdetaillink(Order $order, OrderDetail $detail) {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_viewdetailurl($order, $detail);
-			$icon = $bootstrap->icon('fa fa-info-circle');
-			return $bootstrap->a("href=$href|class=h3 view-item-details|data-itemid=$detail->itemid|data-kit=$detail->kititemflag|data-modal=#ajax-modal", $icon);
 		}
 
 		/**
@@ -158,7 +121,7 @@
 		 * @param  OrderDetail $detail SalesOrderDetail
 		 * @return string              URL view detail
 		 */
-		public function generate_viewdetailurl(Order $order, OrderDetail $detail) {
+		public function generate_viewdetailURL(Order $order, OrderDetail $detail) {
 			$url = new Url($this->pageurl->getUrl());
 			$url->path = DplusWire::wire('config')->pages->ajax."load/view-detail/order/";
 			$url->query->setData(array('ordn' => $order->ordernumber, 'line' => $detail->linenbr));
@@ -184,7 +147,7 @@
 		 * @param  Order  $order SalesOrder
 		 * @return string        URL to load detail lines for Sales Order
 		 */
-		public function generate_loaddetailsURL(Order $order) {
+		public function generate_request_detailsURL(Order $order) {
 			return $this->generate_loaddetailsURLtrait($order);
 		}
 
@@ -196,7 +159,7 @@
 		 * @return string              URL to load the edit/view detail URL
 		 * @uses $order->can_edit()
 		 */
-		public function generate_detailviewediturl(Order $order, OrderDetail $detail) {
+		public function generate_vieweditdetailURL(Order $order, OrderDetail $detail) {
 			$url = new Url(DplusWire::wire('config')->pages->ajaxload.'edit-detail/order/');
 			$url->query->setData(array('ordn' => $order->ordernumber, 'line' => $detail->linenbr));
 			return $url->getUrl();

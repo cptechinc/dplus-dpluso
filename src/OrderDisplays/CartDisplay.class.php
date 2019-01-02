@@ -44,7 +44,7 @@
 		 * @return string          URL to load Dplus Notes
 		 * @uses
 		 */
-		public function generate_dplusnotesrequestURL(Order $cart, $linenbr) {
+		public function generate_request_dplusnotesURL(Order $cart, $linenbr) {
 			$url = new Url($this->pageurl->getUrl());
 			$url->path = DplusWire::wire('config')->pages->notes."redir/";
 			$url->query->setData(array('action' => 'get-cart-notes', 'linenbr' => $linenbr));
@@ -52,38 +52,22 @@
 		}
 
 		/**
-		 * // TODO rename for URL()
 		 * Is not implemented yet
 		 * @param  Order $cart   CartQuote
 		 * @param  mixed $detail CartDetail
 		 * @return void          Isn't implemented yet
 		 */
-		public function generate_documentsrequestURL(Order $cart, OrderDetail $detail = null) {
+		public function generate_request_documentsURL(Order $cart, OrderDetail $detail = null) {
 			// TODO
 		}
 
 		/**
-		 * // FIXME Remove, and make link at presentation level
-		 * Returns HTML link to edit line
-		 * @param  Order       $cart   CartQuote
-		 * @param  OrderDetail $detail CartDetail
-		 * @return string              HTML Link
-		 */
-		public function generate_detailvieweditlink(Order $cart, OrderDetail $detail) {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_detailviewediturl($cart, $detail);
-			$icon = $bootstrap->button('class=btn btn-sm btn-warning detail-line-icon', $bootstrap->icon('fa fa-pencil'));
-			return $bootstrap->a("href=$href|class=update-line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$cart->custid|aria-label=View Detail Line", $icon);
-		}
-
-		/**
-		 * // TODO rename for URL()
 		 * Returns URL to load edit detail
 		 * @param  Order       $cart   CartQuote
 		 * @param  OrderDetail $detail CartDetail
 		 * @return string              URL to load edit detail
 		 */
-		public function generate_detailviewediturl(Order $cart, OrderDetail $detail) {
+		public function generate_vieweditdetailURL(Order $cart, OrderDetail $detail) {
 			$url = new Url($this->pageurl->getUrl());
 			$url->path = DplusWire::wire('config')->pages->ajax."load/edit-detail/cart/";
 			$url->query->setData(array('line' => $detail->linenbr));

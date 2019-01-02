@@ -60,7 +60,7 @@
 		 * @param  Order  $order SalesOrder | Quote
 		 * @return string        URL to request order details
 		 */
-		public function generate_loaddetailsURL(Order $order);
+		public function generate_request_detailsURL(Order $order);
 		
 		/**
 		 * Returns description of the last time this was loaded from Dplus

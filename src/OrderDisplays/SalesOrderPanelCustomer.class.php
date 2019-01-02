@@ -70,8 +70,8 @@
 			return $url->getUrl();
 		}
 		
-		public function generate_loaddetailsURL(Order $order) {
-			$url = new Url(parent::generate_loaddetailsURL($order));
+		public function generate_request_detailsURL(Order $order) {
+			$url = new Url(parent::generate_request_detailsURL($order));
 			$url->query->set('custID', $order->custid);
 			return $url->getUrl();
 		}
@@ -157,8 +157,8 @@
 			OrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-		public function generate_documentsrequestURL(Order $order, OrderDetail $orderdetail = null) {
-			$url = new Url(parent::generate_documentsrequestURL($order, $orderdetail));
+		public function generate_request_documentsURL(Order $order, OrderDetail $orderdetail = null) {
+			$url = new Url(parent::generate_request_documentsURL($order, $orderdetail));
 			$url->query->set('custID', $this->custID);
 			return $url->getUrl();
 		}

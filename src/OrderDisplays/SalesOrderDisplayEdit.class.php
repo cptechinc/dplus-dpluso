@@ -90,7 +90,7 @@
 		 * @param  Order  $order Sales Order
 		 * @return string        Sales Order confirmation page URL
 		 */
-		public function generate_confirmationurl(Order $order) {
+		public function generate_confirmationURL(Order $order) {
 			$url = new Url(DplusWire::wire('config')->pages->confirmorder);
 			$url->query->set('ordn', $order->ordernumber);
 			return $url->getUrl();
@@ -108,46 +108,7 @@
 			return $bootstrap->a("href=$href|class=btn btn-block btn-warning", $icon. " Discard Changes, Unlock Order");
 		}
 		
-		/**
-		 * Returns HTML Link to save and unlock
-		 * // FIXME Remove, and make link at presentation level
-		 * @param  Order  $order Sales Order
-		 * @return string        HTML Link to discard changes
-		 */
-		public function generate_saveunlocklink(Order $order) {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_unlockurl($order);
-			$icon = $bootstrap->icon('fa fa-unlock');
-			return $bootstrap->a("href=$href|class=btn btn-block btn-emerald save-unlock-order|data-form=#orderhead-form", $icon. " Save and Exit");
-		}
-		/**
-		 * 
-		 * Returns HTML Link to order confirmation page
-		 * // FIXME Remove, and make link at presentation level
-		 * @param  Order  $order Sales Order
-		 * @return string        HTML Link to discard changes
-		 */
-		public function generate_confirmationlink(Order $order) {
-			$href = $this->generate_confirmationurl($order);
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_unlockurl($order);
-			$icon = $bootstrap->icon('fa fa-arrow-right');
-			return $bootstrap->a("href=$href|class=btn btn-block btn-success", $icon. " Finished with Order");
-		}
-
-		// FIXME Remove, and make link at presentation level
-		public function generate_detailvieweditlink(Order $order, OrderDetail $detail) {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_detailviewediturl($order, $detail);
-			if ($order->can_edit()) {
-				$icon = $bootstrap->icon('fa fa-pencil');
-				return $bootstrap->a("href=$href|class=btn btn-sm btn-warning update-line|title=Edit Line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$order->custid|aria-label=View Detail Line", $icon);
-			} else {
-				$icon = $bootstrap->icon('fa fa-eye');
-				return $bootstrap->a("href=$href|class=update-line|title=Edit Line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$order->custid|aria-label=View Detail Line", $icon);
-			}
-		}
-
+		
 		/**
 		 * Returns URL to delete detail line
 		 * // TODO rename for URL()

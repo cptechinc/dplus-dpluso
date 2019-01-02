@@ -162,7 +162,7 @@
 		}
 		
 		// TODO rename for URL()
-		public function generate_loaddetailsURL(Order $order) {
+		public function generate_request_detailsURL(Order $order) {
 			$pageurl = new Url($this->pageurl->getUrl());
 			$pageurl->query->set('ordn', $order->ordernumber);
 			$url = new Url($this->generate_loaddetailsURLtrait($order));
@@ -262,26 +262,10 @@
 			OrderDisplayInterface Functions
 			URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-		public function generate_documentsrequestURL(Order $order, OrderDetail $orderdetail = null) {
+		public function generate_request_documentsURL(Order $order, OrderDetail $orderdetail = null) {
 			$url = new Url($this->generate_documentsrequestURLtrait($order, $orderdetail));
 			$url->query->set('page', $this->pagenbr);
 			$url->query->set('orderby', $this->tablesorter->orderbystring);
 			return $url->getUrl();
-		}
-		
-		
-		// FIXME Remove, and make link at presentation level
-		public function generate_viewlinkeduseractionslink(Order $order) {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_viewlinkeduseractionsurl($order);
-			$icon = $bootstrap->span('class=h3', $bootstrap->icon('fa fa-check-square-o'));
-			return $bootstrap->a("href=$href|class=load-into-modal|data-modal=$this->modal", $icon." View Associated Actions");
-		}
-		
-		// FIXME Remove, and make link at presentation level
-		public function generate_detailvieweditlink(Order $order, OrderDetail $detail) {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_detailviewediturl($order, $detail);
-			return $bootstrap->a("href=$href|class=update-line|data-kit=$detail->kititemflag|data-itemid=$detail->itemid|data-custid=$order->custid|aria-label=View Detail Line", $detail->itemid);
 		}
 	}

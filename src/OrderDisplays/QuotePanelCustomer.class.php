@@ -70,8 +70,8 @@
 			return $url->getUrl();
 		}
 		
-		public function generate_loaddetailsURL(Order $quote) {
-			$url = new Url(parent::generate_loaddetailsURL($quote));
+		public function generate_request_detailsURL(Order $quote) {
+			$url = new Url(parent::generate_request_detailsURL($quote));
 			$url->query->set('custID', $quote->custid);
 			if (!empty($this->shipID)) {
 				$url->query->set('shipID', $this->shipID);
@@ -109,8 +109,8 @@
 			URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
 		
-		public function generate_documentsrequestURL(Order $quote, OrderDetail $quotedetail = null) {
-			$url = new Url(parent::generate_documentsrequestURL($quote, $quotedetail));
+		public function generate_request_documentsURL(Order $quote, OrderDetail $quotedetail = null) {
+			$url = new Url(parent::generate_request_documentsURL($quote, $quotedetail));
 			$url->query->set('custID', $this->custID);
 			return $url->getUrl();
 		}
