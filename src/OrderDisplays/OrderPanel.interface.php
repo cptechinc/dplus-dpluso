@@ -30,11 +30,10 @@
 		public function generate_iconlegend();
 		
 		/**
-		 * // TODO rename for URL()
 		 * Returns URL to request the orders to be loaded
 		 * @return string URLto request the orders to be loaded
 		 */
-		public function generate_loadurl();
+		public function generate_loadURL();
 		
 		/**
 		 * Returns URL to remove the sort on the panel

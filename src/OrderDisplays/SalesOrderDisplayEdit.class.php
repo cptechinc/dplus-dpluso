@@ -3,7 +3,6 @@
 	
 	use Purl\Url;
 	use Dplus\ProcessWire\DplusWire;
-	use Dplus\Content\HTMLWriter;
 
 	/**
 	 * Use Statements for Model Classes which are non-namespaced
@@ -78,8 +77,8 @@
 		 * @param  Order  $order Sales Order
 		 * @return string        Unlock Sales Order URL
 		 */
-		public function generate_unlockurl(Order $order) {
-			$url = $this->generate_ordersredirurl();
+		public function generate_unlockURL(Order $order) {
+			$url = $this->generate_ordersredirURL();
 			$url->query->set('action', 'unlock-order');
 			$url->query->set('ordn', $order->ordernumber);
 			return $url->getUrl();
@@ -97,45 +96,15 @@
 		}
 		
 		/**
-		 * Returns HTML Link to discard changes
-		 * @param  Order  $order Sales Order
-		 * @return string        HTML Link to discard changes
-		 */
-		public function generate_discardchangeslink(Order $order) {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_unlockurl($order);
-			$icon = $bootstrap->icon('fa fa-times');
-			return $bootstrap->a("href=$href|class=btn btn-block btn-warning", $icon. " Discard Changes, Unlock Order");
-		}
-		
-		
-		/**
 		 * Returns URL to delete detail line
-		 * // TODO rename for URL()
 		 * @param  Order       $order  Order
 		 * @param  OrderDetail $detail OrderDetail
 		 * @return string              HTML Link to delete detail line
 		 */
-		public function generate_deletedetailurl(Order $order, OrderDetail $detail) {
-			$url = $this->generate_ordersredirurl();
+		public function generate_removedetailURL(Order $order, OrderDetail $detail) {
+			$url = $this->generate_ordersredirURL();
 			$url->query->setData(array('action' => 'remove-line-get', 'ordn' => $order->ordernumber, 'linenbr' => $detail->linenbr, 'page' => $this->pageurl->getUrl()));
 			return $url->getUrl();
-		}
-
-		/**
-		 * Returns HTML Link to delete detail line
-		 * // TODO REMOVE
-		 * @param  Order       $order  Order
-		 * @param  OrderDetail $detail OrderDetail
-		 * @return string              HTML Link to delete detail line
-		 */
-		public function generate_deletedetaillink(Order $order, OrderDetail $detail) {
-			$bootstrap = new HTMLWriter();
-			$icon = $bootstrap->icon('fa fa-trash') . $bootstrap->span('class=sr-only', 'Delete Line');
-			$url = $this->generate_ordersredirurl();
-			$url->query->setData(array('action' => 'remove-line-get', 'ordn' => $order->ordernumber, 'linenbr' => $detail->linenbr, 'page' => $this->pageurl->getUrl()));
-			$href = $url->getUrl();
-			return $bootstrap->a("href=$href|class=btn btn-sm btn-danger|title=Delete Item", $icon);
 		}
 
 		/* =============================================================

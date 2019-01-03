@@ -13,7 +13,11 @@
 	use Order, OrderDetail;
 
 	class SalesOrderPanel extends OrderPanel implements OrderDisplayInterface, SalesOrderDisplayInterface, OrderPanelInterface, SalesOrderPanelInterface {
-		use SalesOrderDisplayTraits;
+		use SalesOrderDisplayTraits {
+			SalesOrderDisplayTraits::generate_documentsrequestURL as trait_generate_documentsrequestURL;
+			SalesOrderDisplayTraits::generate_request_detailsURL as trait_generate_request_detailsURL;
+			SalesOrderDisplayTraits::generate_request_trackingURL as trait_generate_request_trackingURL;
+		}
 
 		/**
 		 * Array of SalesOrders
@@ -123,7 +127,6 @@
 			OrderPanelInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-		// TODO rename for URL()
 		public function setup_pageURL() {
 			$this->pageurl->path = DplusWire::wire('config')->pages->ajax."load/sales-orders/";
 			$this->pageurl->query->remove('display');
@@ -131,8 +134,7 @@
 			$this->paginationinsertafter = 'sales-orders';
 		}
 		
-		// TODO rename for URL()
-		public function generate_loadurl() {
+		public function generate_loadURL() {
 			$url = new Url($this->pageurl);
 			$url->query->remove('filter');
 			foreach (array_keys($this->filterable) as $filtercolumns) {
@@ -161,11 +163,10 @@
 			return $bootstrap->a( $attr, 'Icon Definitions');
 		}
 		
-		// TODO rename for URL()
 		public function generate_request_detailsURL(Order $order) {
 			$pageurl = new Url($this->pageurl->getUrl());
 			$pageurl->query->set('ordn', $order->ordernumber);
-			$url = new Url($this->generate_loaddetailsURLtrait($order));
+			$url = new Url($this->trait_generate_request_detailsURL($order));
 			$url->query->set('page', $pageurl->getUrl());
 			return $url->getUrl();
 		}
@@ -234,25 +235,8 @@
 			SalesOrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-		// FIXME Remove, and make link at presentation level
-		public function generate_loadtrackinglink(Order $order) {
-			$bootstrap = new HTMLWriter();
-			if ($order->has_tracking()) {
-				$href = $this->generate_trackingrequesturl($order);
-				$content = $bootstrap->span("class=sr-only", 'View Tracking');
-				$content .= $bootstrap->icon('fa fa-plane hover');
-				$ajaxdata = $this->generate_ajaxdataforcontento();
-				return $bootstrap->a("href=$href|class=h3 generate-load-link|title=Click to view Tracking|$ajaxdata", $content);
-			} else {
-				$content = $bootstrap->span("class=sr-only", 'No Tracking Information Available');
-				$content .= $bootstrap->icon('fa fa-plane hover');
-				return $bootstrap->a("href=#|class=h3 text-muted|title=No Tracking Info Available", $content);
-			}
-		}
-		
-		// TODO rename for URL()
-		public function generate_trackingrequesturl(Order $order) {
-			$url = new Url($this->generate_trackingrequesturltrait($order));
+		public function generate_request_trackingURL(Order $order) {
+			$url = new Url($this->trait_generate_request_trackingURL($order));
 			$url->query->set('page', $this->pagenbr);
 			$url->query->set('orderby', $this->tablesorter->orderbystring);
 			return $url->getUrl();
@@ -263,7 +247,7 @@
 			URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
 		public function generate_request_documentsURL(Order $order, OrderDetail $orderdetail = null) {
-			$url = new Url($this->generate_documentsrequestURLtrait($order, $orderdetail));
+			$url = new Url($this->trait_generate_request_documentsURL($order, $orderdetail));
 			$url->query->set('page', $this->pagenbr);
 			$url->query->set('orderby', $this->tablesorter->orderbystring);
 			return $url->getUrl();

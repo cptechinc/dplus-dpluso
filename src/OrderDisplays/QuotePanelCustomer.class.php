@@ -60,8 +60,8 @@
 			OrderPanelInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-		public function generate_loadurl() { 
-			$url = new Url(parent::generate_loadurl());
+		public function generate_loadURL() { 
+			$url = new Url(parent::generate_loadURL());
 			$url->query->set('action', 'load-cust-quotes');
 			$url->query->set('custID', $this->custID);
 			if (!empty($this->shipID)) {

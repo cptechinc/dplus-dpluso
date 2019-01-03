@@ -3,7 +3,6 @@
 	
 	use Purl\Url;
 	use Dplus\ProcessWire\DplusWire;
-	use Dplus\Content\HTMLWriter;
 
 	/**
 	 * Use Statements for Model Classes which are non-namespaced
@@ -25,7 +24,7 @@
 		 * @param  int    $linenbr  Line Number
 		 * @return string           URL to load Dplus Notes
 		 */
-		public function generate_request_dplusnotesURLtrait(Order $quote, $linenbr) {
+		public function generate_request_dplusnotesURL(Order $quote, $linenbr = 0) {
 			$url = new Url($this->pageurl->getUrl());
 			$url->path = DplusWire::wire('config')->pages->notes."redir/";
 			$url->query->setData(array('action' => 'get-quote-notes', 'qnbr' => $quote->quotnbr, 'linenbr' => $linenbr));
@@ -33,14 +32,13 @@
 		}
 
 		/**
-		 * // TODO rename for URL()
 		 * Sets up a common url function for getting documents request url, classes that have this trait
 		 * will define generate_documentsrequestURL(Order $quote)
 		 * Not used as of 10/25/2017
 		 * @param  Order  $quote [description]
 		 * @return string		URL to the order redirect to make the get order documents request
 		 */
-		public function generate_documentsrequestURLtrait(Order $quote, OrderDetail $quotedetail = null) {
+		public function generate_request_documentsURL(Order $quote, OrderDetail $quotedetail = null) {
 			return '';
 		}
 
@@ -50,7 +48,7 @@
 		 * @return string        URL to edit quote
 		 */
 		public function generate_editURL(Order $quote) {
-			$url = $this->generate_quotesredirurl();
+			$url = $this->generate_quotesredirURL();
 			$url->query->setData(array('action' => 'edit-quote', 'qnbr' => $quote->quotnbr));
 			return $url->getUrl();
 		}
@@ -118,7 +116,6 @@
 			return $url->getUrl();
 		}
 
-
 		/**
 		 * Returns the URL to view the detail
 		 * @param  Order       $quote  For quotenbr
@@ -138,14 +135,13 @@
 		 * @param  Order  $quote Quote
 		 * @return string
 		 */
-		public function generate_loaddetailsURLtrait(Order $quote) {
-			$url = $this->generate_quotesredirurl();
+		public function generate_request_detailsURL(Order $quote) {
+			$url = $this->generate_quotesredirURL();
 			$url->query->setData(array('action' => 'load-quote-details', 'qnbr' => $quote->quotnbr));
 			return $url->getUrl();
 		}
 
 		/**
-		 * // TODO rename for URL()
 		 * Returns the URL to view / edit the detail
 		 * @param  Order       $quote  for Quote Number
 		 * @param  OrderDetail $detail for detail line Number
@@ -171,11 +167,10 @@
 			URL Helper Functions
 		============================================================ */
 		/**
-		 * // TODO rename for URL()
 		 * Makes the URL to the orders redirect page,
 		 * @return Url URL to REDIRECT page
 		 */
-		public function generate_quotesredirurl() {
+		public function generate_quotesredirURL() {
 			$url = new Url(DplusWire::wire('config')->pages->quotes);
 			$url->path = DplusWire::wire('config')->pages->quotes."redir/";
 			return $url;

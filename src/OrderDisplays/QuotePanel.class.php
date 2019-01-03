@@ -15,7 +15,10 @@
 	 * Class for dealing with list of quotes
 	 */
 	class QuotePanel extends OrderPanel implements OrderDisplayInterface, QuoteDisplayInterface, OrderPanelInterface, QuotePanelInterface {
-		use QuoteDisplayTraits;
+		use QuoteDisplayTraits {
+			QuoteDisplayTraits::generate_request_dplusnotesURL as trait_generate_request_dplusnotesURL;
+			QuoteDisplayTraits::generate_request_detailsURL as trait_generate_request_detailsURL;
+		}
 
 		/**
 		 * Array of Quotes
@@ -174,17 +177,15 @@
 			return $bootstrap->a($attr, 'Icon Definitions');
 		}
 		
-		// TODO rename for URL()
-		public function generate_loadurl() {
+		public function generate_loadURL() {
 			$url = new Url($this->pageurl->getUrl());
 			$url->path = DplusWire::wire('config')->pages->quotes.'redir/';
 			$url->query->setData(array('action' => 'load-quotes'));
 			return $url->getUrl();
 		}
 		
-		
 		public function generate_request_detailsURL(Order $quote) {
-			$url = new Url($this->generate_loaddetailsURLtrait($quote));
+			$url = new Url($this->trait_generate_request_detailsURL($quote));
 			$url->query->set('page', $this->pagenbr);
 			$url->query->set('orderby', $this->tablesorter->orderbystring);
 
@@ -198,7 +199,7 @@
 		}
 
 		public function generate_request_dplusnotesURL(Order $quote, $linenbr = 0) {
-			$url = new Url($this->generate_request_dplusnotesURLtrait($quote, $linenbr));
+			$url = new Url($this->trait_generate_request_dplusnotesURL($quote, $linenbr));
 			$url->query->set('page', $this->pagenbr);
 			$url->query->set('orderby', $this->tablesorter->orderbystring);
 			return $url->getUrl();

@@ -149,9 +149,8 @@
 			SalesOrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-		// TODO rename for URL()
-		public function generate_trackingrequesturl(Order $order) {
-			$url = new Url(parent::generate_trackingrequesturl($order));
+		public function generate_request_trackingURL(Order $order) {
+			$url = new Url(parent::generate_request_trackingURL($order));
 			$url->query->set('custID', $this->custID);
 			if (!empty($this->shipID)) {
 				$url->query->set('shipID', $this->shipID);

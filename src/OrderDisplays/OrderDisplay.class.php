@@ -3,7 +3,6 @@
 	
 	use Purl\Url;
 	use Dplus\ProcessWire\DplusWire;
-	use Dplus\Content\HTMLWriter;
 	
 	/**
 	 * Use Statements for Model Classes which are non-namespaced
@@ -46,11 +45,6 @@
 			$this->pageurl = new Url($pageurl->getUrl());
 			$this->modal = $modal;
 		}
-		
-		/* =============================================================
-			Helper Functions
-		============================================================ */
-	
 		
 		/* =============================================================
 			OrderDisplay Interface Functions

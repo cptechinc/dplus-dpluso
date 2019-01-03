@@ -143,7 +143,6 @@
 		}
 
 		/**
-		 * // TODO rename for URL()
 		 * Setup the Page URL then add the necessary components in the path and querystring
 		 * @return void
 		 * @uses parent::setup_pageURL()
@@ -209,7 +208,6 @@
 		}
 
 		/**
-		 * // TODO rename for URL()
 		 * Returns the sortby column URL
 		 * @param  string $column column to sortby
 		 * @return string         URL with the column sortby with the correct rule

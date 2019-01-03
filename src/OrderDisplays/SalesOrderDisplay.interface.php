@@ -11,18 +11,11 @@
 	 */
 	interface SalesOrderDisplayInterface {
 		/**
-		 * Returns HTML Link to load tracking for that Sales Orders
-		 * @param  Order  $order Sales Order
-		 * @return string        HTML Link
-		 */
-		public function generate_loadtrackinglink(Order $order);
-		
-		/**
 		 * Returns URL to load tracking for that Sales Orders
 		 * @param  Order  $order Sales Order
-		 * @return string        Sales \Order Tracking Request URL
+		 * @return string        Sales Order Tracking Request URL
 		 */
-		public function generate_trackingrequesturl(Order $order);
+		public function generate_request_trackingURL(Order $order);
 		
 		/**
 		 * Returns Sales \Order Details

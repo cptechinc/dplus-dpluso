@@ -3,7 +3,6 @@
 	
 	use Purl\Url;
 	use Dplus\ProcessWire\DplusWire;
-	use Dplus\Content\HTMLWriter;
 
 	/**
 	 * Use Statements for Model Classes which are non-namespaced
@@ -37,7 +36,6 @@
 		}
 
 		/**
-		 * // TODO rename for URL()
 		 * Returns URL for dplus notes for that Line #
 		 * @param  Order  $cart    CartQuote
 		 * @param  int    $linenbr Line #
@@ -75,14 +73,13 @@
 		}
 
 		/**
-		 * // TODO rename for URL()
 		 * Returns URL to remove detail
 		 * @param  Order       $cart   CartQuote
 		 * @param  OrderDetail $detail CartDetail
 		 * @return string              URL to load edit detail
 		 * @uses
 		 */
-		public function generate_detaildeleteurl(Order $cart, OrderDetail $detail) {
+		public function generate_removedetailURL(Order $cart, OrderDetail $detail) {
 			$url = new Url($this->pageurl->getUrl());
 			$url->path = DplusWire::wire('config')->pages->cart."redir/";
 			$url->query->setData(array('action' => 'remove-line', 'line' => $detail->linenbr));

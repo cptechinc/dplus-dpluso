@@ -1,10 +1,8 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
-
-	use Dplus\Content\HTMLWriter;
-
-	// DEPRECATE
-
+	
+	use Purl\Url;
+	
 	/**
 	 * Use Statements for Model Classes which are non-namespaced
 	 */
@@ -25,7 +23,7 @@
 		 */
 		protected $order;
 
-		public function __construct($sessionID, \Purl\Url $pageurl, $modal, $ordn) {
+		public function __construct($sessionID, Url $pageurl, $modal, $ordn) {
 			parent::__construct($sessionID, $pageurl, $modal);
 			$this->ordn = $ordn;
 		}
@@ -40,21 +38,5 @@
 		 */
 		public function get_order($debug = false) {
 			return SalesOrder::load($this->ordn, $debug);
-		}
-
-		/* =============================================================
-			OrderDisplayInterface Functions
-			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
-		============================================================ */
-		public function generate_request_documentsURL(Order $order, OrderDetail $orderdetail = null) {
-			return $this->generate_documentsrequestURLtrait($order, $orderdetail);
-		}
-
-		/* =============================================================
-			SalesOrderDisplayInterface Functions
-			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
-		============================================================ */
-		public function generate_trackingrequesturl(Order $order) {
-			return $this->generate_trackingrequesturltrait($order);
 		}
 	}

@@ -2,7 +2,6 @@
 	namespace Dplus\Dpluso\OrderDisplays;
 	
 	use Purl\Url;
-	use Dplus\Content\HTMLWriter;
 
 	/**
 	 * Use Statements for Model Classes which are non-namespaced
@@ -47,22 +46,5 @@
 		 */
 		public function get_quote($debug = false) {
 			return get_quotehead($this->sessionID, $this->qnbr, 'Quote', false);
-		}
-
-		/* =============================================================
-			OrderDisplayInterface Functions
-			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
-		============================================================ */
-		public function generate_request_documentsURL(Order $quote, OrderDetail $quotedetail = null) {
-			return $this->generate_documentsrequestURLtrait($quote, $quotedetail);
-		}
-		
-		public function generate_request_dplusnotesURL(Order $quote, $linenbr = 0) {
-			return $this->generate_request_dplusnotesURLtrait($quote, $linenbr);
-		}
-		
-		public function generate_request_detailsURL(Order $quote) {
-			$url = new Url($this->generate_loaddetailsURLtrait($quote));
-			return $url->getUrl();
 		}
 	}

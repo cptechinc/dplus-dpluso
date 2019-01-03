@@ -135,8 +135,7 @@
 			$this->paginationinsertafter = 'sales-history';
 		}
 		
-		// TODO rename for URL()
-		public function generate_loadurl() {
+		public function generate_loadURL() {
 			$url = new Url($this->pageurl);
 			$url->query->remove('filter');
 			foreach (array_keys($this->filterable) as $filtercolumns) {
@@ -216,9 +215,8 @@
 			SalesOrderDisplayInterface Functions
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
-		// TODO rename for URL()
-		public function generate_trackingrequesturl(Order $order) {
-			$url = new Url($this->generate_trackingrequesturltrait($order));
+		public function generate_request_trackingURL(Order $order) {
+			$url = new Url(parent::generate_request_trackingURL($order));
 			$url->query->set('page', $this->pagenbr);
 			$url->query->set('orderby', $this->tablesorter->orderbystring);
 			$url->query->set('type', 'history');
@@ -230,7 +228,7 @@
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
 		public function generate_request_documentsURL(Order $order, OrderDetail $orderdetail = null) {
-			$url = new Url($this->generate_documentsrequestURLtrait($order, $orderdetail));
+			$url = new Url(parent::generate_documentsrequestURL($order, $orderdetail));
 			$url->query->set('page', $this->pagenbr);
 			$url->query->set('orderby', $this->tablesorter->orderbystring);
 			$url->query->set('type', 'history');
