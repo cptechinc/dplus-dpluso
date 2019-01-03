@@ -27,10 +27,10 @@
 		/**
 		 * Returns URL to request Dplus Notes
 		 * @param  Order  $order   SalesOrder | Quote
-		 * @param  string $linenbr Line Number
+		 * @param  int    $linenbr Line Number
 		 * @return string          URL to request Dplus Notes
 		 */
-		public function generate_request_dplusnotesURL(Order $order, $linenbr);
+		public function generate_request_dplusnotesURL(Order $order, $linenbr = 0);
 		
 		/**
 		 * Returns URL to request Order Documents

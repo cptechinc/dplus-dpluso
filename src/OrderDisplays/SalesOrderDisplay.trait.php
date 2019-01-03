@@ -18,10 +18,10 @@
 		/**
 		 * Returns URL to request Dplus Notes
 		 * @param  Order  $order   SalesOrder
-		 * @param  string $linenbr Line Number
+		 * @param  int    $linenbr Line Number
 		 * @return string          URL to request Dplus Notes
 		 */
-		public function generate_request_dplusnotesURL(Order $order, $linenbr) {
+		public function generate_request_dplusnotesURL(Order $order, $linenbr = 0) {
 			$url = new Url($this->pageurl->getUrl());
 			$url->path = DplusWire::wire('config')->pages->notes."redir/";
 			$url->query->setData(array('action' => 'get-order-notes', 'ordn' => $order->ordernumber, 'linenbr' => $linenbr));
