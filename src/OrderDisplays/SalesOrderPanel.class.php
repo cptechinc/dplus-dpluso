@@ -128,10 +128,12 @@
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
 		public function setup_pageURL() {
+			$pagenbr = Paginator::generate_pagenbr($this->pageurl);
+			$this->paginationinsertafter = 'sales-orders';
 			$this->pageurl->path = DplusWire::wire('config')->pages->ajax."load/sales-orders/";
 			$this->pageurl->query->remove('display');
 			$this->pageurl->query->remove('ajax');
-			$this->paginationinsertafter = 'sales-orders';
+			$this->pageurl = Paginator::paginate_purl($this->pageurl, $pagenbr, $this->paginationinsertafter);
 		}
 		
 		public function generate_loadURL() {

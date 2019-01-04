@@ -61,7 +61,7 @@
 			$filters = $this->filters;
 
 			if ($user->is_salesrep()) {
-				unset($this->$filters['salesperson']);
+				unset($filters['salesperson']);
 			}
 			
 			unset($filters['custid']);
