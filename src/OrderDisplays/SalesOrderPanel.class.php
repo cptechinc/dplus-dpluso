@@ -14,7 +14,7 @@
 
 	class SalesOrderPanel extends OrderPanel implements OrderDisplayInterface, SalesOrderDisplayInterface, OrderPanelInterface, SalesOrderPanelInterface {
 		use SalesOrderDisplayTraits {
-			SalesOrderDisplayTraits::trait_generate_request_documentsURL as trait_trait_generate_request_documentsURL;
+			SalesOrderDisplayTraits::generate_request_documentsURL as trait_generate_request_documentsURL;
 			SalesOrderDisplayTraits::generate_request_detailsURL as trait_generate_request_detailsURL;
 			SalesOrderDisplayTraits::generate_request_trackingURL as trait_generate_request_trackingURL;
 		}
