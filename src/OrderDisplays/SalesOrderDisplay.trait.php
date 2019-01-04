@@ -34,7 +34,7 @@
 		 * @param  OrderDetail $orderdetail  SalesOrderDetail
 		 * @return string		             URL to the order redirect to make the get order documents request
 		 */
-		public function generate_documentsrequestURL(Order $order, OrderDetail $orderdetail = null) {
+		public function generate_request_documentsURL(Order $order, OrderDetail $orderdetail = null) {
 			$url = $this->generate_ordersredirURL();
 			$url->query->setData(array('action' => 'get-order-documents', 'ordn' => $order->ordernumber));
 			if ($orderdetail) {

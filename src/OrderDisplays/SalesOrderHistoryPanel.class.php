@@ -228,7 +228,7 @@
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
 		public function generate_request_documentsURL(Order $order, OrderDetail $orderdetail = null) {
-			$url = new Url(parent::generate_documentsrequestURL($order, $orderdetail));
+			$url = new Url(parent::generate_request_documentsURL($order, $orderdetail));
 			$url->query->set('page', $this->pagenbr);
 			$url->query->set('orderby', $this->tablesorter->orderbystring);
 			$url->query->set('type', 'history');
