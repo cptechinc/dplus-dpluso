@@ -6,6 +6,7 @@
 	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Content\HTMLWriter;
 	use Dplus\Content\FormMaker;
+	use Dplus\Content\Paginator;
 
 	/**
 	 * Use Statements for Model Classes which are non-namespaced

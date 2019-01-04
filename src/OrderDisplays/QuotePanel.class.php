@@ -5,6 +5,7 @@
 	use ProcessWire\WireInput;
 	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Content\HTMLWriter;
+	use Dplus\Content\Paginator;
 
 	/**
 	 * Use Statements for Model Classes which are non-namespaced
@@ -71,10 +72,12 @@
 		}
 		
 		public function setup_pageURL() {
+			$pagenbr = Paginator::generate_pagenbr($this->pageurl);
+			$this->paginationinsertafter = 'quotes';
 			$this->pageurl->path = DplusWire::wire('config')->pages->ajax."load/quotes/";
 			$this->pageurl->query->remove('display');
 			$this->pageurl->query->remove('ajax');
-			$this->paginationinsertafter = 'quotes';
+			$this->pageurl = Paginator::paginate_purl($this->pageurl, $pagenbr, $this->paginationinsertafter);
 		}
 
 		/* =============================================================
