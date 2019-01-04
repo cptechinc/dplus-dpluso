@@ -1,12 +1,12 @@
 <?php
 	namespace Dplus\Dpluso\Bookings;
-	
+
 	use Purl\Url;
 	use ProcessWire\WireInput;
 	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Content\HTMLWriter;
 	use Dplus\Base\DplusDateTime;
-	
+
 	/**
 	 * Class for handling of getting and displaying booking records from the database
 	 * @author Paul Gomez paul@cptechinc.com
@@ -396,7 +396,7 @@
 			$href = $this->generate_viewsalesordersbydayurl($date);
 			$icon = $bootstrap->icon('fa fa-arrow-circle-left');
 			$ajaxdata = "data-modal=$this->modal";
-			return $bootstrap->a("href=$href|class=btn btn-primary btn-sm load-into-modal info-screen|$ajaxdata", "$icon Back to Bookings on $date");
+			return $bootstrap->a("href=$href|class=modal-load btn btn-primary btn-sm info-screen|$ajaxdata", "$icon Back to Bookings on $date");
 		}
 
 		/**
