@@ -1,6 +1,6 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
-	
+
 	use Purl\Url;
 	use Dplus\ProcessWire\DplusWire;
 
@@ -50,6 +50,7 @@
 		public function generate_editURL(Order $quote) {
 			$url = $this->generate_quotesredirURL();
 			$url->query->setData(array('action' => 'edit-quote', 'qnbr' => $quote->quotnbr));
+			$url->query->set('quoteorigin', $this->pageurl->getURL());
 			return $url->getUrl();
 		}
 

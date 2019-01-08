@@ -1,15 +1,15 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
-	
+
 	use Purl\Url;
 	use ProcessWire\WireInput;
 	use Dplus\ProcessWire\DplusWire;
-	
+
 	/**
 	 * Use Statements for Model Classes which are non-namespaced
 	 */
 	use Order, OrderDetail;
-	
+
 	class CustomerSalesOrderPanel extends SalesOrderPanel implements OrderPanelCustomerInterface {
 		use OrderPanelCustomerTraits;
 
@@ -68,7 +68,7 @@
 			$url->query->set('custID', $this->custID);
 			return $url->getUrl();
 		}
-		
+
 		public function generate_request_detailsURL(Order $order) {
 			$url = new Url(parent::generate_request_detailsURL($order));
 			$url->query->set('custID', $order->custid);
@@ -83,7 +83,7 @@
 			}
 			return '';
 		}
-		
+
 		/**
 		 * Returns Min Date for $datetype
 		 * @param  string $datetype Date Column
@@ -93,7 +93,7 @@
 		public function get_mindate($datetype = 'quotdate', $debug = false) {
 			return get_minquotedate($this->sessionID, $this->custID,  $this->shiptoID, $datetype, $this->filters, $this->filterable, $debug);
 		}
-		
+
 		/**
 		 * Returns Max Quote Total
 		 * @param  bool   $debug  Run in debug? If so, return SQL Query
@@ -102,7 +102,7 @@
 		public function get_maxquotetotal($debug = false) {
 			return get_maxquotetotal($this->sessionID, $this->custID, $this->shiptoID, $this->filters, $this->filterable, $debug);
 		}
-		
+
 		/**
 		 * Returns Min Quote Total
 		 * @param  bool   $debug  Run in debug? If so, return SQL Query
@@ -115,7 +115,7 @@
 		public function generate_filter(WireInput $input) {
 			parent::generate_filter($input);
 			$this->filters['custid'][] = $this->custID;
-			
+
 			if (!empty($this->shipID)) {
 				$this->filters['shiptoid'][] = $this->shipID;
 			}
@@ -157,6 +157,17 @@
 		============================================================ */
 		public function generate_request_documentsURL(Order $order, OrderDetail $orderdetail = null) {
 			$url = new Url(parent::generate_request_documentsURL($order, $orderdetail));
+			$url->query->set('custID', $this->custID);
+			return $url->getUrl();
+		}
+
+		/**
+		 * Returns URL to Request Edit Order
+		 * @param  Order  $order SalesOrder
+		 * @return string        URL to edit order page
+		 */
+		public function generate_editURL(Order $order) {
+			$url = new URL(parent::generate_editURL($order));
 			$url->query->set('custID', $this->custID);
 			return $url->getUrl();
 		}

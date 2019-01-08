@@ -1,6 +1,6 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
-	
+
 	use Purl\Url;
 	use Dplus\ProcessWire\DplusWire;
 
@@ -8,7 +8,7 @@
 	 * Use Statements for Model Classes which are non-namespaced
 	 */
 	use Order, OrderDetail;
-	
+
 	/**
 	 * Traits that will be shared by Sales Order Displays like Displays or Panels
 	 */
@@ -51,6 +51,7 @@
 		public function generate_editURL(Order $order) {
 			$url = $this->generate_ordersredirURL();
 			$url->query->setData(array('action' => 'get-order-edit','ordn' => $order->ordernumber));
+			$url->query->set('orderorigin', $this->pageurl->getURL());
 			return $url->getUrl();
 		}
 
