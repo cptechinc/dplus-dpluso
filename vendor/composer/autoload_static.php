@@ -60,7 +60,7 @@ class ComposerStaticInitde55f17c88d493db7f2fa2056536094d
         'Customer' => __DIR__ . '/../..' . '/src/Customer/Customer.class.php',
         'Dplus\\Dpluso\\Bookings\\BookingsPanel' => __DIR__ . '/../..' . '/src/Bookings/BookingsPanel.class.php',
         'Dplus\\Dpluso\\Bookings\\CustomerBookingsPanel' => __DIR__ . '/../..' . '/src/Bookings/BookingsPanelCustomer.class.php',
-        'Dplus\\Dpluso\\Configs\\DplusoURLConfig' => __DIR__ . '/../..' . '/src/Configs/DplusoURLs.class.php',
+        'Dplus\\Dpluso\\Configs\\DplusoConfigURLs' => __DIR__ . '/../..' . '/src/Configs/DplusoURLs.class.php',
         'Dplus\\Dpluso\\Configs\\DplusoURLS' => __DIR__ . '/../..' . '/src/Configs/DplusoURLs.class.php',
         'Dplus\\Dpluso\\Configs\\FormFieldsConfig' => __DIR__ . '/../..' . '/src/Configs/FormFieldsConfig.class.php',
         'Dplus\\Dpluso\\Customer\\CustomerIndex' => __DIR__ . '/../..' . '/src/Customer/CustomerIndex.class.php',

@@ -10,7 +10,7 @@ return array(
     'Customer' => $baseDir . '/src/Customer/Customer.class.php',
     'Dplus\\Dpluso\\Bookings\\BookingsPanel' => $baseDir . '/src/Bookings/BookingsPanel.class.php',
     'Dplus\\Dpluso\\Bookings\\CustomerBookingsPanel' => $baseDir . '/src/Bookings/BookingsPanelCustomer.class.php',
-    'Dplus\\Dpluso\\Configs\\DplusoURLConfig' => $baseDir . '/src/Configs/DplusoURLs.class.php',
+    'Dplus\\Dpluso\\Configs\\DplusoConfigURLs' => $baseDir . '/src/Configs/DplusoURLs.class.php',
     'Dplus\\Dpluso\\Configs\\DplusoURLS' => $baseDir . '/src/Configs/DplusoURLs.class.php',
     'Dplus\\Dpluso\\Configs\\FormFieldsConfig' => $baseDir . '/src/Configs/FormFieldsConfig.class.php',
     'Dplus\\Dpluso\\Customer\\CustomerIndex' => $baseDir . '/src/Customer/CustomerIndex.class.php',

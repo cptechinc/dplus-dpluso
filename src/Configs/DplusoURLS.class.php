@@ -3,7 +3,7 @@
 	
 	use Dplus\Base\ThrowErrorTrait;
 	
-	class DplusoURLConfig {
+	class DplusoConfigURLs {
 		use ThrowErrorTrait;
 		
 		/**
