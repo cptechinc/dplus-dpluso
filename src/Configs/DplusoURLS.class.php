@@ -1,5 +1,5 @@
 <?php
-	namespace Dplus\Dpluso;
+	namespace Dplus\Dpluso\Configs;
 	
 	use ProcessWire\WireData;
 	
