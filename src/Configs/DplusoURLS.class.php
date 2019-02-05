@@ -3,6 +3,9 @@
 	
 	use Dplus\Base\ThrowErrorTrait;
 	
+	/**
+	 * Class for Accessing Dpluso URLs and Config Values such as Dpluso Server Address, Root Path
+	 */
 	class DplusoConfigURLs {
 		use ThrowErrorTrait;
 		
@@ -64,6 +67,9 @@
 		}
 	}
 	
+	/**
+	 * Class for parsing keys and looking up the path by traveling down its urls property
+	 */
 	class DplusoURLS implements \ArrayAccess {
 		/**
 		 * URL Paths
@@ -72,7 +78,6 @@
 		 * so $urls['activity']['_self'] would point to where activity page is supposed to be
 		 * @var array
 		 */
-		
 		private $urls = array(
 			'actions'  => 'activity',
 			'activity' => array(
@@ -148,6 +153,9 @@
 			),
 		);
 		
+		/* =============================================================
+			Array Access Interface Methods
+		============================================================ */
 		public function offsetSet($offset, $value) {
 	        if (is_null($offset)) {
 	            $this->urls[] = $value;
@@ -177,7 +185,7 @@
 		 * @param  string $key Key to Page
 		 * @return string      Page Path
 		 */
-		protected function get_pathfromkey(string $key) {
+		public function get_pathfromkey(string $key) {
 			$keys = explode('_', $key);
 			$paths = array();
 			
