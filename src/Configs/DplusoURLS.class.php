@@ -71,6 +71,8 @@
 	 * Class for parsing keys and looking up the path by traveling down its urls property
 	 */
 	class DplusoURLS implements \ArrayAccess {
+		use ThrowErrorTrait;
+
 		/**
 		 * URL Paths
 		 * NOTE if an element is an array then that could mean the element is a menu with subelements making references to subpages of that menu
@@ -108,6 +110,7 @@
 				'orderquote' => 'quote-to-order'
 			),
 			'notes'    => array('_self' => 'notes'),
+			'orders'   => array('_self' => 'orders'),
 			'print'    => array('_self' => 'print'),
 			'products' => array(
 				'_self'    => 'products',
