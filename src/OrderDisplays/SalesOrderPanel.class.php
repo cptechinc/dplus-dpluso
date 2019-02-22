@@ -255,4 +255,9 @@
 			$url->query->set('orderby', $this->tablesorter->orderbystring);
 			return $url->getUrl();
 		}
+		
+		public function cleanup() {
+			$this->orders = null;
+			$this->count = 0;
+		}
 	}
