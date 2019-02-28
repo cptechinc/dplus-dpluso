@@ -4,7 +4,7 @@
 	use Purl\Url;
 	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Dpluso\Configs\DplusoConfigURLs;
-	
+
 	/**
 	 * Use Statements for Model Classes which are non-namespaced
 	 */
@@ -185,7 +185,7 @@
 		 */
 		public function generate_ordersredirURL() {
 			$configurls = DplusoConfigURLs::get_instance();
-			$url = new Url($configurls->get_ordersredirURL());
+			$url = new Url($configurls->get_salesorders_redirURL());
 			return $url;
 		}
 	}

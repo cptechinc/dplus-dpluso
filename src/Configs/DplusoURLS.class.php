@@ -4,11 +4,14 @@
 	use Purl\Url;
 	use Dplus\Base\ThrowErrorTrait;
 
-
+	/**
+	 * Class for Providing URLs to Dplus Pages / Requests / Functions
+	 */
 	class DplusoConfigURLs {
 		use ThrowErrorTrait;
 		use CustomerURLsTraits;
 		use OrderURLsTraits;
+		use BookingsURLTraits;
 
 		/**
 		 * Root Path to build off from
@@ -69,9 +72,11 @@
 		}
 	}
 
+	/**
+	 * Functions that provide URLs to Customer Functions / Pages
+	 */
 	trait CustomerURLsTraits {
-
-		public function get_custredirURL() {
+		public function get_customer_redirURL() {
 			$url = new Url($this->paths->get_urlpath('customer'));
 			$url->path->add('redir');
 			return $url->getUrl();
@@ -84,7 +89,7 @@
 		 * @return string           URL PATH
 		 */
 		public function get_ciURL($custID, $shiptoID = '') {
-			$url = new Url($this->get_custredirURL());
+			$url = new Url($this->get_customer_redirURL());
 			$url->query->set('action', 'ci-customer');
 			$url->query->set('custID', $custID);
 
@@ -95,13 +100,102 @@
 		}
 	}
 
+	/**
+	 * Functions that provide URLS to Order Pages / Functions
+	 */
 	trait OrderURLsTraits {
-		public function get_ordersredirURL() {
-			$url = new \Purl\Url($this->paths->get_urlpath('orders'));
+		/**
+		 * Returns the URL to the Sales Order Redirect for Requests
+		 * @return string Sales Order Redirect
+		 */
+		public function get_salesorders_redirURL() {
+			$url = new Url($this->paths->get_urlpath('orders'));
 			$url->path->add('redir');
 			return $url->getUrl();
 		}
 	}
+
+	/**
+	 * Functions that provide URLs to Booking Functions / Pages
+	 */
+	trait BookingsURLTraits {
+		/**
+		 * Returns the URL for Loading bookings through Ajax
+		 * @return string Bookings ajax URL
+		 */
+		public function get_bookings_ajaxURL() {
+			$url = new Url($this->paths->get_urlpath('ajax_load'));
+			$url->path->add('bookings');
+			return $url->getUrl();
+		}
+
+		/**
+		 * Returns the Sales Orders Bookings Ajax URL
+		 * @return string Sales Order bookings Ajax URL
+		 */
+		public function get_bookings_orders_ajaxURL() {
+			$url = new Url($this->get_bookings_ajaxURL());
+			$url->path->add('sales-orders');
+			return $url->getUrl();
+		}
+
+		/**
+		 * Returns the URL to view the date provided's bookings
+		 * @param  string $date     Date to view Orders for
+		 * @param  string $custID   Customer ID
+		 * @param  string $shiptoID Customer Shipto ID
+		 *
+		 * @return string           URL to view the date's booked orders
+		 */
+		public function get_bookings_salesorders_bydayURL($date, $custID = '', $shiptoID = '') {
+			$url = new Url($this->get_bookings_orders_ajaxURL());
+			$url->query->set('date', $date);
+
+			if (!empty($custID)) {
+				$url->query->set('custID', $custID);
+				if (!empty($shipID)) {
+					$url->query->set('shipID', $shipID);
+				}
+			}
+
+			return $url->getUrl();
+		}
+
+		/**
+		 * Returns URL to view the bookingsfor a sales order on a particular date
+		 * @param  string $ordn Sales Order #
+		 * @param  string $date Date
+		 * @param  string $custID   Customer ID
+		 * @param  string $shiptoID Customer Shipto ID
+		 * @return string       URL to view bookings for that order # and date
+		 */
+		public function get_bookings_day_salesorderURL($ordn, $date, $custID = '', $shiptoID = '') {
+			$url = new Url($this->get_bookings_ajaxURL());
+			$url->path->add('sales-order');
+			$url->query->set('ordn', $ordn);
+			$url->query->set('date', $date);
+			if (!empty($custID)) {
+				$url->query->set('custID', $custID);
+				if (!empty($shiptoID)) {
+					$url->query->set('shipID', $shiptoID);
+				}
+			}
+			return $url->getUrl();
+		}
+
+		/**
+		 * Returns URL to Bookings Page with a filter between Book Dates
+		 * @param  string $start Start Date m/d/Y
+		 * @param  string $end   End Date m/d/Y
+		 * @return string        URL to Bookings
+		 */
+		public function get_bookings_filter_bookdatesURL($start, $end) {
+			$url = new Url($this->get_bookings_ajaxURL());
+			$url->query->set('filter', 'filter');
+			$url->query->set('bookdate', "$start|$end");
+			return $url->getUrl();
+		}
+ 	}
 
 	class DplusoPaths {
 		use ThrowErrorTrait;
@@ -128,7 +222,7 @@
 				'useractions' => 'user-actions'
 			),
 			'ajax' => array(
-				'_self' => 'user',
+				'_self' => 'ajax',
 				'json'  => 'json',
 				'load'  => 'load'
 			),

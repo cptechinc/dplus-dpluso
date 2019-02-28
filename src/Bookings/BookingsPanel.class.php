@@ -1,21 +1,31 @@
 <?php
 	namespace Dplus\Dpluso\Bookings;
 
+	/**
+	 * External Libraries
+	 */
 	use Purl\Url;
 	use ProcessWire\WireInput;
-	use Dplus\ProcessWire\DplusWire;
-	use Dplus\Content\HTMLWriter;
-	use Dplus\Base\DplusDateTime;
 
+	/**
+	 * Internal Libraries
+	 */
+	use Dplus\Base\ThrowErrorTrait;
+	use Dplus\Base\MagicMethodTraits;
+	use Dplus\Base\AttributeParser;
+	use Dplus\Base\Filterable;
+	use Dplus\Base\DplusDateTime;
+	use Dplus\Dpluso\Configs\DplusoConfigURLs;
+	
 	/**
 	 * Class for handling of getting and displaying booking records from the database
 	 * @author Paul Gomez paul@cptechinc.com
 	 */
 	class BookingsPanel {
-		use \Dplus\Base\ThrowErrorTrait;
-		use \Dplus\Base\MagicMethodTraits;
-		use \Dplus\Base\AttributeParser;
-		use \Dplus\Base\Filterable;
+		use ThrowErrorTrait;
+		use MagicMethodTraits;
+		use AttributeParser;
+		use Filterable;
 
 		/**
 		 * Object that stores page location and where to load
@@ -216,7 +226,8 @@
 		 * @return void
 		 */
 		public function setup_pageURL() {
-			$this->pageurl->path = DplusWire::wire('config')->pages->ajaxload."bookings/";
+			$urlconfig = DplusoConfigURLs::get_instance();
+			$this->pageurl->path = $urlconfig->get_bookings_ajaxURL();
 		}
 		/**
 		 * Defines the interval
@@ -235,43 +246,14 @@
 			CLASS FUNCTIONS
 		============================================================ */
 		/**
-		 * // TODO rename for URL()
 		 * Returns the URL to bookings panel's normal state
 		 * @return string URL
 		 * @uses
 		 */
-		public function generate_refreshurl() {
+		public function generate_refreshURL() {
 			$url = new Url($this->pageurl->getURL());
 			$url->query = '';
 			return $url->getURL();
-		}
-
-		/**
-		 * // FIXME Remove, and make link at presentation level
-		 * Returns the HTML link for refreshing bookings
-		 * @return string HTML link
-		 * @uses
-		 */
-		public function generate_refreshlink() {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_refreshurl();
-			$icon = $bootstrap->icon('fa fa-refresh');
-			$ajaxdata = $this->generate_ajaxdataforcontento();
-			return $bootstrap->a("href=$href|class=load-link|$ajaxdata", "$icon Refresh Bookings");
-		}
-
-		/**
-		 * // FIXME Remove, and make link at presentation level
-		 * Returns the HTML link for refreshing bookings
-		 * @return string HTML link
-		 * @uses
-		 */
-		public function generate_cleardateparameterslink() {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_refreshurl();
-			$icon = $bootstrap->icon('fa fa-times');
-			$ajaxdata = $this->generate_ajaxdataforcontento();
-			return $bootstrap->a("href=$href|class=btn btn-xs btn-warning load-and-show|$ajaxdata", "$icon Remove Date Parameters");
 		}
 
 		/**
@@ -356,111 +338,37 @@
 		}
 
 		/**
-		 * // TODO rename for URL()
 		 * Returns the URL to view the date provided's bookings
 		 * @param  string $date Date to view Orders for
 		 * @return string       URL to view the date's booked orders
 		 */
-		public function generate_viewsalesordersbydayurl($date) {
-			$url = new Url($this->pageurl->getUrl());
-			$url->path = DplusWire::wire('config')->pages->ajaxload."bookings/sales-orders/";
-			$url->query = '';
-			$url->query->set('date', $date);
-			return $url->getUrl();
+		public function generate_viewsalesordersbydayURL($date) {
+			$urlconfig = DplusoConfigURLs::get_instance();
+			return $urlconfig->get_bookings_salesorders_bydayURL($date);
 		}
 
 		/**
-		 * // FIXME Remove, and make link at presentation level
-		 * Returns HTML Link to view the days booked sales orders
-		 * @param  string $date Date for viewing bookings
-		 * @return string       HTML Link to view booked sales orders
-		 * @uses   $this->generate_viewsalesordersbydayurl($date)
-		 */
-		public function generate_viewsalesordersbydaylink($date) {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_viewsalesordersbydayurl($date);
-			$icon = $bootstrap->icon('fa fa-external-link');
-			$ajaxdata = "data-modal=$this->modal";
-			return $bootstrap->a("href=$href|class=btn btn-primary btn-sm load-into-modal info-screen|$ajaxdata", "$icon View Sales Orders");
-		}
-
-		/**
-		 * // FIXME Remove, and make link at presentation level
-		 * Returns HTML Link to view the days booked sales orders
-		 * @param  string $date Date for viewing bookings
-		 * @return string       HTML Link to view booked sales orders
-		 * @uses   $this->generate_viewsalesordersbydayurl($date)
-		 */
-		public function generate_viewsalesordersbydaybacklink($date) {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_viewsalesordersbydayurl($date);
-			$icon = $bootstrap->icon('fa fa-arrow-circle-left');
-			$ajaxdata = "data-modal=$this->modal";
-			return $bootstrap->a("href=$href|class=modal-load btn btn-primary btn-sm info-screen|$ajaxdata", "$icon Back to Bookings on $date");
-		}
-
-		/**
-		 * // TODO rename for URL()
 		 * Returns URL to view the bookingsfor a sales order on a particular date
 		 * @param  string $ordn Sales Order #
 		 * @param  string $date Date
 		 * @return string       URL to view bookings for that order # and date
 		 */
-		public function generate_viewsalesorderdayurl($ordn, $date) {
-			$url = new Url($this->pageurl->getUrl());
-			$url->path = DplusWire::wire('config')->pages->ajaxload."bookings/sales-order/";
-			$url->query = '';
-			$url->query->set('ordn', $ordn);
-			$url->query->set('date', $date);
-			return $url->getUrl();
+		public function generate_viewsalesorderdayURL($ordn, $date) {
+			$urlconfig = DplusoConfigURLs::get_instance();
+			return $urlconfig->get_bookings_day_salesorderURL($ordn, $date);
 		}
 
 		/**
-		 * // FIXME Remove, and make link at presentation level
-		 * Returns HTML Link to view the bookings bookingsfor a sales order on a particular date
-		 * @param  string $ordn Sales Order #
-		 * @param  string $date Date
-		 * @return string       HTML Link to view bookings for that order # and date
-		 * @uses $this->generate_viewsalesorderdayurl($ordn, $date);
-		 */
-		public function generate_viewsalesorderdaylink($ordn, $date) {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_viewsalesorderdayurl($ordn, $date);
-			$icon = $bootstrap->icon('fa fa-external-link');
-			$ajaxdata = "data-modal=$this->modal";
-			return $bootstrap->a("href=$href|class=modal-load btn btn-primary btn-sm|$ajaxdata", "$icon View Sales Order changes on $date");
-		}
-
-		/**
-		 * // TODO rename for URL()
 		 * Returns URL to view bookings for that month
 		 * @param  string $date Date usually in m/d/Y format
 		 * @return string       URL to view bookings for that month
 		 */
-		public function generate_viewmonthurl($date) {
+		public function generate_viewmonthURL($date) {
 			$firstofmonth = date('m/01/Y', strtotime($date));
 			$daysinmonth = cal_days_in_month(CAL_GREGORIAN, date('m', strtotime($date)), date('Y', strtotime($date)));
 			$lastofmonth = date("m/$daysinmonth/Y", strtotime($date));
 
-			$url = new Url($this->pageurl->getUrl());
-			$url->path = DplusWire::wire('config')->pages->ajaxload."bookings/";
-			$url->query = '';
-			$url->query->set('filter', 'filter');
-			$url->query->set('bookdate', "$firstofmonth|$lastofmonth");
-			return $url->getUrl();
-		}
-
-		/**
-		 * // FIXME Remove, and make link at presentation level
-		 * Creates HTML link to view bookings for that month
-		 * @param  string $date Date usually in m/d/Y format
-		 * @return string       HTML Link
-		 */
-		public function generate_viewmonthlink($date) {
-			$bootstrap = new HTMLWriter();
-			$href = $this->generate_viewmonthurl($date);
-			$ajaxdata = $this->generate_ajaxdataforcontento();
-			$monthyear = DplusDateTime::format_date($date, 'F Y');
-			return $bootstrap->a("href=$href|class=load-and-show|$ajaxdata|title=View $monthyear bookings", "$monthyear");
+			$urlconfig = DplusoConfigURLs::get_instance();
+			return $urlconfig->get_bookings_filter_bookdatesURL($firstofmonth, $lastofmonth);
 		}
 	}
