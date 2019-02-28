@@ -1,15 +1,10 @@
 <?php
-    use Dplus\ProcessWire\DplusWire;
-    
-    use Purl\Url;
-    
+
 	/**
 	 * Class for dealing with Customers
 	 * Derived from the custindex Table
 	 */
     class Customer extends Contact {
-        use Dplus\Base\CreateFromObjectArrayTraits;
-		use Dplus\Base\CreateClassArrayTraits;
         
         /* =============================================================
 			GETTER FUNCTIONS
@@ -145,21 +140,6 @@
 			);
 		}
 
-		/**
-		 * // TODO rename for URL()
-		 * Return URL to the add Contact form
-		 * @return string  Add Contact URL
-		 */
-		public function generate_addcontacturl() {
-			$url = new Url(DplusWire::wire('config')->pages->contact.'add/');
-            $url->query->set('custID', $this->custid);
-
-            if ($this->has_shipto()) {
-                $url->query->set('shipID', $this->shiptoid);
-            }
-            return $url->getUrl();
-		}
-
 		/* =============================================================
 			CRUD FUNCTIONS
 		============================================================ */
@@ -188,7 +168,7 @@
                 return get_customer($custID, $shiptoID, $contactID, $debug);
             } else {
                 $customer = get_customer($custID, $shiptoID, $contactID, $debug);
-                
+
                 if (empty($customer)) {
                     $customer = new NonExistingCustomer();
                     $customer->set('custid', $custID);
@@ -197,7 +177,7 @@
                 }
                 return $customer;
             }
-            
+
         }
 
         /**
@@ -253,7 +233,7 @@
 		 */
 		public static function generate_bookingsdata($custID, $shiptoID, $value) {
 			$customer = self::load($custID, $shiptoID);
-            
+
 			return array(
 				'label' => $customer ? $customer->get_name() : $custID,
 				'value' => $value,

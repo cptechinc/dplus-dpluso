@@ -12,6 +12,7 @@
 		use CustomerURLsTraits;
 		use OrderURLsTraits;
 		use BookingsURLTraits;
+		use CartURLsTraits;
 
 		/**
 		 * Root Path to build off from
@@ -96,6 +97,83 @@
 			if (!empty($shiptoID)) {
 				$url->query->set('shipID', $shiptoID);
 			}
+			return $url->getUrl();
+		}
+
+		/**
+		 * Returns the URL for Customer Contact Page
+		 * @param  string $custID    Customer ID
+		 * @param  string $shiptoID  Shipto ID
+		 * @param  string $contactID Contact ID
+		 * @return string            Customer Contact Page URL
+		 */
+		public function get_customer_contactURL($custID, $shiptoID = '', $contactID) {
+			$url = new Url($this->paths->get_urlpath('customer_contact'));
+			$url->query->set('custID', $custID);
+
+			if (!empty($shiptoID)) {
+				$url->query->set('shipID', $shiptoID);
+			}
+			$url->query->set('contactID', $contactID);
+			return $url->getUrl();
+		}
+
+		/**
+		 * Returns the URL for Editing  Customer Contact Page
+		 * @param  string $custID    Customer ID
+		 * @param  string $shiptoID  Shipto ID
+		 * @param  string $contactID Contact ID
+		 * @return string            Edit Customer Contact Page URL
+		 */
+		public function get_customer_contact_editURL($custID, $shiptoID = '', $contactID) {
+			$url = new Url($this->paths->get_urlpath('customer_contact'));
+			$url->path->add('edit');
+			$url->query->set('custID', $custID);
+
+			if (!empty($shiptoID)) {
+				$url->query->set('shipID', $shiptoID);
+			}
+			$url->query->set('contactID', $contactID);
+			return $url->getUrl();
+		}
+
+		/**
+		 * Returns the URL for Adding Customer Contact
+		 * @param  string $custID    Customer ID
+		 * @param  string $shiptoID  Shipto ID
+		 * @return string            Add Customer Contact Page URL
+		 */
+		public function get_customer_contact_addURL($custID, $shiptoID = '') {
+			$url = new Url($this->paths->get_urlpath('customer_contact'));
+			$url->path->add('add');
+			$url->query->set('custID', $custID);
+
+			if (!empty($shiptoID)) {
+				$url->query->set('shipID', $shiptoID);
+			}
+			return $url->getUrl();
+		}
+	}
+
+	/**
+	 * Functions that provide URLS to Cart Pages / Functions
+	 */
+	trait CartURLsTraits {
+		/**
+		 * Returns the URL for setting the Cart Customer
+		 * @param  string $custID    Customer ID
+		 * @param  string $shiptoID  Shipto ID
+		 * @return string            Set Cart Customer
+		 */
+		public function get_setcartcustomerURL($custID, $shiptoID = '') {
+			$url = new Url($this->paths->get_urlpath('cart'));
+			$url->path->add('redir');
+			$url->query->set('action', 'shop-as-customer');
+            $url->query->set('custID', $custID);
+
+			if (!empty($shiptoID)) {
+                $url->query->set('shipID', $shiptoID);
+            }
 			return $url->getUrl();
 		}
 	}

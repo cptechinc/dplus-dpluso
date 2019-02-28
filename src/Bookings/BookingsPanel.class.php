@@ -16,7 +16,7 @@
 	use Dplus\Base\Filterable;
 	use Dplus\Base\DplusDateTime;
 	use Dplus\Dpluso\Configs\DplusoConfigURLs;
-	
+
 	/**
 	 * Class for handling of getting and displaying booking records from the database
 	 * @author Paul Gomez paul@cptechinc.com

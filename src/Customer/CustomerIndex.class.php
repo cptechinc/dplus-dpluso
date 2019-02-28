@@ -1,17 +1,26 @@
 <?php
     namespace Dplus\Dpluso\Customer;
     
-    use Dplus\ProcessWire\DplusWire;
-    use Dplus\Content\TablePageSorter;
+    /**
+	 * External Libraries
+	 */
     use Purl\Url;
+
+    /**
+	 * Internal Libraries
+	 */
+	use Dplus\ProcessWire\DplusWire;
+	use Dplus\Base\ThrowErrorTrait;
+	use Dplus\Base\MagicMethodTraits;
+    use Dplus\Content\TablePageSorter;
     
     /**
      * Class for dealing with the Customer Index database table
      */
     class CustomerIndex {
-        use \Dplus\Base\ThrowErrorTrait;
-		use \Dplus\Base\MagicMethodTraits;
-        use \Dplus\Base\AttributeParser;
+        use ThrowErrorTrait;
+		use MagicMethodTraits;
+        use AttributeParser;
         
         /**
 		 * Array of filters that will apply to the orders
