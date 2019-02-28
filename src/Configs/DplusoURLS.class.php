@@ -1,40 +1,40 @@
 <?php
 	namespace Dplus\Dpluso\Configs;
-	
+
 	use Purl\Url;
 	use Dplus\Base\ThrowErrorTrait;
 
-	
+
 	class DplusoConfigURLs {
 		use ThrowErrorTrait;
 		use CustomerURLsTraits;
 		use OrderURLsTraits;
-		
+
 		/**
 		 * Root Path to build off from
 		 * @var string
 		 */
 		private static $_rootpath;
-		
+
 		/**
 		 * Instance of DplusoConfigURLs
 		 * @var DplusoConfigURLs
 		 */
 		private static $instance;
-		
+
 		/**
 		 * Paths
 		 * @var DplusoPaths
 		 */
 		private $paths;
-		
+
 		public static function get_instance() {
 			if (empty(self::$instance)) {
 				self::$instance = new DplusoConfigURLS();
 			}
 			return self::$instance;
 		}
-		
+
 		/**
 		 * Constructor Function
 		 * Sets the basepath from the static property
@@ -42,7 +42,7 @@
 		private function __construct() {
 			$this->paths = DplusoPaths::get_instance();
 		}
-		
+
 		/**
 		 * Automatically Parse URL Path from Call
 		 * @param  string $key URL Path String
@@ -51,7 +51,7 @@
 		function __get($key) {
 			return $this->paths->get_urlpath($key);
 		}
-		
+
 		/**
 		 * Sets the static self::$rootpath
 		 * @param string $path Root Path
@@ -59,7 +59,7 @@
 		static function set_rootpath($path) {
 			self::$_rootpath = $path;
 		}
-		
+
 		/**
 		 * Returns self::$rootpath
 		 * @param string self::$rootpath
@@ -68,16 +68,15 @@
 			return self::$_rootpath;
 		}
 	}
-	
+
 	trait CustomerURLsTraits {
-		
-		
+
 		public function get_custredirURL() {
 			$url = new Url($this->paths->get_urlpath('customer'));
 			$url->path->add('redir');
 			return $url->getUrl();
 		}
-		
+
 		/**
 		 * Returns the URL for CI
 		 * @param  string $custID   Customer ID
@@ -95,7 +94,7 @@
 			return $url->getUrl();
 		}
 	}
-	
+
 	trait OrderURLsTraits {
 		public function get_ordersredirURL() {
 			$url = new \Purl\Url($this->paths->get_urlpath('orders'));
@@ -103,19 +102,18 @@
 			return $url->getUrl();
 		}
 	}
-	
+
 	class DplusoPaths {
 		use ThrowErrorTrait;
-		
+
 		/**
 		 * Root Path to build off from
 		 * @var string
 		 */
 		private $rootpath;
-		
+
 		private static $instance;
-		
-		
+
 		/**
 		 * URL Paths
 		 * NOTE if an element is an array then that could mean the element is a menu with subelements making references to subpages of that menu
@@ -182,11 +180,11 @@
 				'vendorinfo' => 'vend-info',
 			),
 			'warehouse' => array(
-				'_self'   => 'warehouse', 
+				'_self'   => 'warehouse',
 				'picking' => array(
 					'_self'    => 'picking',    // NOTE $config->pages->warehousepicking
 					'order'    => 'pick-order', // NOTE $config->pages->salesorderpicking
-					'pickpack' => 'pick-pack'   // NOTE $config->pages->salesorderpickpacking 
+					'pickpack' => 'pick-pack'   // NOTE $config->pages->salesorderpickpacking
 				),
 				'binr' => array(
 					'_self' => 'binr',
@@ -198,26 +196,29 @@
 				)
 			),
 		);
+
 		public function __get($key) {
 			return $this->get_urlpath($key);
 		}
+
 		private function __construct() {
 			$this->rootpath = DplusoConfigURLs::get_rootpath();
 		}
-		
+
 		public static function get_instance() {
 			if (empty(self::$instance)) {
 				self::$instance = new DplusoPaths();
 			}
 			return self::$instance;
 		}
-		
+
 		public function get_urlpath($key) {
 			$path = $this->get_pathfromkey($key);
 			return "{$this->rootpath}$path";
 		}
+
 		/**
-		 * Returns the paths found by parsing the key into an array 
+		 * Returns the paths found by parsing the key into an array
 		 * 1. $key is parsed into an array delimited by an underscore (_)
 		 *      Example $key = "vendor"       -> $keys = array('vendor');
 		 *      Example $key = "vendor_info"  -> $keys = array('vendor', 'info')
@@ -228,22 +229,22 @@
 		public function get_pathfromkey(string $key) {
 			$keys = explode('_', $key);
 			$paths = array();
-			
+
 			// Check that this key exists else throw error
 			if (isset($this->urls[$keys[0]])) {
-				
+
 				// Check if this $keys[0] is an array, then travel down
 				if (is_array($this->urls[$keys[0]])) {
-					
+
 					// Set array to the array value found at $keys[0]
 					$level = $this->urls[$keys[0]];
-					
+
 					// Automatically append the level's _self value to $paths, then remove it from $keys
 					$paths[] = $level['_self'];
 					array_shift($keys);
-					
+
 					while (is_array($level) && !empty($keys)) {
-						
+
 						// Check that this key exists else throw error
 						if (key_exists($keys[0], $level)) {
 							if (is_array($level[$keys[0]])) {
@@ -269,7 +270,7 @@
 				$this->error_keypath($keys, $paths);
 			}
 		}
-		
+
 		/**
 		 * Throws an E_USER_ERROR because Key was not found in array
 		 * @param  array  $keys  Keys Array
