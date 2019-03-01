@@ -1,44 +1,53 @@
-<?php 
+<?php
 	namespace Dplus\Dpluso\Items;
-	
-	use Dplus\ProcessWire\DplusWire;
-	use Purl\Url;
-	
+
 	/**
-	 * ItemLookupModal provides functions, and holds data for the item lookup form and 
-	 * generates the specific data needed when the results need to be for a worksheet, sales order, or quote. 
+	 * External Libraries
+	 */
+	use Purl\Url;
+
+	/**
+	 * Internal Libraries
+	 */
+	use Dplus\Base\ThrowErrorTrait;
+ 	use Dplus\Base\MagicMethodTraits;
+	use Dplus\Dpluso\Configs\DplusoConfigURLs;
+
+	/**
+	 * ItemLookupModal provides functions, and holds data for the item lookup form and
+	 * generates the specific data needed when the results need to be for a worksheet, sales order, or quote.
 	 */
 	class ItemLookupModal {
-		use \Dplus\Base\ThrowErrorTrait;
-		use \Dplus\Base\MagicMethodTraits;
-		
+		use ThrowErrorTrait;
+		use MagicMethodTraits;
+
 		/**
 		 * Type
 		 * Used for description
 		 * @var string
 		 */
 		protected $type = 'worksheet';
-		
+
 		/**
 		 * Customer to lookup items for
 		 * @var string
 		 */
 		protected $custID;
-		
+
 		/**
 		 * Customer Shipto to lookup items for
 		 * @var string
 		 */
 		protected $shipID;
-		
+
 		/* =============================================================
-			GETTER FUNCTIONS 
+			GETTER FUNCTIONS
 		============================================================ */
 		/**
 		* If a property is not accessible then try to give them the property through
 		* a already defined method or to give them the property value
 		* @param  string $property property name
-		* @return 
+		* @return
 		*     1. Value returned in value call
 		*     2. Returns the value of the property_exists
 		*     3. Throw Error
@@ -54,7 +63,7 @@
 				return false;
 			}
 		}
-		
+
 		/**
 		 * Return the type of Item Lookup Modal
 		 * @return string worksheet|order|quote
@@ -62,7 +71,7 @@
 		public function get_type() {
 			return $this->type;
 		}
-		
+
 		/* =============================================================
 			SETTER FUNCTIONS
 		============================================================ */
@@ -75,7 +84,7 @@
 			$this->custID = $custID;
 			$this->shipID = $shipID;
 		}
-		
+
 		/**
 		 * This creates a Lookup Modal Sales Order and replaces $this with it
 		 * @param string $ordn Sales Order #
@@ -85,7 +94,7 @@
 			$lookup->set_customer($this->custID, $this->shipID);
 			return $lookup;
 		}
-		
+
 		/**
 		 * This creates a Lookup Modal Quote and replaces $this with it
 		 * @param string $qnbr Quote #
@@ -95,41 +104,38 @@
 			$lookup->set_customer($this->custID, $this->shipID);
 			return $lookup;
 		}
-		
+
 		/* =============================================================
-			CLASS FUNCTIONS 
+			CLASS FUNCTIONS
 		============================================================ */
 		/**
 		 * Return the URL where the results are going to be loaded from
 		 * @return string URL
 		 */
-		public function generate_resultsurl() {
-			$url = new Url(DplusWire::wire('config')->pages->ajax.'load/products/item-search-results/cart/');
-			$url->query->set('custID', $this->custID)->set('shipID', $this->shipID);
-			return $url->getUrl();
+		public function generate_resultsURL() {
+			$urlconfig = DplusoConfigURLs::get_instance();
+			return $urlconfig->get_itemlookup_cart_resultsURL($this->custID, $this->shipID);
 		}
-		
+
 		/**
 		 * Return the URL where the nonstock form will be loaded from
 		 * @return string URL
 		 */
-		public function generate_nonstockformurl() {
-			$url = new Url(DplusWire::wire('config')->pages->ajax.'load/products/non-stock/form/cart/');
-			$url->query->set('custID', $this->custID)->set('shipID', $this->shipID);
-			return $url->getUrl();
+		public function generate_nonstockformURL() {
+			$urlconfig = DplusoConfigURLs::get_instance();
+			return $urlconfig->get_itemlookup_cart_nonstockformURL($this->custID, $this->shipID);
 		}
-		
+
 		/**
 		 * Return the URL where the add multiple item form will be loaded from
 		 * @return string URL
 		 */
-		public function generate_addmultipleurl() {
-			$url = new Url(DplusWire::wire('config')->pages->ajax.'load/add-detail/cart/');
-			$url->query->set('custID', $this->custID)->set('shipID', $this->shipID);
-			return $url->getUrl();
+		public function generate_addmultipleURL() {
+			$urlconfig = DplusoConfigURLs::get_instance();
+			return $urlconfig->get_itemlookup_cart_addmultipleURL($this->custID, $this->shipID);
 		}
 	}
-	
+
 	/**
 	 * Item Lookup modal for Sales Orders
 	 */
@@ -140,15 +146,15 @@
 		 * @var string
 		 */
 		protected $type = 'order';
-		
+
 		/**
 		 * Order Number
 		 * @var string
 		 */
 		protected $ordn;
-		
+
 		/* =============================================================
-			CONSTRUCTOR FUNCTIONS 
+			CONSTRUCTOR FUNCTIONS
 		============================================================ */
 		/**
 		 * Constructor for Item Lookup for Sales Orders
@@ -157,45 +163,38 @@
 		public function __construct($ordn) {
 			$this->ordn = $ordn;
 		}
-		
+
 		/* =============================================================
-			CLASS FUNCTIONS 
+			CLASS FUNCTIONS
 		============================================================= */
 		/**
-		 *  TODO rename for URL()
 		 * Return the URL where the results are going to be loaded from
 		 * @return string URL
 		 */
-		public function generate_resultsurl() {
-			$url = new Url(DplusWire::wire('config')->pages->ajax.'load/products/item-search-results/order/');
-			$url->query->setData(array('ordn' => $this->ordn,'custID' => $this->custID, 'shipID' => $this->shipID));
-			$url->query->set('ordn', $this->ordn)->set('custID', $this->custID)->set('shipID', $this->shipID);
-			return $url->getUrl();
+		public function generate_resultsURL() {
+			$urlconfig = DplusoConfigURLs::get_instance();
+			return $urlconfig->get_itemlookup_order_resultsURL($this->custID, $this->shipID, $this->ordn);
 		}
-		
+
 		/**
-		 *  TODO rename for URL()
 		 * Return the URL where the nonstock form will be loaded from
 		 * @return string URL
 		 */
-		public function generate_nonstockformurl() {
-			$url = new Url(DplusWire::wire('config')->pages->ajax.'load/products/non-stock/form/order/');
-			$url->query->set('ordn', $this->ordn)->set('custID', $this->custID)->set('shipID', $this->shipID);
-			return $url->getUrl();
+		public function generate_nonstockformURL() {
+			$urlconfig = DplusoConfigURLs::get_instance();
+			return $urlconfig->get_itemlookup_order_nonstockformURL($this->custID, $this->shipID, $this->ordn);
 		}
-		
+
 		/**
-		 *  TODO rename for URL()
 		 * Return the URL where the add multiple item form will be loaded from
 		 * @return string URL
 		 */
-		public function generate_addmultipleurl() {
-			$url = new Url(DplusWire::wire('config')->pages->ajax.'load/add-detail/order/');
-			$url->query->set('ordn', $this->ordn)->set('custID', $this->custID)->set('shipID', $this->shipID);
-			return $url->getUrl();
+		public function generate_addmultipleURL() {
+			$urlconfig = DplusoConfigURLs::get_instance();
+			return $urlconfig->get_itemlookup_order_addmultipleURL($this->custID, $this->shipID, $this->ordn);
 		}
 	}
-	
+
 	/**
 	 * Item Lookup modal for Quotes
 	 */
@@ -206,19 +205,19 @@
 		 * @var string
 		 */
 		protected $type = 'quote';
-		
+
 		/**
 		 * Quote Number
 		 * @var string
 		 */
 		protected $qnbr;
-		
+
 		/**
 		 * Is this Quote to Order?
 		 * @var bool
 		 */
 		protected $to_order  = false;
-		
+
 		/* =============================================================
 			CONSTRUCTOR FUNCTIONS
 		============================================================= */
@@ -229,50 +228,49 @@
 		public function __construct($qnbr) {
 			$this->qnbr = $qnbr;
 		}
-		
+
 		/* =============================================================
 			CLASS FUNCTIONS
 		============================================================ */
 		/**
-		 *  TODO rename for URL()
 		 * Return the URL where the results are going to be loaded from
 		 * @return string URL
 		 */
-		public function generate_resultsurl() {
-			$url = new Url(DplusWire::wire('config')->pages->ajax.'load/products/item-search-results/quote/');
-			$url->query->set('qnbr', $this->qnbr)->set('custID', $this->custID)->set('shipID', $this->shipID);
-			
+		public function generate_resultsURL() {
+			$urlconfig = DplusoConfigURLs::get_instance();
+			$url = new Url($urlconfig->get_itemlookup_quote_resultsURL($this->custID, $this->shipID, $this->qnbr));
+
 			if ($this->to_order) {
 				$url->query->set('order', 'true');
 			}
-			return $url->getUrl();
+			return $url->getURL();
 		}
-		
+
 		/**
-		 *  TODO rename for URL()
 		 * Returns the URL where the nonstock form can be loaded
 		 * @return string URL
 		 */
-		public function generate_nonstockformurl() {
-			$url = new Url(DplusWire::wire('config')->pages->ajax.'load/products/non-stock/form/quote/');
-			$url->query->set('qnbr', $this->qnbr)->set('custID', $this->custID)->set('shipID', $this->shipID);
+		public function generate_nonstockformURL() {
+			$urlconfig = DplusoConfigURLs::get_instance();
+			$url = new Url($urlconfig->get_itemlookup_quote_nonstockformURL($this->custID, $this->shipID, $this->qnbr));
+
 			if ($this->to_order) {
 				$url->query->set('order', 'true');
 			}
-			return $url->getUrl();
+			return $url->getURL();
 		}
-		
+
 		/**
-		 *  TODO rename for URL()
 		 * Returns the URL where the add multiple items form can be loaded
 		 * @return string URL
 		 */
-		public function generate_addmultipleurl() {
-			$url = new Url(DplusWire::wire('config')->pages->ajax.'load/add-detail/quote/');
-			$url->query->set('qnbr', $this->qnbr)->set('custID', $this->custID)->set('shipID', $this->shipID);
+		public function generate_addmultipleURL() {
+			$urlconfig = DplusoConfigURLs::get_instance();
+			$url = new Url($urlconfig->get_itemlookup_quote_addmultipleURL($this->custID, $this->shipID, $this->qnbr));
+
 			if ($this->to_order) {
 				$url->query->set('order', 'true');
 			}
-			return $url->getUrl();
+			return $url->getURL();
 		}
 	}
