@@ -43,7 +43,7 @@
 
 		public static function get_instance() {
 			if (empty(self::$instance)) {
-				self::$instance = new DplusoConfigURLS();
+				self::$instance = new DplusoConfigURLs();
 			}
 			return self::$instance;
 		}
@@ -62,6 +62,15 @@
 		 * @return string      URL Path
 		 */
 		function __get($key) {
+			return $this->paths->get_urlpath($key);
+		}
+
+		/**
+		 *  Parse URL Path from $key
+		 * @param  string $key URL Path String
+		 * @return string      URL Path
+		 */
+		function find($key) {
 			return $this->paths->get_urlpath($key);
 		}
 

@@ -65,6 +65,7 @@ class ComposerStaticInitde55f17c88d493db7f2fa2056536094d
         'Dplus\\Dpluso\\Configs\\CustomerURLsTraits' => __DIR__ . '/../..' . '/src/Configs/URLs/Customer.trait.php',
         'Dplus\\Dpluso\\Configs\\DplusoConfigURLs' => __DIR__ . '/../..' . '/src/Configs/DplusoURLs.class.php',
         'Dplus\\Dpluso\\Configs\\DplusoPaths' => __DIR__ . '/../..' . '/src/Configs/URLs/DplusoPaths.class.php',
+        'Dplus\\Dpluso\\Configs\\DplusoRoles' => __DIR__ . '/../..' . '/src/Configs/DplusoRoles.class.php',
         'Dplus\\Dpluso\\Configs\\FormFieldsConfig' => __DIR__ . '/../..' . '/src/Configs/FormFieldsConfig.class.php',
         'Dplus\\Dpluso\\Configs\\ItemLookupURLsTraits' => __DIR__ . '/../..' . '/src/Configs/URLs/ItemLookup.trait.php',
         'Dplus\\Dpluso\\Configs\\OrderURLsTraits' => __DIR__ . '/../..' . '/src/Configs/URLs/Order.trait.php',

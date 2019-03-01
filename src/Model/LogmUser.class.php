@@ -1,13 +1,18 @@
 <?php
+	/**
+	 * Internal Libraries
+	 */
+	use Dplus\Base\ThrowErrorTrait;
+	use Dplus\Base\MagicMethodTraits;
 	use Dplus\ProcessWire\DplusWire;
-	
+
 	/**
 	 * Dplus User that has their email, name, loginid, role, company, fax, phone
 	 */
 	class LogmUser {
-		use Dplus\Base\ThrowErrorTrait;
-		use Dplus\Base\MagicMethodTraits;
-		
+		use ThrowErrorTrait;
+		use MagicMethodTraits;
+
 		/**
 		 * Login ID
 		 * @var string
@@ -68,7 +73,7 @@
 		 * @var string X
 		 */
 		protected $dummy;
-		
+
 		/**
 		 * Role ID
 		 * // Example SalesPerson ID
@@ -81,9 +86,9 @@
 		 * @var array
 		 */
 		public $fieldaliases = array(
-            'loginID' => 'loginid',
-            'whseID' => 'whseid',
-        );
+			'loginID' => 'loginid',
+			'whseID' => 'whseid',
+		);
 
 		/* =============================================================
 			CRUD FUNCTIONS
@@ -96,22 +101,22 @@
 		public function get_dplusrole() {
 			return strtolower($this->role);
 		}
-		
+
 		/**
-		 * Returns the Dpluso Role for the user, so it can be looked at for 
+		 * Returns the Dpluso Role for the user, so it can be looked at for
 		 * Navigation and user type customization
 		 * @return string DPLUSO user type
 		 */
 		public function get_dplusorole() {
 			$role = $this->get_dplusrole();
-			
+
 			if (in_array($role, array_keys(DplusWire::wire('config')->dplus_dplusoroles))) {
 				return DplusWire::wire('config')->dplus_dplusoroles[$role];
 			} else {
 				return false;
 			}
 		}
-		
+
 		/**
 		 * Returns if User is a Sales Rep
 		 * @return bool Is User a Sales Rep?
@@ -127,7 +132,7 @@
 		public function is_salesmanager() {
 			return $this->get_dplusrole() == DplusWire::wire('config')->user_roles['sales-manager']['dplus-code'];
 		}
-		
+
 		/**
 		 * Returns if User is an Admin
 		 * @return bool Is User an Admin?
@@ -156,7 +161,7 @@
 		 * Loads an object of this class
 		 * @param  string   $loginID  User's Dplus Login ID
 		 * @param  bool     $debug    Whether to return the SQL to create the object or the object
-		 * @return LogmUser 
+		 * @return LogmUser
 		 */
 		public static function load($loginID, $debug = false) {
 			return get_logmuser($loginID, $debug);

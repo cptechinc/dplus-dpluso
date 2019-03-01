@@ -15,6 +15,7 @@ return array(
     'Dplus\\Dpluso\\Configs\\CustomerURLsTraits' => $baseDir . '/src/Configs/URLs/Customer.trait.php',
     'Dplus\\Dpluso\\Configs\\DplusoConfigURLs' => $baseDir . '/src/Configs/DplusoURLs.class.php',
     'Dplus\\Dpluso\\Configs\\DplusoPaths' => $baseDir . '/src/Configs/URLs/DplusoPaths.class.php',
+    'Dplus\\Dpluso\\Configs\\DplusoRoles' => $baseDir . '/src/Configs/DplusoRoles.class.php',
     'Dplus\\Dpluso\\Configs\\FormFieldsConfig' => $baseDir . '/src/Configs/FormFieldsConfig.class.php',
     'Dplus\\Dpluso\\Configs\\ItemLookupURLsTraits' => $baseDir . '/src/Configs/URLs/ItemLookup.trait.php',
     'Dplus\\Dpluso\\Configs\\OrderURLsTraits' => $baseDir . '/src/Configs/URLs/Order.trait.php',
