@@ -1,7 +1,14 @@
 <?php
 	namespace Dplus\Dpluso\Configs;
 
+	/**
+	 * External Libraries
+	 */
 	use Purl\Url;
+
+	/**
+	 * Internal Libraries
+	 */
 	use Dplus\Base\ThrowErrorTrait;
 
 	/**
@@ -14,6 +21,7 @@
 		use BookingsURLsTraits;
 		use CartURLsTraits;
 		use ItemLookupURLsTraits;
+		use VendorURLsTraits;
 
 		/**
 		 * Root Path to build off from

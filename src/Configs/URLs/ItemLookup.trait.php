@@ -1,6 +1,11 @@
 <?php
     namespace Dplus\Dpluso\Configs;
 
+	/**
+	 * External Libraries
+	 */
+    use Purl\Url;
+    
     trait ItemLookupURLsTraits {
         //////////////////////////
         // Base

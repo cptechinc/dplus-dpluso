@@ -1,5 +1,10 @@
 <?php
 	namespace Dplus\Dpluso\Configs;
+
+	/**
+	 * External Libraries
+	 */
+	use Purl\Url;
 	
     /**
 	 * Functions that provide URLS to Order Pages / Functions

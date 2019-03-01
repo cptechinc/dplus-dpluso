@@ -1,9 +1,9 @@
 <?php
-    namespace Dplus\Dpluso\Configs;
-    
-    use Dplus\Base\ThrowErrorTrait;
+	namespace Dplus\Dpluso\Configs;
 
-    class DplusoPaths {
+	use Dplus\Base\ThrowErrorTrait;
+
+	class DplusoPaths {
 		use ThrowErrorTrait;
 
 		/**
@@ -96,7 +96,7 @@
 				)
 			),
 		);
-
+		
 		public function __get($key) {
 			return $this->get_urlpath($key);
 		}
