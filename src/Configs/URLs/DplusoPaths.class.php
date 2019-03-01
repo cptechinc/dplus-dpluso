@@ -3,6 +3,9 @@
 
 	use Dplus\Base\ThrowErrorTrait;
 
+	/**
+	 * Class for providing and parsing Paths to Pages
+	 */
 	class DplusoPaths {
 		use ThrowErrorTrait;
 

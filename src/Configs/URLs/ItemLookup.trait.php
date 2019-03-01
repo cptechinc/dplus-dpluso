@@ -6,6 +6,9 @@
 	 */
     use Purl\Url;
     
+    /**
+	 * Functions that provide URLS for Item Lookup Pages / Functions
+	 */
     trait ItemLookupURLsTraits {
         //////////////////////////
         // Base
