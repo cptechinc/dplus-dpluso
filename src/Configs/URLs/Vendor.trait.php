@@ -9,7 +9,7 @@
     /**
 	 * Functions that provide URLs to Vendor Functions / Pages
 	 */
-    trait VendorURLsTrait {
+    trait VendorURLsTraits {
         /**
          * Returns URL to Load Vendor Information Page for Vendor ID
          * @param  string $vendorID Vendor ID

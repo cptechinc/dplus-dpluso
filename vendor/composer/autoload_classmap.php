@@ -18,7 +18,7 @@ return array(
     'Dplus\\Dpluso\\Configs\\FormFieldsConfig' => $baseDir . '/src/Configs/FormFieldsConfig.class.php',
     'Dplus\\Dpluso\\Configs\\ItemLookupURLsTraits' => $baseDir . '/src/Configs/URLs/ItemLookup.trait.php',
     'Dplus\\Dpluso\\Configs\\OrderURLsTraits' => $baseDir . '/src/Configs/URLs/Order.trait.php',
-    'Dplus\\Dpluso\\Configs\\VendorURLsTrait' => $baseDir . '/src/Configs/URLs/Vendor.trait.php',
+    'Dplus\\Dpluso\\Configs\\VendorURLsTraits' => $baseDir . '/src/Configs/URLs/Vendor.trait.php',
     'Dplus\\Dpluso\\Customer\\CustomerIndex' => $baseDir . '/src/Customer/CustomerIndex.class.php',
     'Dplus\\Dpluso\\General\\SigninLog' => $baseDir . '/src/General/SigninLog.class.php',
     'Dplus\\Dpluso\\Items\\ItemLookupModal' => $baseDir . '/src/Items/ItemLookupModal.class.php',
