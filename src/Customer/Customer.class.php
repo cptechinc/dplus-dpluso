@@ -1,11 +1,12 @@
 <?php
-
+	use Dplus\Dpluso\Configs\DplusoRoles;
+	
 	/**
 	 * Class for dealing with Customers
 	 * Derived from the custindex Table
 	 */
     class Customer extends Contact {
-        
+
         /* =============================================================
 			GETTER FUNCTIONS
 		============================================================ */
@@ -151,7 +152,7 @@
          */
         public function create_custpermpermission($loginID = '', $debug = false) {
             if (!has_custperm($this->custid, $this->shiptoid)) {
-                insert_custperm($this, LogmUser::get_toplevelcustpermloginid(), $debug);
+                insert_custperm($this, DplusoRoles::get_top_custpermrole(), $debug);
                 return insert_custperm($this, $loginID, $debug);
             }
         }

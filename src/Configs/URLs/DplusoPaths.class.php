@@ -100,14 +100,27 @@
 			),
 		);
 		
+		/**
+		 * Parse URL Path from $key
+		 * @param  string $key
+		 * @return string URL path
+		 */
 		public function __get($key) {
 			return $this->get_urlpath($key);
 		}
 
+		/**
+		 * Constructor
+		 * NOTE: Sets the rootpath
+		 */
 		private function __construct() {
 			$this->rootpath = DplusoConfigURLs::get_rootpath();
 		}
 
+		/**
+		 * Returns instance of self
+		 * @return DplusoPaths
+		 */
 		public static function get_instance() {
 			if (empty(self::$instance)) {
 				self::$instance = new DplusoPaths();
@@ -115,6 +128,11 @@
 			return self::$instance;
 		}
 
+		/**
+		 * Parse URL Path from $key and returns it with the rootpath prepended
+		 * @param  string $key
+		 * @return string      URL Path
+		 */
 		public function get_urlpath($key) {
 			$path = $this->get_pathfromkey($key);
 			return "{$this->rootpath}$path";

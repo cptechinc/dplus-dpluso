@@ -41,6 +41,10 @@
 		 */
 		private $paths;
 
+		/**
+		 * Returns Instance of Self
+		 * @return string DplusoConfigURLs
+		 */
 		public static function get_instance() {
 			if (empty(self::$instance)) {
 				self::$instance = new DplusoConfigURLs();
@@ -50,7 +54,7 @@
 
 		/**
 		 * Constructor Function
-		 * Sets the basepath from the static property
+		 * Initializes $this->paths
 		 */
 		private function __construct() {
 			$this->paths = DplusoPaths::get_instance();

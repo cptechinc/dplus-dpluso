@@ -4,7 +4,7 @@
 	 */
 	use Dplus\Base\ThrowErrorTrait;
 	use Dplus\Base\MagicMethodTraits;
-	use Dplus\ProcessWire\DplusWire;
+	use Dplus\Dpluso\Configs\DplusoRoles;
 
 	/**
 	 * Dplus User that has their email, name, loginid, role, company, fax, phone
@@ -109,9 +109,10 @@
 		 */
 		public function get_dplusorole() {
 			$role = $this->get_dplusrole();
+			$rolesconfig = DplusoRoles::get_instance();
 
-			if (in_array($role, array_keys(DplusWire::wire('config')->dplus_dplusoroles))) {
-				return DplusWire::wire('config')->dplus_dplusoroles[$role];
+			if ($rolesconfig->does_dplus_role_exist($role)) {
+				return $rolesconfig->get_role_from_dplus_role($role);
 			} else {
 				return false;
 			}
@@ -122,7 +123,8 @@
 		 * @return bool Is User a Sales Rep?
 		 */
 		public function is_salesrep() {
-			return $this->get_dplusrole() == DplusWire::wire('config')->user_roles['sales-rep']['dplus-code'];
+			$rolesconfig = DplusoRoles::get_instance();
+			return $this->get_dplusrole() == $rolesconfig->roles['sales-rep']['dplus-code'];
 		}
 
 		/**
@@ -130,7 +132,8 @@
 		 * @return bool Is User a Sales Manager?
 		 */
 		public function is_salesmanager() {
-			return $this->get_dplusrole() == DplusWire::wire('config')->user_roles['sales-manager']['dplus-code'];
+			$rolesconfig = DplusoRoles::get_instance();
+			return $this->get_dplusrole() == $rolesconfig->roles['sales-manager']['dplus-code'];
 		}
 
 		/**
@@ -138,7 +141,8 @@
 		 * @return bool Is User an Admin?
 		 */
 		public function is_admin() {
-			return $this->get_dplusrole() == DplusWire::wire('config')->user_roles['admin']['dplus-code'];
+			$rolesconfig = DplusoRoles::get_instance();
+			return $this->get_dplusrole() == $rolesconfig->roles['admin']['dplus-code'];
 		}
 
 		/**
@@ -146,15 +150,7 @@
 		 * @return string admin | $this->loginid
 		 */
 		public function get_custpermloginid() {
-			return $this->get_dplusrole() == DplusWire::wire('config')->roles['sales-rep'] ? $this->loginid : 'admin';
-		}
-
-		/**
-		 * Returns the custperm loginid that Anything above a salesrep uses
-		 * @return string LoginID
-		 */
-		public static function get_toplevelcustpermloginid() {
-			return 'admin';
+			return $this->is_salesrep() ? $this->loginid : 'admin';
 		}
 
 		/**
