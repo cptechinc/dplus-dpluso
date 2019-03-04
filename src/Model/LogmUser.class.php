@@ -111,7 +111,7 @@
 			$role = $this->get_dplusrole();
 			$rolesconfig = DplusoRoles::get_instance();
 
-			if ($rolesconfig->does_dplus_role_exist($role)) {
+			if ($rolesconfig->dplus_role_exists($role)) {
 				return $rolesconfig->get_role_from_dplus_role($role);
 			} else {
 				return false;
