@@ -1,11 +1,11 @@
 <?php
 	namespace Dplus\Dpluso\Configs;
-	
+
 	/**
 	 * External Libraries
 	 */
 	use Purl\Url;
-	
+
     /**
 	 * Functions that provide URLs to Notes Functions / Pages
 	 */
@@ -19,7 +19,7 @@
 			$url->path->add('redir');
 			return $url->getUrl();
 		}
-			
+
 
 		/**
 		 * Returns URL to request the Qnotes for a Cart Detail Line
