@@ -1,8 +1,9 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
-	
+
 	use Purl\Url;
 	use Dplus\ProcessWire\DplusWire;
+	use Dplus\Dpluso\Configs\DplusoConfigURLs;
 
 	/**
 	 * Use Statements for Model Classes which are non-namespaced
@@ -43,10 +44,8 @@
 		 * @uses
 		 */
 		public function generate_request_dplusnotesURL(Order $cart, $linenbr) {
-			$url = new Url($this->pageurl->getUrl());
-			$url->path = DplusWire::wire('config')->pages->notes."redir/";
-			$url->query->setData(array('action' => 'get-cart-notes', 'linenbr' => $linenbr));
-			return $url->getUrl();
+			$urlconfig = DplusoConfigURLs::get_instance();
+			return $urlconfig->get_request_cart_dplusnotesURL($linenbr);
 		}
 
 		/**
@@ -66,10 +65,8 @@
 		 * @return string              URL to load edit detail
 		 */
 		public function generate_vieweditdetailURL(Order $cart, OrderDetail $detail) {
-			$url = new Url($this->pageurl->getUrl());
-			$url->path = DplusWire::wire('config')->pages->ajax."load/edit-detail/cart/";
-			$url->query->setData(array('line' => $detail->linenbr));
-			return $url->getUrl();
+			$urlconfig = DplusoConfigURLs::get_instance();
+			return $urlconfig->get_cart_viewedit_detailURL($detail->linenbr);
 		}
 
 		/**
@@ -80,9 +77,7 @@
 		 * @uses
 		 */
 		public function generate_removedetailURL(Order $cart, OrderDetail $detail) {
-			$url = new Url($this->pageurl->getUrl());
-			$url->path = DplusWire::wire('config')->pages->cart."redir/";
-			$url->query->setData(array('action' => 'remove-line', 'line' => $detail->linenbr));
-			return $url->getUrl();
+			$urlconfig = DplusoConfigURLs::get_instance();
+			return $urlconfig->get_cart_remove_detailURL($detail->linenbr);
 		}
 	}

@@ -53,7 +53,10 @@
 				'order'      => 'order', // NOTE $config->pages->editorder
 				'orderquote' => 'quote-to-order'
 			),
-			'notes'    => array('_self' => 'notes'),
+			'notes'    => array(
+				'_self' => 'notes',
+				'redir' => 'redir'
+			),
 			'orders'   => array('_self' => 'user/orders'),
 			'print'    => array('_self' => 'print'),
 			'products' => array(
