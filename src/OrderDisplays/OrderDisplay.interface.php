@@ -10,19 +10,6 @@
 	 * List of functions that need to be implemented by OrderDisplays
 	 */
 	interface OrderDisplayInterface {
-		/**
-		 * Returns URL to load the Customer Page
-		 * @param  Order  $order SalesOrder | Quote
-		 * @return string        Load Customer Page URL
-		 */
-		public function generate_customerURL(Order $order);
-		
-		/**
-		 * Returns URL to load the Customer Shipto Page
-		 * @param  Order  $order SalesOrder | Quote
-		 * @return string        Load Customer Shipto Page URL
-		 */
-		public function generate_customershiptoURL(Order $order);
 		
 		/**
 		 * Returns URL to request Dplus Notes

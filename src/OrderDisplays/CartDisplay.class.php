@@ -1,8 +1,9 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
 
-	use Purl\Url;
-	use Dplus\ProcessWire\DplusWire;
+	/**
+	 * Internal Libraries
+	 */
 	use Dplus\Dpluso\Configs\DplusoConfigURLs;
 
 	/**
