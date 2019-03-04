@@ -1,9 +1,17 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
 
+	/**
+	 * External Libraries
+	 */
 	use Purl\Url;
-	use Dplus\ProcessWire\DplusWire;
 
+	/**
+	 * Internal Libraries
+	 */
+	use Dplus\Dpluso\Configs\DplusoConfigURLs;
+	use Dplus\ProcessWire\DplusWire;
+	
 	/**
 	 * Use Statements for Model Classes which are non-namespaced
 	 */
@@ -25,10 +33,8 @@
 		 * @return string           URL to load Dplus Notes
 		 */
 		public function generate_request_dplusnotesURL(Order $quote, $linenbr = 0) {
-			$url = new Url($this->pageurl->getUrl());
-			$url->path = DplusWire::wire('config')->pages->notes."redir/";
-			$url->query->setData(array('action' => 'get-quote-notes', 'qnbr' => $quote->quotnbr, 'linenbr' => $linenbr));
-			return $url->getUrl();
+			$urlconfig = DplusoConfigURLs::get_instance();
+			return $urlconfig->get_request_quote_dplusnotesURL($quote->quotnbr, $linenbr);
 		}
 
 		/**

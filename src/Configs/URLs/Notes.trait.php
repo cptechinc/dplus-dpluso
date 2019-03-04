@@ -32,4 +32,19 @@
 			$url->query->set('linenbr', $linenbr);
 			return $url->getUrl();
 		}
+
+		
+		/**
+		 * Returns URL to request the Qnotes for a Quote Line
+		 * @param  string $qnbr    Quote Number
+		 * @param  int    $linenbr
+		 * @return string          URL for Requesting Qnotes for a Cart Detail Line
+		 */
+		public function get_request_quote_dplusnotesURL(string $qnbr, int $linenbr) {
+			$url = new Url($this->get_notes_redirURL());
+			$url->query->set('action', 'get-quote-notes');
+			$url->query->set('qnbr', $qnbr);
+			$url->query->set('linenbr', $linenbr);
+			return $url->getUrl();
+		}
 	}
