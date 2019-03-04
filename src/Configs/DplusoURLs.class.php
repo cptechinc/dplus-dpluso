@@ -22,6 +22,7 @@
 		use CartURLsTraits;
 		use ItemLookupURLsTraits;
 		use VendorURLsTraits;
+		use NoteURLsTrait;
 
 		/**
 		 * Root Path to build off from

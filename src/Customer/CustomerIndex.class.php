@@ -1,6 +1,6 @@
 <?php
     namespace Dplus\Dpluso\Customer;
-    
+
     /**
 	 * External Libraries
 	 */
@@ -12,8 +12,9 @@
 	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Base\ThrowErrorTrait;
 	use Dplus\Base\MagicMethodTraits;
+	use Dplus\Base\AttributeParser;
     use Dplus\Content\TablePageSorter;
-    
+
     /**
      * Class for dealing with the Customer Index database table
      */
@@ -21,7 +22,7 @@
         use ThrowErrorTrait;
 		use MagicMethodTraits;
         use AttributeParser;
-        
+
         /**
 		 * Array of filters that will apply to the orders
 		 * @var array
@@ -33,53 +34,53 @@
 		 * @var array
 		 */
 		protected $filterable;
-        
+
         /**
          * Page Number
          * @var int
          */
         protected $pagenbr;
-        
+
         /**
          * Function to index for
          * ii | ci | os = order search | ca = cart customer
          * @var string
          */
         protected $function;
-        
+
         /**
          * Page URL
          * @var string
          */
         protected $pageurl;
-        
+
         /**
          * Table Sorter - for sorting results
          * @var  TablePageSorter
          */
         protected $tablesorter;
-        
+
         /**
          * HTML element to load into for AJAX
          * @var string
          */
         protected $loadinto;
-        
+
         /**
          * HTML element to focus on for AJAX
          * @var string
          */
         protected $focus;
-        
+
         /**
          * AJAX Data Attributes
          * @var string
          */
         protected $ajaxdata;
-        
+
         /**
          * Constructs CustIndex and instantiates tablesorter
-         * @param Url $url       Page URL 
+         * @param Url $url       Page URL
          * @param string   $loadinto  HTML element to load into for AJAX
          * @param string   $focus     HTML element to focus on for AJAX
          */
@@ -89,7 +90,7 @@
 			$this->ajaxdata = "data-loadinto='$this->loadinto' data-focus='$this->focus'";
             $this->tablesorter = new TablePageSorter($this->pageurl->query->get('orderby'));
         }
-        
+
         /**
          * Sets the Page Number
          * @param int $pagenbr Page Number
@@ -97,7 +98,7 @@
         public function set_pagenbr($pagenbr) {
             $this->pagenbr = $pagenbr;
         }
-        
+
         /**
 		 * Returns the sortby column URL
 		 * @param  string $column column to sortby
@@ -108,9 +109,9 @@
 			$url->query->set("orderby", "$column-".$this->tablesorter->generate_columnsortingrule($column));
 			return $url->getUrl();
 		}
-        
+
         /**
-         * Returns the number of customer index records that fit the current 
+         * Returns the number of customer index records that fit the current
          * criteria for the search based on user permissions
          * @param  string $query   Search Query
          * @param  string $loginID User Login ID, if blank, will use current user
@@ -120,7 +121,7 @@
         public function count_searchcustindex($query = '', $loginID = '', $debug = false) {
             return count_searchcustindex($query, $loginID, $debug);
         }
-        
+
         /**
          * Return the number of customer index that user has access to
          * @param  string $loginID User Login ID, if blank, will use current user
@@ -130,7 +131,7 @@
         public function count_distinctcustindex($loginID = '', $debug = false) {
             return count_distinctcustindex($loginID, $debug);
         }
-        
+
         /**
          * Returns Customer Index records that match the Query
          * @param  string $q       Query String to match
@@ -142,7 +143,7 @@
         public function search_custindexpaged($q, $page = 1, $loginID = '', $debug = false) {
             return search_custindexpaged($q, DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->get_orderbystring(), $loginID, $debug);
         }
-        
+
         /**
          * Returns Distinct Customer Index Records that the user has access to
          * @param  int    $page    Page Number to start from
@@ -153,7 +154,7 @@
         public function get_distinctcustindexpaged($page = 1, $loginID = '', $debug = false) {
             return get_distinctcustindexpaged(DplusWire::wire('session')->display, $this->pagenbr, $this->tablesorter->get_orderbystring(), $loginID, $debug);
         }
-        
+
         /**
          * Returns the grouping description of the Customer Index based on configurations
          * NOTE customer-shipto=Customer Shipto | customer=Customer | none=No grouping
