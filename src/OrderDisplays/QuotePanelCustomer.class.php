@@ -1,7 +1,14 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
-
+	
+	/**
+	 * External Libraries
+	 */
 	use Purl\Url;
+
+	/**
+	 * Internal Libraries
+	 */
 	use Dplus\ProcessWire\DplusWire;
 
 	/**
@@ -121,7 +128,7 @@
 		 * @return string        URL to edit quote page
 		 */
 		public function generate_editURL(Order $quote) {
-			$url = new URL(parent::generate_editURL($quote));
+			$url = new Url(parent::generate_editURL($quote));
 			$url->query->set('custID', $this->custID);
 			return $url->getUrl();
 		}

@@ -23,6 +23,7 @@
 		use ItemLookupURLsTraits;
 		use VendorURLsTraits;
 		use NoteURLsTrait;
+		use QuoteURLsTraits;
 
 		/**
 		 * Root Path to build off from
@@ -95,12 +96,3 @@
 			return self::$_rootpath;
 		}
 	}
-
-	
-
-	
-	
-
-	
-
-	

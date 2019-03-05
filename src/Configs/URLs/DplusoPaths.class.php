@@ -15,6 +15,11 @@
 		 */
 		private $rootpath;
 
+		/**
+		 * Instance of this Class
+		 *
+		 * @var DplusoPaths
+		 */
 		private static $instance;
 
 		/**
@@ -33,7 +38,10 @@
 			'ajax' => array(
 				'_self' => 'ajax',
 				'json'  => 'json',
-				'load'  => 'load'
+				'load'  => array(
+					'_self'       => 'load',
+					'quotes' => 'quotes'
+				)
 			),
 			'cart'     => array('_self' => 'cart'),
 			'customer' => array(
@@ -58,15 +66,27 @@
 				'redir' => 'redir'
 			),
 			'orders'   => array('_self' => 'user/orders'),
-			'print'    => array('_self' => 'print'),
+			'print'    => array(
+				'_self' => 'print',
+				'order' => 'order',
+				'quote' => 'quote'
+			),
 			'products' => array(
 				'_self'    => 'products',
 				'iteminfo' => 'item-info', // NOTE $config->pages->iteminfo
 			),
+			'quotes' => array(
+				'_self' => 'user/quotes',
+				'redir' => 'redir'
+			),
 			'reports'   => array('_self' => 'reports'),
 			'sys'       => array(
 				'_self' => 'sys',
-				'email' => 'email', // NOTE $config->pages->email
+				'email' => array( // NOTE $config->pages->email
+					'_self' => 'email',
+					'order' => 'order',
+					'quote' => 'quote'
+				),
 			),
 			'user' => array(
 				'_self'   => 'user',
@@ -102,7 +122,7 @@
 				)
 			),
 		);
-		
+
 		/**
 		 * Parse URL Path from $key
 		 * @param  string $key
@@ -138,7 +158,17 @@
 		 */
 		public function get_urlpath($key) {
 			$path = $this->get_pathfromkey($key);
-			return "{$this->rootpath}$path";
+			return "{$this->rootpath}$path/";
+		}
+
+		/**
+		 * Parse URL Path from $key and returns it with the rootpath prepended
+		 * @param  string $key
+		 * @return string      URL Path
+		 */
+		public function find($key) {
+			$path = $this->get_pathfromkey($key);
+			return "{$this->rootpath}$path/";
 		}
 
 		/**

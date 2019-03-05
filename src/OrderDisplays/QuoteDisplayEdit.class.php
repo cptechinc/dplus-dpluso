@@ -1,8 +1,15 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
-	
+
+	/**
+	 * External Libraries
+	 */
 	use Purl\Url;
-	use Dplus\ProcessWire\DplusWire;
+
+	/**
+	 * Internal Libraries
+	 */
+	use Dplus\Dpluso\Configs\DplusoConfigURLs;
 
 	/**
 	 * Use Statements for Model Classes which are non-namespaced
@@ -11,7 +18,7 @@
 
 	class EditQuoteDisplay extends QuoteDisplay {
 		use QuoteDisplayTraits;
-		
+
 		/**
 		 * Primary Constructor
 		 * @param string   $sessionID Session Identifier
@@ -33,10 +40,8 @@
 		 * @return string        URL to unlock Quote
 		 */
 		public function generate_unlockURL(Order $quote) {
-			$url = $this->generate_quotesredirURL();
-			$url->query->set('action', 'unlock-quote');
-			$url->query->set('qnbr', $quote->quotnbr);
-			return $url->getUrl();
+			$urlconfig = DplusoConfigURLs::get_instance();
+			return $urlconfig->get_quote_unlockURL($uote->quotnbr);
 		}
 
 		/**
@@ -45,11 +50,10 @@
 		 * @return string        URL for Quote confirmation page
 		 */
 		public function generate_confirmationURL(Order $quote) {
-			$url = new Url(DplusWire::wire('config')->pages->confirmquote);
-			$url->query->set('qnbr', $quote->quotnbr);
-			return $url->getUrl();
+			$urlconfig = DplusoConfigURLs::get_instance();
+			return $urlconfig->get_quote_confirmURL($qnbr);
 		}
-		
+
 		/**
 		 * Returns URL to delete detail line
 		 * @param  Order       $quote  Quote
@@ -57,8 +61,7 @@
 		 * @return string              HTML Link to delete detail line
 		 */
 		function generate_removedetailURL(Order $quote, OrderDetail $detail) {
-			$url = $this->generate_quotesredirURL();
-			$url->query->setData(array('action' => 'remove-line-get', 'qnbr' => $quote->quotnbr, 'linenbr' => $detail->linenbr, 'page' => $this->pageurl->getUrl()));
-			return $url->getUrl();
+			$urlconfig = DplusoConfigURLs::get_instance();
+			return $urlconfig->get_quote_removedetailURL($quote->quotnbr, $detail->linenbr, $this->pageurl->getUrl());
 		}
 	}

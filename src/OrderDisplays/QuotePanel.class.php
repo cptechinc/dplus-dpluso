@@ -1,9 +1,17 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
 
+	/**
+	 * External Libraries
+	 */
 	use Purl\Url;
 	use ProcessWire\WireInput;
+
+	/**
+	 * Internal Libraries
+	 */
 	use Dplus\ProcessWire\DplusWire;
+	use Dplus\Dpluso\Configs\DplusoConfigURLs;
 	use Dplus\Content\HTMLWriter;
 	use Dplus\Content\Paginator;
 
@@ -70,11 +78,12 @@
 			$this->pageurl = $this->pageurl = new Url($pageurl->getUrl());
 			$this->setup_pageURL();
 		}
-		
+
 		public function setup_pageURL() {
+			$urlconfig = DplusoConfigURLs::get_instance();
 			$pagenbr = Paginator::generate_pagenbr($this->pageurl);
 			$this->paginationinsertafter = 'quotes';
-			$this->pageurl->path = DplusWire::wire('config')->pages->ajax."load/quotes/";
+			$this->pageurl->path = $urlconfig->find('ajax_load_quotes');
 			$this->pageurl->query->remove('display');
 			$this->pageurl->query->remove('ajax');
 			$this->pageurl = Paginator::paginate_purl($this->pageurl, $pagenbr, $this->paginationinsertafter);
@@ -179,14 +188,12 @@
 			$attr .= "|data-html=true|title=Icons Definition|data-content=$content";
 			return $bootstrap->a($attr, 'Icon Definitions');
 		}
-		
+
 		public function generate_loadURL() {
-			$url = new Url($this->pageurl->getUrl());
-			$url->path = DplusWire::wire('config')->pages->quotes.'redir/';
-			$url->query->setData(array('action' => 'load-quotes'));
-			return $url->getUrl();
+			$urlconfig = DplusoConfigURLs::get_instance();
+			return $urlconfig->get_quotes_loadURL();
 		}
-		
+
 		public function generate_request_detailsURL(Order $quote) {
 			$url = new Url($this->trait_generate_request_detailsURL($quote));
 			$url->query->set('page', $this->pagenbr);
@@ -207,7 +214,7 @@
 			$url->query->set('orderby', $this->tablesorter->orderbystring);
 			return $url->getUrl();
 		}
-		
+
 		public function generate_request_documentsURL(Order $quote, OrderDetail $quotedetail = null) {
 			return '';
 		}
