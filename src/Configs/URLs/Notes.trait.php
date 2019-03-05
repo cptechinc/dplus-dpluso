@@ -33,7 +33,7 @@
 			return $url->getUrl();
 		}
 
-		
+
 		/**
 		 * Returns URL to request the Qnotes for a Quote Line
 		 * @param  string $qnbr    Quote Number
