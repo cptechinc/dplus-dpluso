@@ -1,6 +1,9 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
 	
+	/**
+	 * External Libraries
+	 */
 	use Purl\Url;
 	
 	/**
@@ -18,8 +21,8 @@
 		protected $ordn;
 		
 		/**
-		 * Sales Order Number
-		 * @var string
+		 * Sales Order
+		 * @var SalesOrder
 		 */
 		protected $order;
 

@@ -47,4 +47,18 @@
 			$url->query->set('linenbr', $linenbr);
 			return $url->getUrl();
 		}
+
+		/**
+		 * Returns URL to request the Qnotes for a Sales Order Line
+		 * @param  string $ordn    Sales Order Number
+		 * @param  int    $linenbr
+		 * @return string          URL for Requesting Qnotes for a Cart Detail Line
+		 */
+		public function get_request_order_dplusnotesURL(string $ordn, int $linenbr) {
+			$url = new Url($this->get_notes_redirURL());
+			$url->query->set('action', 'get-order-notes');
+			$url->query->set('ordn', $ordn);
+			$url->query->set('linenbr', $linenbr);
+			return $url->getUrl();
+		}
 	}

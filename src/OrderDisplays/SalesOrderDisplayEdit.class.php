@@ -1,8 +1,9 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
-	
+
 	use Purl\Url;
 	use Dplus\ProcessWire\DplusWire;
+	use Dplus\Dpluso\Configs\DplusoConfigURLs;
 
 	/**
 	 * Use Statements for Model Classes which are non-namespaced
@@ -38,30 +39,30 @@
 		public function get_creditcard($debug = false) {
 			return get_orderhedcreditcard($this->sessionID, $this->ordn, $debug);
 		}
-		
+
 		/**
 		 * Returns if the credit card html should have a class of hidden
-		 * // DEPRECATE 
+		 * // DEPRECATE
 		 * @param  Order  $order Sales Order
 		 * @return string
 		 */
 		public function showhide_creditcard(Order $order) {
 			return ($order->paymenttype == 'cc') ? '' : 'hidden';
 		}
-		
+
 		/**
 		 * Returns if the international phone html should have a class of hidden
-		 * // DEPRECATE 
+		 * // DEPRECATE
 		 * @param  Order  $order Sales Order
 		 * @return string
 		 */
 		public function showhide_phoneintl(Order $order) {
 			return $order->is_phoneintl() ? '' : 'hidden';
 		}
-		
+
 		/**
 		 * Returns if the deomestic phone html should have a class of hidden
-		 * // DEPRECATE 
+		 * // DEPRECATE
 		 * @param  Order  $order Sales Order
 		 * @return string
 		 */
@@ -78,23 +79,20 @@
 		 * @return string        Unlock Sales Order URL
 		 */
 		public function generate_unlockURL(Order $order) {
-			$url = $this->generate_ordersredirURL();
-			$url->query->set('action', 'unlock-order');
-			$url->query->set('ordn', $order->ordernumber);
-			return $url->getUrl();
+			$urlconfig = DplusoConfigURLs::get_instance();
+			return $urlconfig->get_order_unlockURL($order->ordernumber);
 		}
-		
+
 		/**
 		 * Returns URL to Sales Order confirmation page
 		 * @param  Order  $order Sales Order
 		 * @return string        Sales Order confirmation page URL
 		 */
 		public function generate_confirmationURL(Order $order) {
-			$url = new Url(DplusWire::wire('config')->pages->confirmorder);
-			$url->query->set('ordn', $order->ordernumber);
-			return $url->getUrl();
+			$urlconfig = DplusoConfigURLs::get_instance();
+			return $urlconfig->get_order_confirmURL($order->ordernumber);
 		}
-		
+
 		/**
 		 * Returns URL to delete detail line
 		 * @param  Order       $order  Order
@@ -102,9 +100,8 @@
 		 * @return string              HTML Link to delete detail line
 		 */
 		public function generate_removedetailURL(Order $order, OrderDetail $detail) {
-			$url = $this->generate_ordersredirURL();
-			$url->query->setData(array('action' => 'remove-line-get', 'ordn' => $order->ordernumber, 'linenbr' => $detail->linenbr, 'page' => $this->pageurl->getUrl()));
-			return $url->getUrl();
+			$urlconfig = DplusoConfigURLs::get_instance();
+			return $urlconfig->get_order_removedetailURL($order->ordernumber, $detail->linenbr, $this->pageurl->getUrl());
 		}
 
 		/* =============================================================

@@ -1,7 +1,14 @@
 <?php
 	namespace Dplus\Dpluso\OrderDisplays;
 
+	/**
+	 * External Libraries
+	 */
 	use Purl\Url;
+
+	/**
+	 * Internal Libraries
+	 */
 	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Dpluso\Configs\DplusoConfigURLs;
 
@@ -22,10 +29,8 @@
 		 * @return string          URL to request Dplus Notes
 		 */
 		public function generate_request_dplusnotesURL(Order $order, $linenbr = 0) {
-			$url = new Url($this->pageurl->getUrl());
-			$url->path = DplusWire::wire('config')->pages->notes."redir/";
-			$url->query->setData(array('action' => 'get-order-notes', 'ordn' => $order->ordernumber, 'linenbr' => $linenbr));
-			return $url->getUrl();
+			$urlconfig = DplusoConfigURLs::get_instance();
+			return $urlconfig->get_request_order_dplusnotesURL($order->ordernumber, intval($linenbr));
 		}
 
 		/**
@@ -36,12 +41,13 @@
 		 * @return string		             URL to the order redirect to make the get order documents request
 		 */
 		public function generate_request_documentsURL(Order $order, OrderDetail $orderdetail = null) {
-			$url = $this->generate_ordersredirURL();
-			$url->query->setData(array('action' => 'get-order-documents', 'ordn' => $order->ordernumber));
+			$urlconfig = DplusoConfigURLs::get_instance();
+
 			if ($orderdetail) {
-				$url->query->set('itemdoc', $orderdetail->itemid);
+				return $urlconfig->get_salesorders_documentsURL($order->ordernumber, $orderdetail->itemid);
+			} else {
+				return $urlconfig->get_salesorders_documentsURL($order->ordernumber);
 			}
-			return $url->getUrl();
 		}
 
 		/**
@@ -50,10 +56,8 @@
 		 * @return string        URL to edit order page
 		 */
 		public function generate_editURL(Order $order) {
-			$url = $this->generate_ordersredirURL();
-			$url->query->setData(array('action' => 'get-order-edit','ordn' => $order->ordernumber));
-			$url->query->set('orderorigin', $this->pageurl->getURL());
-			return $url->getUrl();
+			$urlconfig = DplusoConfigURLs::get_instance();
+			return $urlconfig->get_order_editURL($order->ordernumber, $this->pageurl->getURL());
 		}
 
 		/**
@@ -62,9 +66,8 @@
 		 * @return string        URL to edit order page
 		 */
 		public function generate_releaseurl(Order $order) {
-			$url = $this->generate_ordersredirURL();
-			$url->query->setData(array('action' => 'release-order','ordn' => $order->ordernumber));
-			return $url->getUrl();
+			$urlconfig = DplusoConfigURLs::get_instance();
+			return $urlconfig->get_order_releaseURL($order->ordernumber);
 		}
 
 		/**
@@ -73,9 +76,8 @@
 		 * @return string        URL to view print page
 		 */
 		public function generate_printURL(Order $order) {
-			$url = $this->generate_ordersredirURL();
-			$url->query->setData(array('action' => 'get-order-print','ordn' => $order->ordernumber));
-			return $url->getUrl();
+			$urlconfig = DplusoConfigURLs::get_instance();
+			return $urlconfig->get_order_request_printURL($order->ordernumber);
 		}
 
 		/**
@@ -85,11 +87,8 @@
 		 * @return string        URL to view print page
 		 */
 		public function generate_printpageURL(Order $order) {
-			$url = new Url($this->pageurl->getUrl());
-			$url->path = DplusWire::wire('config')->pages->print."order/";
-			$url->query->set('ordn', $order->ordernumber);
-			$url->query->set('view', 'pdf');
-			return $url->getUrl();
+			$urlconfig = DplusoConfigURLs::get_instance();
+			return $urlconfig->get_order_printpageURL($order->ordernumber, $pdf = true);
 		}
 
 		/**
@@ -98,10 +97,8 @@
 		 * @return string        URL to email Order
 		 */
 		public function generate_sendemailURL(Order $order) {
-			$url = new Url(DplusWire::wire('config')->pages->email."sales-order/");
-			$url->query->set('ordn', $order->ordernumber);
-			$url->query->set('referenceID', $this->sessionID);
-			return $url->getUrl();
+			$urlconfig = DplusoConfigURLs::get_instance();
+			return $urlconfig->get_email_orderURL($order->ordernumber, $this->sessionID);
 		}
 
 		/**
@@ -110,10 +107,8 @@
 		 * @return string        URL to load linked UserActions
 		 */
 		public function generate_linkeduseractionsURL(Order $order) {
-			$url = new Url($this->pageurl->getUrl());
-			$url->path = DplusWire::wire('config')->pages->useractions;
-			$url->query->setData(array('ordn' => $order->ordernumber));
-			return $url->getUrl();
+			$urlconfig = DplusoConfigURLs::get_instance();
+			return $urlconfig->get_order_linkedactionsURL($order->ordernumber);
 		}
 
 		/**
@@ -123,10 +118,8 @@
 		 * @return string              URL view detail
 		 */
 		public function generate_viewdetailURL(Order $order, OrderDetail $detail) {
-			$url = new Url($this->pageurl->getUrl());
-			$url->path = DplusWire::wire('config')->pages->ajax."load/view-detail/order/";
-			$url->query->setData(array('ordn' => $order->ordernumber, 'line' => $detail->linenbr));
-			return $url->getUrl();
+			$urlconfig = DplusoConfigURLs::get_instance();
+			return $urlconfig->get_order_view_detailURL($order->ordernumber, $detail->linenbr);
 		}
 
 		/**
@@ -135,9 +128,8 @@
 		 * @return string        URL to load detail lines for Sales Order
 		 */
 		public function generate_request_detailsURL(Order $order) {
-			$url = $this->generate_ordersredirURL();
-			$url->query->setData(array('action' => 'get-order-details', 'ordn' => $order->ordernumber));
-			return $url->getUrl();
+			$urlconfig = DplusoConfigURLs::get_instance();
+			return $urlconfig->get_order_request_detailsURL($order->ordernumber);
 		}
 
 		/**
@@ -149,9 +141,8 @@
 		 * @uses $order->can_edit()
 		 */
 		public function generate_vieweditdetailURL(Order $order, OrderDetail $detail) {
-			$url = new Url(DplusWire::wire('config')->pages->ajaxload.'edit-detail/order/');
-			$url->query->setData(array('ordn' => $order->ordernumber, 'line' => $detail->linenbr));
-			return $url->getUrl();
+			$urlconfig = DplusoConfigURLs::get_instance();
+			return $urlconfig->get_order_edit_detailURL($order->ordernumber, $detail->linenbr);
 		}
 
 		/* =============================================================
@@ -164,9 +155,8 @@
 		 * @return string        URL to the order redirect to make the get order documents request
 		 */
 		public function generate_request_trackingURL(Order $order) {
-			$url = $this->generate_ordersredirURL();
-			$url->query->setData(array('action' => 'get-order-tracking', 'ordn' => $order->ordernumber));
-			return $url->getUrl();
+			$urlconfig = DplusoConfigURLs::get_instance();
+			return $urlconfig->get_order_request_trackingURL($order->ordernumber);
 		}
 
 		/**
@@ -177,15 +167,5 @@
 		 */
 		public function get_orderdetails(Order $order, $debug = false) {
 			return get_orderdetails($this->sessionID, $order->ordernumber, true, $debug);
-		}
-
-		/**
-		 * Makes the URL to the orders redirect page,
-		 * @return Url URL to REDIRECT page
-		 */
-		public function generate_ordersredirURL() {
-			$configurls = DplusoConfigURLs::get_instance();
-			$url = new Url($configurls->get_salesorders_redirURL());
-			return $url;
 		}
 	}

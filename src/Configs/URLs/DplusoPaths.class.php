@@ -40,7 +40,17 @@
 				'json'  => 'json',
 				'load'  => array(
 					'_self'       => 'load',
-					'quotes' => 'quotes'
+					'quotes'      => 'quotes',
+					'view-detail' => array(
+						'_self'   => 'view-detail',
+						'quote'   => 'quote',
+						'order'   => 'order'
+					),
+					'edit-detail' => array(
+						'_self'   => 'edit-detail',
+						'quote'   => 'quote',
+						'order'   => 'order'
+					)
 				)
 			),
 			'cart'     => array('_self' => 'cart'),
@@ -84,7 +94,7 @@
 				'_self' => 'sys',
 				'email' => array( // NOTE $config->pages->email
 					'_self' => 'email',
-					'order' => 'order',
+					'order' => 'sales-order',
 					'quote' => 'quote'
 				),
 			),
@@ -204,7 +214,7 @@
 							if (is_array($level[$keys[0]])) {
 								// Add $levels[$key[0]]['_self'] to Paths
 								// Set $level to $levels[$key[0]] to travel down to
-								$paths[] = array($level[$keys[0]]['_self']);
+								$paths[] = $level[$keys[0]]['_self'];
 								$level = $level[$keys[0]];
 								array_shift($keys);
 							} else {
