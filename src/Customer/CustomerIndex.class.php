@@ -33,6 +33,17 @@
 				'querytype' => 'in',
 				'datatype' => 'char',
 				'label' => 'State'
+			),
+            'source' => array(
+				'querytype' => 'in',
+				'datatype' => 'char',
+				'label' => 'Source'
+			),
+			'lastsaledate' => array(
+				'querytype' => 'between',
+				'datatype' => 'date',
+				'date-format' => 'Ymd',
+				'label' => 'Last Sale Date'
 			)
 		);
 
@@ -132,8 +143,14 @@
 
 			$user = LogmUser::load($this->userID);
 
-			if ($user->is_salesrep()) {
-				$this->filters['salesperson'][] = $user->roleid;
+            if (isset($this->filters['lastsaledate'])) {
+				if (empty($this->filters['lastsaledate'][0])) {
+					$this->filters['lastsaledate'][0] = date('m/d/Y', strtotime($this->get_mindate('lastsaledate')));
+				}
+
+				if (empty($this->filters['lastsaledate'][1])) {
+					$this->filters['lastsaledate'][1] = date('m/d/Y');
+				}
 			}
 		}
 
