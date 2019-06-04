@@ -1,18 +1,18 @@
 <?php
 	namespace Dplus\Dpluso\UserActions;
-	
+
 	use Purl\Url;
 	use ProcessWire\WireInput;
 	use Dplus\Content\Paginator;
 	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Content\HTMLWriter;
 	use Dplus\Content\Table;
-	
+
 	/**
 	 * Use Statements for Model Classes which are non-namespaced
 	 */
 	use UserAction;
-	
+
 	/**
 	 * Class for dealing with the display of arrays of UserAction
 	 * Content
@@ -137,6 +137,11 @@
 				'datatype' => 'mysql-date',
 				'label' => 'Due Date',
 				'date-format' => "m/d/Y H:i:s"
+			),
+			'customerlink' => array(
+				'querytype' => 'in',
+				'datatype' => 'text',
+				'label' => 'Customer(s)'
 			)
 		);
 
