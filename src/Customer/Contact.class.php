@@ -1,7 +1,7 @@
 <?php
     use Purl\Url;
     use Dplus\ProcessWire\DplusWire;
-    
+
 	/**
 	 * Class for dealing with Contacts in Dpluso
 	 * Contacts are loaded from custindex
@@ -11,139 +11,139 @@
 		use Dplus\Base\CreateClassArrayTraits;
 		use Dplus\Base\ThrowErrorTrait;
 		use Dplus\Base\MagicMethodTraits;
-        
+
         /**
          * DB Record Number
          * @var int
          */
 		protected $recno;
-        
+
         /**
          * Date Updated
          * @var int YYYYMMDD
          */
 		protected $date;
-        
+
         /**
          * Time Updated
          * @var int HHMMSSSS
          */
 		protected $time;
-        
+
         /**
          * Assigned Sales Person 1 Login
          * @var string
          */
 		protected $splogin1;
-        
+
         /**
          * Assigned Sales Person 1 Login
          * @var string
          */
 		protected $splogin2;
-        
+
         /**
          * Assigned Sales Person 3 Login
          * @var string
          */
 		protected $splogin3;
-        
+
         /**
          * Customer ID
          * @var string
          */
 		protected $custid;
-        
+
         /**
          * Customer Shipto ID
          * @var string
          */
 		protected $shiptoid;
-        
+
         /**
          * Customer (Shipto) name
          * @var string
          */
 		protected $name;
-        
+
         /**
          * Address Line 1
          * @var string
          */
 		protected $addr1;
-        
+
         /**
          * Address Line 2
          * @var string
          */
 		protected $addr2;
-        
+
         /**
          * City
          * @var string
          */
 		protected $city;
-        
+
         /**
          * State
          * @var string
          */
 		protected $state;
-        
+
         /**
          * Zipcode
          * @var string
          */
 		protected $zip;
-        
+
         /**
          * Phone
          * @var string
          */
 		protected $phone;
-        
+
         /**
          * Cell Phone
          * @var string
          */
 		protected $cellphone;
-        
+
         /**
          * Contact Name
          * @var string
          */
 		protected $contact;
-        
+
         /**
          * Contact Source
          * @var string C Customer | Customer Contact | CS Customer Shipto
          */
 		protected $source;
-        
+
         /**
          * Phone Extension
          * @var string
          */
 		protected $extension;
-        
+
         /**
          * Email Address
          * @var string
          */
 		protected $email;
-        
+
         /**
          * Customer Type Code
          * @var string
          */
 		protected $typecode;
-        
+
         /**
          * Fax Number
          * @var string
          */
 		protected $faxnbr;
-        
+
         /**
          * Contact title
          * @var string
@@ -180,13 +180,13 @@
 		 * @var string Y | N
 		 */
 		protected $ackcontact;
-        
+
         /**
          * Dummy field
          * @var string X
          */
 		protected $dummy;
-        
+
         /**
          * Property Aliases
          * @var array
@@ -204,7 +204,8 @@
 			'customer' => 'C',
 			'customer-contact' => 'CC',
 			'customer-shipto' => 'CS',
-			'shipto-contact' => 'SC'
+			'shipto-contact' => 'SC',
+            'prospect' => 'P'
 		);
 
         /* =============================================================
