@@ -5,6 +5,7 @@
 	use ProcessWire\WireInput;
 	use Dplus\ProcessWire\DplusWire;
 	use Dplus\Content\FormMaker;
+	use Dplus\Content\Paginator;
 	use Dplus\Base\DplusDateTime;
 
 	/**
@@ -129,12 +130,14 @@
 			LINKS ARE HTML LINKS, AND URLS ARE THE URLS THAT THE HREF VALUE
 		============================================================ */
 		public function setup_pageURL() {
+			$pagenbr = Paginator::generate_pagenbr($this->pageurl);
 			$this->pageurl->path = DplusWire::wire('config')->pages->ajax."load/sales-history/";
 			$this->pageurl->query->remove('display');
 			$this->pageurl->query->remove('ajax');
 			$this->paginationinsertafter = 'sales-history';
+			$this->pageurl = Paginator::paginate_purl($this->pageurl, $pagenbr, $this->paginationinsertafter);
 		}
-		
+
 		public function generate_loadURL() {
 			$url = new Url($this->pageurl);
 			$url->query->remove('filter');
@@ -143,7 +146,7 @@
 			}
 			return $url->getUrl();
 		}
-		
+
 		public function generate_closedetailsURL() {
 			$url = new Url($this->pageurl->getUrl());
 			$url->query->setData(array('ordn' => false, 'show' => false));
